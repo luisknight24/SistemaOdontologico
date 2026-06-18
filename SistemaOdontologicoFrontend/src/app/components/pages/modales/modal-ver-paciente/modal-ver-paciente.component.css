@@ -1,0 +1,45 @@
+.container-wide {
+    width: 100%; 
+    margin: 0 auto;
+}
+
+.card.custom-card-wide {
+    width: 120%; 
+}
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); 
+    grid-gap: 10px;
+}
+
+.grid-item {
+
+}
+.button-container {
+    display: flex;
+    justify-content: center; 
+    align-items: center; 
+    margin-top: 10px; 
+}
+
+.title-container {
+    display: flex;
+    justify-content: center;
+    align-items: center; 
+    margin-bottom: 20px; 
+}
+
+.large-font {
+    font-size: 16px; 
+}
+.larger-modal-container {
+    width: 80%; 
+    max-width: 800px; 
+    margin: 0 auto; 
+    padding: 2px; 
+}
+
+.larger-card {
+    width: 100%; 
+    max-width: 100%; 
+}

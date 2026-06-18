@@ -1,0 +1,129 @@
+<h1 class="page-title" style="color: #17789e;">Nueva Cita</h1>
+<mat-card class="card" style="margin: 20px 40px 40px 40px">
+  <mat-card-content class="dashboard-card-content">
+    <form class="example-form" [formGroup]="formGroup" (ngSubmit)="registrarCita()">
+      <mat-grid-list cols="4" rowHeight="80px">
+        <mat-grid-tile [colspan]="2">
+          <mat-form-field class="example-full-width" appearance="fill">
+            <mat-label>Paciente</mat-label>
+            <mat-icon matSuffix style="font-size: 24px; color: lightblue;">person</mat-icon>
+            <input type="text" placeholder="Buscar..." aria-label="Number" matInput [matAutocomplete]="auto"
+              formControlName="paciente">
+            <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete"
+              (optionSelected)="pacienteSeleccionado($event)" [displayWith]="displayPaciente">
+              <mat-option *ngFor="let option of filteredPacientes" [value]="option">
+                {{option.apellido}} {{option.nombre}}
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile [colspan]="2">
+          <mat-form-field class="example-full-width" appearance="fill" style="margin-left: 40px;">
+            <mat-label>Servicio</mat-label>
+            <mat-icon matSuffix style="font-size: 24px; color: lightblue;">local_pharmacy</mat-icon>
+            <input type="text" placeholder="Buscar..." aria-label="Number" matInput [matAutocomplete]="autoServicio"
+              formControlName="servicio">
+            <mat-autocomplete autoActiveFirstOption #autoServicio="matAutocomplete"
+              (optionSelected)="servicioSeleccionado($event)" [displayWith]="displayServicio">
+              <mat-option *ngFor="let option of filteredServicios" [value]="option">
+                {{option.nombreServicio}}
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+        </mat-grid-tile>
+      </mat-grid-list>
+      <mat-grid-list cols="4" rowHeight="80px">
+        <mat-grid-tile [colspan]="2">
+          <mat-form-field class="example-full-width" appearance="fill">
+            <mat-label>Odontologo</mat-label>
+            <mat-icon matSuffix style="font-size: 24px; color: lightblue;">healing</mat-icon>
+            <input type="text" placeholder="Buscar..." aria-label="Number" matInput [matAutocomplete]="autoOdontologo"
+              formControlName="odontologo" (click)="openAutocompletePanel()">
+            <mat-autocomplete autoActiveFirstOption #autoOdontologo="matAutocomplete"
+              (optionSelected)="odontologoSeleccionado($event)" [displayWith]="displayOdontologo">
+
+              <mat-option *ngFor="let options of filteredOdontologo" [value]="options">
+                {{options.apellido}} {{options.nombre}}
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile [colspan]="1" style="margin-left: 39px;">
+          <mat-form-field appearance="fill">
+            <mat-label>Fecha de Reserva</mat-label>
+            <input matInput [matDatepicker]="picker1" formControlName="fechaReserva" showTime="false">
+            <mat-datepicker-toggle matSuffix [for]="picker1"
+              style="font-size: 20px; color: lightblue;"></mat-datepicker-toggle>
+            <mat-datepicker #picker1></mat-datepicker>
+          </mat-form-field>
+        </mat-grid-tile>
+        <mat-grid-tile style="text-align:end">
+        </mat-grid-tile>
+        <mat-grid-tile [colspan]="4" style="text-align: center;">
+          <button mat-raised-button color="primary" class="btn btn-info"
+            style="width: 15%;"><mat-icon>add_circle</mat-icon> Agregar</button>
+        </mat-grid-tile>
+      </mat-grid-list>
+    </form>
+    <mat-form-field appearance="standard" class="filter-field">
+      <mat-label>Búsqueda (Cualquier campo)</mat-label>
+      <input matInput (keyup)="applyFilter($event)" placeholder="Ex. Servicio" #input>
+    </mat-form-field>
+    <div class="table-container">
+      <div class="mat-elevation-z2">
+        <table mat-table [dataSource]="dataSource">
+          <td mat-cell *matCellDef="let element"> {{element.idCita}} </td>-->
+          <ng-container matColumnDef="numero">
+            <th mat-header-cell *matHeaderCellDef> Numero de Cita </th>
+            <td mat-cell *matCellDef="let element"> {{element.id}} </td>
+          </ng-container>
+          <ng-container matColumnDef="paciente">
+            <th mat-header-cell *matHeaderCellDef> Paciente </th>
+            <td mat-cell *matCellDef="let element"> {{ element.paciente}} </td>
+          </ng-container>
+          <ng-container matColumnDef="servicio">
+            <th mat-header-cell *matHeaderCellDef> Servicio </th>
+            <td mat-cell *matCellDef="let element"> {{ element.servicio }} </td>
+          </ng-container>
+          <ng-container matColumnDef="odontologo">
+            <th mat-header-cell *matHeaderCellDef> Odontologo </th>
+            <td mat-cell *matCellDef="let element"> {{ element.odontologo }} </td>
+          </ng-container>
+          <ng-container matColumnDef="fechaReserva">
+            <th mat-header-cell *matHeaderCellDef> Fecha Reserva </th>
+            <td mat-cell *matCellDef="let element"> {{ element.fechaReserva }} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="precio">
+            <th mat-header-cell *matHeaderCellDef> Precio </th>
+            <td mat-cell *matCellDef="let element"> {{ element.precio }} </td>
+          </ng-container>
+          <ng-container matColumnDef="acciones">
+            <th mat-header-cell *matHeaderCellDef style="width:80px"> Editar</th>
+            <td mat-cell *matCellDef="let element">
+              <button mat-icon-button color="primary" (click)="editarCita(element)">
+                <mat-icon>edit</mat-icon>
+              </button>
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="accion">
+            <th mat-header-cell *matHeaderCellDef style="width:80px"> Eliminar</th>
+            <td mat-cell *matCellDef="let element">
+              <button mat-icon-button color="warn" (click)="eliminarUsuario(element)">
+                <mat-icon>clear</mat-icon>
+              </button>
+            </td>
+          </ng-container>
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+      </div>
+    </div>
+    <mat-grid-list cols="4" rowHeight="80px">
+      <mat-grid-tile></mat-grid-tile>
+      <mat-grid-tile></mat-grid-tile>
+      <mat-grid-tile>
+      </mat-grid-tile>
+    </mat-grid-list>
+  </mat-card-content>
+</mat-card>

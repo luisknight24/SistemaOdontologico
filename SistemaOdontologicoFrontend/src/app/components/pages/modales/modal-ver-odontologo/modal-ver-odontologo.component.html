@@ -1,0 +1,39 @@
+<div class="larger-modal-container">
+    <div class="title-container">
+        <h1>Ver Odontólogo</h1>
+    </div>
+    <div *ngIf="odontologo != null" class="container-wide">
+        <mat-grid-list cols="1" rowHeight="auto">
+            <mat-card class="card custom-card-wide larger-card">
+                <mat-card-title class="title-container">{{ odontologo.nombre }}</mat-card-title>
+                <mat-card-content>
+                    <div class="grid-container">
+                        <div class="grid-item">
+                            <p class="large-font"><strong>nombre:</strong> {{ odontologo.nombre }}</p>
+                        </div>
+                        <div class="grid-item">
+                            <p class="large-font"><strong>apellido:</strong> {{ odontologo.apellido }}</p>
+                        </div>
+                        <div class="grid-item">
+                            <p class="large-font"><strong>experiencia:</strong> {{ odontologo.experiencia }}</p>
+                        </div>
+                        <div class="grid-item">
+                            <p class="large-font"><strong>especialidad:</strong> {{ odontologo.especialidad }}</p>
+                        </div>
+                        <div class="grid-item">
+                            <p class="large-font"><strong>edad:</strong> {{ odontologo.edad }}</p>
+                        </div>
+                        <div class="grid-item">
+                            <p class="large-font"><strong>email:</strong> {{ odontologo.email }}</p>
+                        </div>
+                    </div>
+                </mat-card-content>
+                <mat-card-actions>
+                </mat-card-actions>
+                <mat-card-actions class="button-container">
+                    <button mat-raised-button mat-dialog-close color="warn">Volver</button>
+                </mat-card-actions>
+            </mat-card>
+        </mat-grid-list>
+    </div>
+</div>

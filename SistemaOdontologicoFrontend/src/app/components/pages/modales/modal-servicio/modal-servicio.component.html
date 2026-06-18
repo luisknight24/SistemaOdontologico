@@ -1,0 +1,27 @@
+<h2 mat-dialog-title>{{accion}} Servicio</h2>
+<mat-dialog-content>
+  <form [formGroup]="formServicio">
+    <mat-grid-list cols="2" rowHeight="80px" gutterSize="10px">
+      <mat-grid-tile>
+        <mat-form-field appearance="outline">
+          <mat-label>Nombre</mat-label>
+          <input matInput autocomplete="off" formControlName="nombreServicio">
+          <mat-icon matSuffix style="font-size: 24px; color: lightblue;">local_pharmacy</mat-icon>
+        </mat-form-field>
+      </mat-grid-tile>
+      <mat-grid-tile>
+        <mat-form-field appearance="outline">
+          <mat-label>Precio</mat-label>
+          <input matInput autocomplete="off" formControlName="precio">
+          <mat-icon matSuffix style="font-size: 24px; color: lightblue;">monetization_on</mat-icon>
+        </mat-form-field>
+      </mat-grid-tile>
+    </mat-grid-list>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-raised-button mat-dialog-close color="warn">Volver</button>
+  <button mat-raised-button color="primary" [disabled]="formServicio.invalid" (click)="agregarEditarServicio()">
+    {{accionBoton}}
+  </button>
+</mat-dialog-actions>

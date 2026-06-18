@@ -1,0 +1,28 @@
+<div class="larger-modal-container">
+    <div class="title-container">
+        <h1>Ver Servicio</h1>
+    </div>
+    <div *ngIf="servicio != null" class="container-wide">
+        <mat-grid-list cols="1" rowHeight="auto">
+            <mat-card class="card custom-card-wide larger-card">
+                <mat-card-title class="title-container">{{ servicio.nombreServicio }}</mat-card-title>
+                <mat-card-content>
+                    <div class="grid-container">
+                        <div class="grid-item">
+                            <p class="large-font"><strong> Servicio:</strong> {{ servicio.nombreServicio }}</p>
+                        </div>
+                        <div class="grid-item">
+                            <p class="large-font"><strong>Precio:</strong> {{ servicio.precio }}</p>
+                        </div>
+                    </div>
+                </mat-card-content>
+                <mat-card-actions>
+                    <!-- Agrega acciones aquí si es necesario -->
+                </mat-card-actions>
+                <mat-card-actions class="button-container">
+                    <button mat-raised-button mat-dialog-close color="warn">Volver</button>
+                </mat-card-actions>
+            </mat-card>
+        </mat-grid-list>
+    </div>
+</div>

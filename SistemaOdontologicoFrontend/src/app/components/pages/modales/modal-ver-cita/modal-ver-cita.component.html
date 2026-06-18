@@ -1,0 +1,17 @@
+<div class="title">
+    <h1>Ver cita</h1>
+</div>
+<div *ngIf="reporte != null" class="container">
+    <mat-grid-list cols="2" >
+        <mat-card class="card custom-card">
+            <mat-card-title>{{ reporte.id }}</mat-card-title>            
+            <mat-card-content>
+            </mat-card-content>
+            <mat-card-actions>
+                <!-- Agrega acciones aquí si es necesario -->
+            </mat-card-actions>
+            <button mat-raised-button mat-dialog-close color="warn">Volver</button>
+        </mat-card>
+    </mat-grid-list>
+</div>
+

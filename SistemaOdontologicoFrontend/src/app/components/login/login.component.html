@@ -1,0 +1,55 @@
+<div class="body" style="background-image: url('./assets/ConsultorioDental8.jpg'); background-size: cover; background-position: center; display: flex;">
+  <div style="width: 60%;">
+    
+    <img src="./assets/ConsultorioDental1.jpg" alt="Imagen de la izquierda" width="100%" height="100%">
+    <!-- Add your image here -->
+  </div>
+  <div style="width: 40%; border-left: 1px solid #ddede3;">
+    <h1></h1>
+    <h2></h2>
+    <h3></h3>
+    <mat-card class="loginCard" >
+      <div class="header">
+        <h2 style="font-size: 38px;">Login</h2>
+      </div>
+      <mat-card-content   style="padding-bottom: 15px;" >
+        <form (ngSubmit)="onLogin()" name="loginForm" [formGroup]="formLogin">
+          <div>
+            <mat-form-field class="full-width" appearance="outline">
+              <mat-label>Email</mat-label>
+              <input formControlName="email" matInput autocomplete="off" />
+              <mat-icon matSuffix style=" color: #7c7577;">mail</mat-icon>
+            </mat-form-field>
+            <mat-form-field class="full-width" appearance="outline">
+              <mat-label>Contraseña</mat-label>
+              <input matInput [type]="hidePassword ? 'password' : 'text'" formControlName="password" autocomplete="off">
+              <button mat-icon-button matSuffix (click)="hidePassword = !hidePassword" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hidePassword" type="button" style=" color: #7c7577;">
+                <mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+              </button>
+            </mat-form-field>
+            
+      
+          </div>
+          
+          <button class="full-width btn-info" mat-raised-button   color="primary" type="submit" [disabled]="formLogin.invalid">
+            Ingresar
+            <mat-icon matSuffix>login</mat-icon>
+          </button>
+          
+        </form>
+        <div class="mt-4">
+          <button class="btn-info" mat-raised-button color="primary" type="submit" (click)="agregarUsuario()">
+            Registrarse
+            <mat-icon matSuffix>login</mat-icon>
+          </button>
+          
+        </div>
+      </mat-card-content>
+     
+      <div class="spinner-border" mode="indeterminate" *ngIf="loading">
+        <span class="sr-only"></span>
+      </div>
+    
+    </mat-card>
+  </div>
+</div>
