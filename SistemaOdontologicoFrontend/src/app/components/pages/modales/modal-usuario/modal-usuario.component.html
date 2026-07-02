@@ -1,58 +1,84 @@
-<h2 mat-dialog-title>{{accion}} Usuario</h2>
-<mat-dialog-content>
-  <form [formGroup]="formUsuario">
-    <mat-grid-list cols="2" rowHeight="80px" gutterSize="10px">
-      <mat-grid-tile>
-        <mat-form-field appearance="outline">
+<div class="modal-header">
+  <div class="modal-icon-container">
+    <mat-icon>manage_accounts</mat-icon>
+  </div>
+  <div>
+    <h2 mat-dialog-title style="margin: 0; padding: 0; border: none;">{{accion}} usuario</h2>
+    <p class="modal-subtitle">Complete la información requerida para el perfil del usuario.</p>
+  </div>
+</div>
+
+<mat-dialog-content class="premium-dialog-content">
+  <form [formGroup]="formUsuario" class="modal-form">
+
+    <div class="form-section">
+      <h3 class="section-title"><mat-icon>badge</mat-icon> Datos generales</h3>
+
+      <div class="form-row">
+        <mat-form-field appearance="outline" class="flex-grow">
           <mat-label>Nombre y apellidos</mat-label>
-          <input matInput autocomplete="off" formControlName="nombreApellido">
-          <mat-icon matSuffix style="font-size: 24px; color: lightblue;">account_box</mat-icon>
+          <input matInput autocomplete="off" formControlName="nombreApellido" placeholder="Ej. Juan Pérez">
+          <mat-icon matPrefix>account_circle</mat-icon>
         </mat-form-field>
-      </mat-grid-tile>
-      <mat-grid-tile>
-        <mat-form-field appearance="outline">
-          <mat-label>Correo</mat-label>
-          <input matInput autocomplete="off" formControlName="correo">
-          <mat-icon matSuffix style="font-size: 24px; color: lightblue;">mail</mat-icon>
+      </div>
+
+      <div class="form-row">
+        <mat-form-field appearance="outline" class="flex-grow">
+          <mat-label>Correo electrónico</mat-label>
+          <input matInput autocomplete="off" formControlName="correo" placeholder="ejemplo@clinica.com">
+          <mat-icon matPrefix>email</mat-icon>
         </mat-form-field>
-      </mat-grid-tile>
-      <mat-grid-tile>
-        <mat-form-field appearance="outline">
-          <mat-label>Rol</mat-label>
-          <mat-icon matSuffix style="font-size: 24px; color: lightblue;">grade</mat-icon>
+      </div>
+    </div>
+
+    <mat-divider style="margin: 20px 0;"></mat-divider>
+
+    <div class="form-section">
+      <h3 class="section-title"><mat-icon>security</mat-icon> Seguridad y permisos</h3>
+
+      <div class="form-row">
+        <mat-form-field appearance="outline" class="flex-half">
+          <mat-label>Rol del sistema</mat-label>
+          <mat-icon matPrefix>shield_person</mat-icon>
           <mat-select formControlName="id">
             <mat-option *ngFor="let item of listaRoles" [value]="item.id">
               {{item.descripcion}}
             </mat-option>
           </mat-select>
         </mat-form-field>
-      </mat-grid-tile>
-      <mat-grid-tile>
-        <mat-form-field appearance="outline">
-          <mat-label>Contraseña</mat-label>
-          <input matInput [type]="hide ? 'password' : 'text'" formControlName="clave">
-          <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'"
-            [attr.aria-pressed]="hide" type="button" style="color: lightblue;">
-            <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
-          </button>
-        </mat-form-field>
-      </mat-grid-tile>
-      <mat-grid-tile>
-        <mat-form-field appearance="outline">
-          <mat-label>Estado</mat-label>
-          <mat-icon matSuffix style="font-size: 24px; color: lightblue;">offline_pin</mat-icon>
+
+        <mat-form-field appearance="outline" class="flex-half">
+          <mat-label>Estado de la cuenta</mat-label>
+          <mat-icon matPrefix>power_settings_new</mat-icon>
           <mat-select formControlName="esActivo">
-            <mat-option value="1"> Activo </mat-option>
-            <mat-option value="0">No Activo</mat-option>
+            <mat-option value="1">Activo (Permitir acceso)</mat-option>
+            <mat-option value="0">Inactivo (Bloqueado)</mat-option>
           </mat-select>
         </mat-form-field>
-      </mat-grid-tile>
-    </mat-grid-list>
+      </div>
+
+      <div class="form-row">
+        <mat-form-field appearance="outline" class="flex-grow">
+          <mat-label>Contraseña de acceso</mat-label>
+          <mat-icon matPrefix>lock</mat-icon>
+          <input matInput [type]="hide ? 'password' : 'text'" formControlName="clave"
+            placeholder="Asigna una contraseña segura">
+          <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" type="button">
+            <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+          </button>
+          <mat-hint *ngIf="accion === 'Crear'">La contraseña es obligatoria para nuevos usuarios.</mat-hint>
+        </mat-form-field>
+      </div>
+    </div>
+
   </form>
 </mat-dialog-content>
-<mat-dialog-actions align="end">
-  <button mat-raised-button mat-dialog-close color="warn">Volver</button>
-  <button mat-raised-button color="primary" [disabled]="formUsuario.invalid" (click)="agregarEditarUsuario()">
+
+<mat-dialog-actions align="end" class="premium-dialog-actions">
+  <button mat-button mat-dialog-close class="btn-cancel">Cancelar</button>
+  <button mat-raised-button color="primary" [disabled]="formUsuario.invalid" (click)="agregarEditarUsuario()"
+    class="btn-submit">
+    <mat-icon>{{ accion === 'Crear' ? 'save' : 'update' }}</mat-icon>
     {{accionBoton}}
   </button>
 </mat-dialog-actions>

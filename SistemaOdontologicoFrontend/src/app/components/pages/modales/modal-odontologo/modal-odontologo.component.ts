@@ -61,7 +61,7 @@ export class ModalOdontologoComponent {
     if (this.odontologoEditar) {
       this._odontologoServices.editarOdontologo(_odontologo).subscribe({
         next: (data) => {
-          if (data.status) {
+          if (data.estado) {
             this.mostrarAlerta("El odontologo fue editado", "Exito");
             this.dialogoReferencia.close('editado')
           } else {
@@ -77,7 +77,7 @@ export class ModalOdontologoComponent {
     } else {
       this._odontologoServices.guardarOdontologo(_odontologo).subscribe({
         next: (data) => {
-          if (data.status) {
+          if (data.estado) {
             this.mostrarAlerta("El odontologo fue registrado", "Exito");
             this.dialogoReferencia.close('agregado')
           } else {

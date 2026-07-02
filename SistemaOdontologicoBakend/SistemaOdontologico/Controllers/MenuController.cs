@@ -26,13 +26,13 @@ namespace SistemaOdontologico.Controllers
       var rsp = new Response<List<MenuDTO>>();
       try
       {
-        rsp.status = true;
-        rsp.value = await _menuServicio.listaMenus(idUsuario);
+        rsp.estado = true;
+        rsp.valor = await _menuServicio.listaMenus(idUsuario);
       }
       catch (Exception ex)
       {
-        rsp.status = false;
-        rsp.msg = ex.Message;
+        rsp.estado = false;
+        rsp.mensaje = ex.Message;
       }
       return Ok(rsp);
     }

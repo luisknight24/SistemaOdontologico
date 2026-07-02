@@ -30,7 +30,7 @@ namespace SistemaOdontologico.Repositorios
                 .CountAsync();
             if (appointmentCount >= 7)
             {
-              throw new Exception("The dentist already has 7 appointments on the specified date.");
+              throw new Exception("The dentist already has 4 appointments on the specified date.");
             }
           }
           await _DbContext.SaveChangesAsync();          

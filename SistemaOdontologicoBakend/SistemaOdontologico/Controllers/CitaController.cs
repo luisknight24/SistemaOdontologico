@@ -29,13 +29,13 @@ namespace SistemaOdontologico.Controllers
             var rsp = new Response<List<CitaDTO>>();
             try
             {
-                rsp.status = true;
-                rsp.value = await _citaServicio.listaCitas();
+                rsp.estado = true;
+                rsp.valor = await _citaServicio.listaCitas();
             }
             catch (Exception ex)
             {
-                rsp.status = false;
-                rsp.msg = ex.Message;
+                rsp.estado = false;
+                rsp.mensaje = ex.Message;
             }
             return Ok(rsp);
         }
@@ -46,13 +46,13 @@ namespace SistemaOdontologico.Controllers
             var rsp = new Response<List<ReporteDTO>>();
             try
             {
-                rsp.status = true;
-                rsp.value = await _citaServicio.ReporteCita(fechaInicio, fechaFin);
+                rsp.estado = true;
+                rsp.valor = await _citaServicio.ReporteCita(fechaInicio, fechaFin);
             }
             catch (Exception ex)
             {
-                rsp.status = false;
-                rsp.msg = ex.Message;
+                rsp.estado = false;
+                rsp.mensaje = ex.Message;
             }
             return Ok(rsp);
         }
@@ -80,13 +80,13 @@ namespace SistemaOdontologico.Controllers
             var rsp = new Response<List<ReporteDTO>>();
             try
             {
-                rsp.status = true;
-                rsp.value = await _citaServicio.Reporte2();
+                rsp.estado = true;
+                rsp.valor = await _citaServicio.Reporte2();
             }
             catch (Exception ex)
             {
-                rsp.status = false;
-                rsp.msg = ex.Message;
+                rsp.estado = false;
+                rsp.mensaje = ex.Message;
             }
             return Ok(rsp);
         }
@@ -98,13 +98,13 @@ namespace SistemaOdontologico.Controllers
       var rsp = new Response<CitaDTO>();
       try
       {
-        rsp.status = true;
-        rsp.value = await _citaServicio.registrarCita(cita);
+        rsp.estado = true;
+        rsp.valor = await _citaServicio.registrarCita(cita);
       }
       catch (Exception ex)
       {
-        rsp.status = false;
-        rsp.msg = ex.Message;
+        rsp.estado = false;
+        rsp.mensaje = ex.Message;
       }
       return Ok(rsp);
     }
@@ -116,13 +116,13 @@ namespace SistemaOdontologico.Controllers
       var rsp = new Response<bool>();
       try
       {
-        rsp.status = true;
-        rsp.value = await _citaServicio.eliminarCita(id);
+        rsp.estado = true;
+        rsp.valor = await _citaServicio.eliminarCita(id);
       }
       catch (Exception ex)
       {
-        rsp.status = false;
-        rsp.msg = ex.Message;
+        rsp.estado = false;
+        rsp.mensaje = ex.Message;
       }
       return Ok(rsp);
     }
@@ -134,13 +134,13 @@ namespace SistemaOdontologico.Controllers
       var rsp = new Response<bool>();
       try
       {
-        rsp.status = true;
-        rsp.value = await _citaServicio.editarCita(cita);
+        rsp.estado = true;
+        rsp.valor = await _citaServicio.editarCita(cita);
       }
       catch (Exception ex)
       {
-        rsp.status = false;
-        rsp.msg = ex.Message;
+        rsp.estado = false;
+        rsp.mensaje = ex.Message;
       }
       return Ok(rsp);
     }

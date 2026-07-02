@@ -60,8 +60,8 @@ export class UsuarioComponent  implements OnInit, AfterViewInit{
   mostrarUsuarios() {
     this._usuarioServicio.ObtenerUsuarios().subscribe({
       next: (data) => {
-        if(data.status)
-          this.dataSource.data = data.value;
+        if(data.estado)
+          this.dataSource.data = data.valor;
         else
           this._snackBar.open("No se encontraron datos", 'Oops!', { duration: 2000 });
       },
@@ -177,7 +177,7 @@ applyFilterEstado() {
       if (result === "eliminar") {
         this._usuarioServicio.EliminarUsuario(usuario.id).subscribe({
           next: (data) => {
-            if (data.status) {
+            if (data.estado) {
               this.mostrarAlerta("El usuario fue eliminado", "Listo!")
               this.mostrarUsuarios();
             } else {
@@ -201,5 +201,28 @@ applyFilterEstado() {
     });
   }
 
+  eliminarU(usuario:Usuario){
+Swal.fire({
+  title:"Desea eliminar el usuario",
+  text:usuario.nombreApellidos,
+  icon:'warning',
+  confirmButtonColor:'#3085d6',
+showCancelButton:true,
+cancelButtonColor: '#3085d6',
 
+}).then(result => {
+  if(result.isConfirmed)
+  this._usuarioServicio.EliminarUsuario(usuario.id).subscribe({
+    next: (data) =>{
+      if (data.estado) {
+        this.mostrarAlerta("El usuario fue eliminado", "Listo!")
+        this.mostrarUsuarios();
+      } else {
+        this.mostrarAlerta("No se pudo eliminar el usuario", "Error");
+      }
+    },
+      error: (e) => {}
+    })
+  })
+  }
 }

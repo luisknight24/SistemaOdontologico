@@ -28,13 +28,13 @@ namespace SistemaOdontologico.Controllers
       var rsp = new Response<List<ServicioDTO>>();
       try
       {
-        rsp.status = true;
-        rsp.value = await _servicioServicio.listaServicios();
+        rsp.estado = true;
+        rsp.valor = await _servicioServicio.listaServicios();
       }
       catch (Exception ex)
       {
-        rsp.status = false;
-        rsp.msg = ex.Message;
+        rsp.estado = false;
+        rsp.mensaje = ex.Message;
       }
       return Ok(rsp);
     }
@@ -62,13 +62,13 @@ namespace SistemaOdontologico.Controllers
       var rsp = new Response<ServicioDTO>();
       try
       {
-        rsp.status = true;
-        rsp.value = await _servicioServicio.crearServicio(servicio);
+        rsp.estado = true;
+        rsp.valor = await _servicioServicio.crearServicio(servicio);
       }
       catch (Exception ex)
       {
-        rsp.status = false;
-        rsp.msg = ex.Message;
+        rsp.estado = false;
+        rsp.mensaje = ex.Message;
       }
       return Ok(rsp);
     }
@@ -80,13 +80,13 @@ namespace SistemaOdontologico.Controllers
       var rsp = new Response<bool>();
       try
       {
-        rsp.status = true;
-        rsp.value = await _servicioServicio.editarServicio(Usuario);
+        rsp.estado = true;
+        rsp.valor = await _servicioServicio.editarServicio(Usuario);
       }
       catch (Exception ex)
       {
-        rsp.status = false;
-        rsp.msg = ex.Message;
+        rsp.estado = false;
+        rsp.mensaje = ex.Message;
       }
       return Ok(rsp);
     }
@@ -97,13 +97,13 @@ namespace SistemaOdontologico.Controllers
       var rsp = new Response<bool>();
       try
       {
-        rsp.status = true;
-        rsp.value = await _servicioServicio.eliminarServicio(id);
+        rsp.estado = true;
+        rsp.valor = await _servicioServicio.eliminarServicio(id);
       }
       catch (Exception ex)
       {
-        rsp.status = false;
-        rsp.msg = ex.Message;
+        rsp.estado = false;
+        rsp.mensaje = ex.Message;
       }
       return Ok(rsp);
     }

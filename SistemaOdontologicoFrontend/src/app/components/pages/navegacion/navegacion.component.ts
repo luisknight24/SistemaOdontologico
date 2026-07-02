@@ -45,7 +45,7 @@ ngOnInit(): void {
     this._menuServicio.getRoles(usuario.id).subscribe({
       next: (data)=>{
 
-        if(data.status)this.listaMenu=data.value;
+        if(data.estado)this.listaMenu=data.valor;
 
 
       },

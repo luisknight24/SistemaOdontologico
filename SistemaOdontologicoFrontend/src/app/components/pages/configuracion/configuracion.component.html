@@ -1,0 +1,77 @@
+<div class="page-container fade-in">
+  <div class="page-header-container">
+    <div>
+      <h1 class="page-title">Configuración del sistema</h1>
+      <p class="page-subtitle">Ajusta las preferencias visuales, notificaciones y privacidad.</p>
+    </div>
+  </div>
+
+  <div class="config-grid">
+    <!-- Preferencias Visuales -->
+    <mat-card class="content-card">
+      <mat-card-content class="card-content-padding">
+        <h3 class="section-title"><mat-icon>palette</mat-icon> Apariencia visual</h3>
+        <p class="text-muted mb-4">Personaliza cómo se ve y se siente la aplicación.</p>
+
+        <div class="setting-item">
+          <div class="setting-info">
+            <h4>Modo Oscuro</h4>
+            <p>Activa el esquema de colores oscuros para descansar la vista.</p>
+          </div>
+          <mat-slide-toggle color="primary" [checked]="temaOscuro" (change)="onTemaOscuroChange($event)"></mat-slide-toggle>
+        </div>
+        <mat-divider class="dark-divider margin-y-15"></mat-divider>
+
+        <div class="setting-item">
+          <div class="setting-info">
+            <h4>Animaciones de Interfaz</h4>
+            <p>Habilita transiciones suaves al navegar entre páginas.</p>
+          </div>
+          <mat-slide-toggle color="primary" [checked]="animaciones" (change)="onAnimacionesChange($event)"></mat-slide-toggle>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Notificaciones -->
+    <mat-card class="content-card">
+      <mat-card-content class="card-content-padding">
+        <h3 class="section-title"><mat-icon>notifications</mat-icon> Alertas y Notificaciones</h3>
+        <p class="text-muted mb-4">Controla qué información quieres recibir.</p>
+
+        <div class="setting-item">
+          <div class="setting-info">
+            <h4>Alertas del Sistema</h4>
+            <p>Recibir notificaciones flotantes de errores y éxitos.</p>
+          </div>
+          <mat-slide-toggle color="accent" [(ngModel)]="alertasSistema"></mat-slide-toggle>
+        </div>
+        <mat-divider class="dark-divider margin-y-15"></mat-divider>
+
+        <div class="setting-item">
+          <div class="setting-info">
+            <h4>Correos de Nuevas Citas</h4>
+            <p>Enviar un email automático al paciente tras registrar cita.</p>
+          </div>
+          <mat-slide-toggle color="accent" [(ngModel)]="correosNuevasCitas"></mat-slide-toggle>
+        </div>
+        <mat-divider class="dark-divider margin-y-15"></mat-divider>
+
+        <div class="setting-item">
+          <div class="setting-info">
+            <h4>Recordatorios Diarios</h4>
+            <p>Recibir resumen de las citas programadas para hoy.</p>
+          </div>
+          <mat-slide-toggle color="accent" [(ngModel)]="correosRecordatorios"></mat-slide-toggle>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Guardar Todo -->
+    <div class="save-actions">
+      <button mat-raised-button color="primary" class="btn-save" (click)="guardarConfiguracion()">
+        <mat-icon>save_as</mat-icon> Guardar preferencias
+      </button>
+    </div>
+
+  </div>
+</div>

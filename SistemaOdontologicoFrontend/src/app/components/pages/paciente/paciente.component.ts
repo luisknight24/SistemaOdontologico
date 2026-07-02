@@ -12,14 +12,13 @@ import { PacienteService } from '../../../servicios/paciente.service';
 const ELEMENT_DATA: Paciente[] = [
   {
     id: 1,
-    nombre: "Anderson",
-    apellido: "Jordan",
+    nombre: "Luis",
+    apellido: "Balladares",
     edad: 2,
     genero: "Masculino",
-    direccion: "Playas de villl¿ami",
-    telefono: "12234242",
-    email: "andjor3sdfsfsfsdfsfsf",
-
+    direccion: "Salitre",
+    telefono: "0987039893",
+    email: "luiskni",
   }
 
 ];
@@ -60,8 +59,8 @@ export class PacienteComponent implements OnInit, AfterViewInit {
   mostrarPaciente() {
     this._pacienteServicio.obtenerPaciente().subscribe({
       next: (data) => {
-        if (data.status)
-          this.dataSource.data = data.value;
+        if (data.estado)
+          this.dataSource.data = data.valor;
         else
           this._snackBar.open("No se encontraron datos", 'Oops!', { duration: 2000 });
       },
@@ -98,7 +97,7 @@ export class PacienteComponent implements OnInit, AfterViewInit {
   verPaciente(paciente: Paciente) {
     this.dialog.open(ModalVerPacienteComponent, {
       disableClose: true,
-      data: { paciente }  
+      data: { paciente }
     }).afterClosed().subscribe(result => {
     });
   }
@@ -114,7 +113,7 @@ export class PacienteComponent implements OnInit, AfterViewInit {
 
         this._pacienteServicio.eliminarPaciente(paciente.id).subscribe({
           next: (data) => {
-            if (data.status) {
+            if (data.estado) {
               this.mostrarAlerta("El paciente fue eliminado", "Listo!")
               this.mostrarPaciente();
             } else {
@@ -141,7 +140,7 @@ export class PacienteComponent implements OnInit, AfterViewInit {
   searchValue: string = '';
   onSearchInput() {
     if (this.searchValue === '') {
-      this.filtro = 'todos'; // Marcar automáticamente la opción "todos" en el filtro
+      this.filtro = 'todos';
       this.applyFilterGenero();
     }
   }

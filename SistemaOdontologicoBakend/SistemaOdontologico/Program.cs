@@ -51,6 +51,9 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 var app = builder.Build();
 
+// Inicializar base de datos y sembrar datos
+SistemaOdontologico.Utilidades.DbInitializer.Initialize(app);
+
 
 app.UseCors("NuevaPolitica");
 

@@ -1,28 +1,33 @@
-<div class="larger-modal-container">
-    <div class="title-container">
-        <h1>Ver Servicio</h1>
+<div class="premium-modal-header">
+    <div class="modal-icon-container">
+        <mat-icon>medical_services</mat-icon>
     </div>
-    <div *ngIf="servicio != null" class="container-wide">
-        <mat-grid-list cols="1" rowHeight="auto">
-            <mat-card class="card custom-card-wide larger-card">
-                <mat-card-title class="title-container">{{ servicio.nombreServicio }}</mat-card-title>
-                <mat-card-content>
-                    <div class="grid-container">
-                        <div class="grid-item">
-                            <p class="large-font"><strong> Servicio:</strong> {{ servicio.nombreServicio }}</p>
-                        </div>
-                        <div class="grid-item">
-                            <p class="large-font"><strong>Precio:</strong> {{ servicio.precio }}</p>
-                        </div>
-                    </div>
-                </mat-card-content>
-                <mat-card-actions>
-                    <!-- Agrega acciones aquí si es necesario -->
-                </mat-card-actions>
-                <mat-card-actions class="button-container">
-                    <button mat-raised-button mat-dialog-close color="warn">Volver</button>
-                </mat-card-actions>
-            </mat-card>
-        </mat-grid-list>
+    <div>
+        <h2 class="modal-title">Ficha del Servicio</h2>
+        <p class="modal-subtitle">Especificaciones clínicas y costo asignado.</p>
     </div>
+</div>
+
+<div mat-dialog-content class="premium-modal-content custom-scrollbar" *ngIf="servicio">
+    <div class="details-grid grid-two-columns">
+        <div class="detail-card">
+            <mat-icon>star_outline</mat-icon>
+            <div class="detail-info">
+                <span class="detail-label">Nombre del Tratamiento</span>
+                <span class="detail-value text-bold-highlight">{{ servicio.nombreServicio }}</span>
+            </div>
+        </div>
+
+        <div class="detail-card">
+            <mat-icon>payments</mat-icon>
+            <div class="detail-info">
+                <span class="detail-label">Precio Cobrado Base</span>
+                <span class="detail-value text-success-highlight">S/ {{ servicio.precio }}</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div mat-dialog-actions align="end" class="premium-dialog-actions">
+    <button mat-raised-button mat-dialog-close color="primary" class="btn-submit">Entendido</button>
 </div>

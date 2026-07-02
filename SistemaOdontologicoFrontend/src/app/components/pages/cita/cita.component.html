@@ -1,129 +1,172 @@
-<h1 class="page-title" style="color: #17789e;">Nueva Cita</h1>
-<mat-card class="card" style="margin: 20px 40px 40px 40px">
-  <mat-card-content class="dashboard-card-content">
-    <form class="example-form" [formGroup]="formGroup" (ngSubmit)="registrarCita()">
-      <mat-grid-list cols="4" rowHeight="80px">
-        <mat-grid-tile [colspan]="2">
-          <mat-form-field class="example-full-width" appearance="fill">
+<div class="page-container fade-in">
+  <div class="page-header-container">
+    <div>
+      <h1 class="page-title">Gestión de citas</h1>
+      <p class="page-subtitle">Registra y administra las reservaciones odontológicas.</p>
+    </div>
+  </div>
+
+  <mat-card class="content-card">
+    <mat-card-header>
+      <mat-card-title class="card-header-title">
+        <mat-icon>event_available</mat-icon> Registrar nueva cita
+      </mat-card-title>
+    </mat-card-header>
+    <mat-divider class="dark-divider"></mat-divider>
+
+    <mat-card-content class="card-content-padding">
+      <form [formGroup]="formGroup" (ngSubmit)="registrarCita()" class="premium-form">
+        <div class="form-grid">
+          <mat-form-field appearance="outline" class="form-field">
             <mat-label>Paciente</mat-label>
-            <mat-icon matSuffix style="font-size: 24px; color: lightblue;">person</mat-icon>
-            <input type="text" placeholder="Buscar..." aria-label="Number" matInput [matAutocomplete]="auto"
+            <mat-icon matSuffix>person_search</mat-icon>
+            <input type="text" placeholder="Buscar paciente..." matInput [matAutocomplete]="auto"
               formControlName="paciente">
             <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete"
               (optionSelected)="pacienteSeleccionado($event)" [displayWith]="displayPaciente">
               <mat-option *ngFor="let option of filteredPacientes" [value]="option">
-                {{option.apellido}} {{option.nombre}}
+                <div class="autocomplete-option">
+                  <mat-icon class="text-primary-light">person</mat-icon>
+                  <span>{{option.apellido}} {{option.nombre}}</span>
+                </div>
               </mat-option>
             </mat-autocomplete>
           </mat-form-field>
-        </mat-grid-tile>
-        <mat-grid-tile [colspan]="2">
-          <mat-form-field class="example-full-width" appearance="fill" style="margin-left: 40px;">
-            <mat-label>Servicio</mat-label>
-            <mat-icon matSuffix style="font-size: 24px; color: lightblue;">local_pharmacy</mat-icon>
-            <input type="text" placeholder="Buscar..." aria-label="Number" matInput [matAutocomplete]="autoServicio"
+
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Servicio odontológico</mat-label>
+            <mat-icon matSuffix>medical_services</mat-icon>
+            <input type="text" placeholder="Buscar servicio..." matInput [matAutocomplete]="autoServicio"
               formControlName="servicio">
             <mat-autocomplete autoActiveFirstOption #autoServicio="matAutocomplete"
               (optionSelected)="servicioSeleccionado($event)" [displayWith]="displayServicio">
               <mat-option *ngFor="let option of filteredServicios" [value]="option">
-                {{option.nombreServicio}}
+                <div class="autocomplete-option-between">
+                  <span>{{option.nombreServicio}}</span>
+                  <span class="text-primary-light font-semibold">S/ {{option.precio}}</span>
+                </div>
               </mat-option>
             </mat-autocomplete>
           </mat-form-field>
-        </mat-grid-tile>
-      </mat-grid-list>
-      <mat-grid-list cols="4" rowHeight="80px">
-        <mat-grid-tile [colspan]="2">
-          <mat-form-field class="example-full-width" appearance="fill">
-            <mat-label>Odontologo</mat-label>
-            <mat-icon matSuffix style="font-size: 24px; color: lightblue;">healing</mat-icon>
-            <input type="text" placeholder="Buscar..." aria-label="Number" matInput [matAutocomplete]="autoOdontologo"
+
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Odontólogo asignado</mat-label>
+            <mat-icon matSuffix>badge</mat-icon>
+            <input type="text" placeholder="Buscar odontólogo..." matInput [matAutocomplete]="autoOdontologo"
               formControlName="odontologo" (click)="openAutocompletePanel()">
             <mat-autocomplete autoActiveFirstOption #autoOdontologo="matAutocomplete"
               (optionSelected)="odontologoSeleccionado($event)" [displayWith]="displayOdontologo">
-
               <mat-option *ngFor="let options of filteredOdontologo" [value]="options">
-                {{options.apellido}} {{options.nombre}}
+                <div class="autocomplete-option">
+                  <mat-icon class="text-accent">medication</mat-icon>
+                  <span>Dr(a). {{options.apellido}} {{options.nombre}}</span>
+                </div>
               </mat-option>
             </mat-autocomplete>
           </mat-form-field>
-        </mat-grid-tile>
-        <mat-grid-tile [colspan]="1" style="margin-left: 39px;">
-          <mat-form-field appearance="fill">
-            <mat-label>Fecha de Reserva</mat-label>
-            <input matInput [matDatepicker]="picker1" formControlName="fechaReserva" showTime="false">
-            <mat-datepicker-toggle matSuffix [for]="picker1"
-              style="font-size: 20px; color: lightblue;"></mat-datepicker-toggle>
+
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Fecha de reserva</mat-label>
+            <input matInput [matDatepicker]="picker1" formControlName="fechaReserva">
+            <mat-datepicker-toggle matSuffix [for]="picker1" class="text-primary"></mat-datepicker-toggle>
             <mat-datepicker #picker1></mat-datepicker>
           </mat-form-field>
-        </mat-grid-tile>
-        <mat-grid-tile style="text-align:end">
-        </mat-grid-tile>
-        <mat-grid-tile [colspan]="4" style="text-align: center;">
-          <button mat-raised-button color="primary" class="btn btn-info"
-            style="width: 15%;"><mat-icon>add_circle</mat-icon> Agregar</button>
-        </mat-grid-tile>
-      </mat-grid-list>
-    </form>
-    <mat-form-field appearance="standard" class="filter-field">
-      <mat-label>Búsqueda (Cualquier campo)</mat-label>
-      <input matInput (keyup)="applyFilter($event)" placeholder="Ex. Servicio" #input>
-    </mat-form-field>
-    <div class="table-container">
-      <div class="mat-elevation-z2">
+        </div>
+
+        <div class="form-actions-end">
+          <button mat-raised-button color="primary" type="submit" [disabled]="formGroup.invalid" class="btn-action">
+            <mat-icon>save</mat-icon> Confirmar reserva
+          </button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card class="content-card">
+    <mat-card-content class="card-content-padding">
+      <div class="table-actions-bar">
+        <h2 class="table-bar-title">Citas registradas</h2>
+        <mat-form-field appearance="outline" class="search-field">
+          <mat-icon matPrefix>search</mat-icon>
+          <mat-label>Buscar cita...</mat-label>
+          <input matInput (keyup)="applyFilter($event)" placeholder="Ej. Extracción" #input>
+        </mat-form-field>
+      </div>
+
+      <div class="table-container">
         <table mat-table [dataSource]="dataSource">
-          <td mat-cell *matCellDef="let element"> {{element.idCita}} </td>-->
           <ng-container matColumnDef="numero">
-            <th mat-header-cell *matHeaderCellDef> Numero de Cita </th>
-            <td mat-cell *matCellDef="let element"> {{element.id}} </td>
+            <th mat-header-cell *matHeaderCellDef> Número </th>
+            <td mat-cell *matCellDef="let element"> <span class="text-bold">#{{element.id}}</span> </td>
           </ng-container>
+
           <ng-container matColumnDef="paciente">
             <th mat-header-cell *matHeaderCellDef> Paciente </th>
-            <td mat-cell *matCellDef="let element"> {{ element.paciente}} </td>
+            <td mat-cell *matCellDef="let element">
+              <div class="flex-align-center">
+                <mat-icon class="text-muted-icon">face</mat-icon> {{element.paciente}}
+              </div>
+            </td>
           </ng-container>
+
           <ng-container matColumnDef="servicio">
             <th mat-header-cell *matHeaderCellDef> Servicio </th>
-            <td mat-cell *matCellDef="let element"> {{ element.servicio }} </td>
+            <td mat-cell *matCellDef="let element">
+              <span class="badge badge-accent">{{element.servicio}}</span>
+            </td>
           </ng-container>
+
           <ng-container matColumnDef="odontologo">
-            <th mat-header-cell *matHeaderCellDef> Odontologo </th>
-            <td mat-cell *matCellDef="let element"> {{ element.odontologo }} </td>
+            <th mat-header-cell *matHeaderCellDef> Odontólogo </th>
+            <td mat-cell *matCellDef="let element"> {{element.odontologo}} </td>
           </ng-container>
+
           <ng-container matColumnDef="fechaReserva">
-            <th mat-header-cell *matHeaderCellDef> Fecha Reserva </th>
-            <td mat-cell *matCellDef="let element"> {{ element.fechaReserva }} </td>
+            <th mat-header-cell *matHeaderCellDef> Fecha </th>
+            <td mat-cell *matCellDef="let element">
+              <div class="flex-align-center">
+                <mat-icon class="text-accent-icon">calendar_today</mat-icon> {{element.fechaReserva |
+                date:'dd/MM/yyyy'}}
+              </div>
+            </td>
           </ng-container>
 
           <ng-container matColumnDef="precio">
-            <th mat-header-cell *matHeaderCellDef> Precio </th>
-            <td mat-cell *matCellDef="let element"> {{ element.precio }} </td>
-          </ng-container>
-          <ng-container matColumnDef="acciones">
-            <th mat-header-cell *matHeaderCellDef style="width:80px"> Editar</th>
+            <th mat-header-cell *matHeaderCellDef> Costo </th>
             <td mat-cell *matCellDef="let element">
-              <button mat-icon-button color="primary" (click)="editarCita(element)">
+              <span class="text-bold">S/ {{element.precio}}</span>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="acciones">
+            <th mat-header-cell *matHeaderCellDef class="text-center"> Editar </th>
+            <td mat-cell *matCellDef="let element" class="text-center">
+              <button mat-icon-button color="accent" matTooltip="Editar Cita" (click)="editarCita(element)">
                 <mat-icon>edit</mat-icon>
               </button>
             </td>
           </ng-container>
+
           <ng-container matColumnDef="accion">
-            <th mat-header-cell *matHeaderCellDef style="width:80px"> Eliminar</th>
-            <td mat-cell *matCellDef="let element">
-              <button mat-icon-button color="warn" (click)="eliminarUsuario(element)">
-                <mat-icon>clear</mat-icon>
+            <th mat-header-cell *matHeaderCellDef class="text-center"> Eliminar </th>
+            <td mat-cell *matCellDef="let element" class="text-center">
+              <button mat-icon-button color="warn" matTooltip="Cancelar Cita" (click)="eliminarUsuario(element)">
+                <mat-icon>event_busy</mat-icon>
               </button>
             </td>
           </ng-container>
+
           <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
           <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+          <tr class="mat-row" *matNoDataRow>
+            <td class="mat-cell empty-state" colspan="8">
+              <mat-icon class="empty-state-icon">event_note</mat-icon>
+              <p>No hay citas programadas{{input.value ? ' para "' + input.value + '"' : ''}}.</p>
+            </td>
+          </tr>
         </table>
       </div>
-    </div>
-    <mat-grid-list cols="4" rowHeight="80px">
-      <mat-grid-tile></mat-grid-tile>
-      <mat-grid-tile></mat-grid-tile>
-      <mat-grid-tile>
-      </mat-grid-tile>
-    </mat-grid-list>
-  </mat-card-content>
-</mat-card>
+    </mat-card-content>
+  </mat-card>
+</div>

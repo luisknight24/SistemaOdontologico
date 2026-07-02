@@ -24,12 +24,12 @@ namespace SistemaOdontologico.Controllers
       var rsp = new Response<List<RolDTO>>();
       try
       {
-        rsp.status = true;
-        rsp.value = await _rolServicios.listaRoles();
+        rsp.estado = true;
+        rsp.valor = await _rolServicios.listaRoles();
       }
       catch(Exception ex) {
-        rsp.status = false;
-        rsp.msg = ex.Message;
+        rsp.estado = false;
+        rsp.mensaje = ex.Message;
       }
       return Ok(rsp);
     }

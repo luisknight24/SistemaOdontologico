@@ -21,7 +21,6 @@ export class ModalServicioComponent {
     @Inject(MAT_DIALOG_DATA) public servicioEditar: Servicio,
     private fb: FormBuilder,
     private _snackBar: MatSnackBar,
-    //private _categoriaServicio: CategoriaService,
     private _servicioService: ServiciosService
   ) {
     this.formServicio = this.fb.group({
@@ -40,7 +39,6 @@ export class ModalServicioComponent {
       this.formServicio.patchValue({
         nombreServicio: this.servicioEditar.nombreServicio,
         precio: this.servicioEditar.precio
-        //idCategoria: String(this.pacienteEditar.idCategoria),
       })
     }
   }
@@ -54,7 +52,7 @@ export class ModalServicioComponent {
     if (this.servicioEditar) {
       this._servicioService.editarServicio(_Servicio).subscribe({
         next: (data) => {
-          if (data.status) {
+          if (data.estado) {
             this.mostrarAlerta("El servicio fue editado", "Exito");
             this.dialogoReferencia.close('editado')
           } else {
@@ -71,11 +69,11 @@ export class ModalServicioComponent {
 
       this._servicioService.guardarServicio(_Servicio).subscribe({
         next: (data) => {
-          if (data.status) {
-            this.mostrarAlerta("El servicio fue registrado", "Exito");
+          if (data.estado) {
+            this.mostrarAlerta("El producto fue registrado", "Exito");
             this.dialogoReferencia.close('agregado')
           } else {
-            this.mostrarAlerta("No se pudo registrar el servicio", "Error");
+            this.mostrarAlerta("No se pudo registrar el producto", "Error");
           }
         },
         error: (e) => {

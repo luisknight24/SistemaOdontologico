@@ -44,8 +44,8 @@ export class ServicioComponent implements OnInit, AfterViewInit {
   mostrarServicio() {
     this._Servicio.obtenerServicio().subscribe({
       next: (data) => {
-        if (data.status)
-          this.dataSource.data = data.value;
+        if (data.estado)
+          this.dataSource.data = data.valor;
         else
           this._snackBar.open("No se encontraron datos", 'Oops!', { duration: 2000 });
       },
@@ -78,7 +78,6 @@ export class ServicioComponent implements OnInit, AfterViewInit {
       disableClose: true,
       data: { servicio }  // Pasa el objeto odontologo como parte de un objeto con una propiedad llamada "odontologo"
     }).afterClosed().subscribe(result => {
-      // Puedes realizar alguna acción después de cerrar el modal de ver
     });
   }
 
@@ -102,7 +101,7 @@ export class ServicioComponent implements OnInit, AfterViewInit {
       if (result === "eliminar") {
         this._Servicio.eliminarServicio(servicio.id).subscribe({
           next: (data) => {
-            if (data.status) {
+            if (data.estado) {
               this.mostrarAlerta("El servicio fue eliminado", "Listo!")
               this.mostrarServicio();
             } else {

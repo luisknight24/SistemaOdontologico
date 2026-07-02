@@ -1,17 +1,26 @@
-<div class="title">
-    <h1>Ver cita</h1>
-</div>
-<div *ngIf="reporte != null" class="container">
-    <mat-grid-list cols="2" >
-        <mat-card class="card custom-card">
-            <mat-card-title>{{ reporte.id }}</mat-card-title>            
-            <mat-card-content>
-            </mat-card-content>
-            <mat-card-actions>
-                <!-- Agrega acciones aquí si es necesario -->
-            </mat-card-actions>
-            <button mat-raised-button mat-dialog-close color="warn">Volver</button>
-        </mat-card>
-    </mat-grid-list>
+<div class="premium-modal-header">
+    <div class="modal-icon-container">
+        <mat-icon>event_note</mat-icon>
+    </div>
+    <div>
+        <h2 class="modal-title">Resumen de Reserva</h2>
+        <p class="modal-subtitle">Información del ticket de atención médica.</p>
+    </div>
 </div>
 
+<div mat-dialog-content class="premium-modal-content custom-scrollbar" *ngIf="reporte">
+    <div class="details-grid grid-two-columns">
+        <div class="detail-card full-width-card">
+            <mat-icon>qr_code</mat-icon>
+            <div class="detail-info">
+                <span class="detail-label">Código Único de Registro</span>
+                <span class="detail-value monospace-text">#{{ reporte.id }}</span>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div mat-dialog-actions align="end" class="premium-dialog-actions">
+    <button mat-raised-button mat-dialog-close color="warn" class="btn-submit">Volver</button>
+</div>

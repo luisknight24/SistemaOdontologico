@@ -1,58 +1,76 @@
-<h2 mat-dialog-title>{{accion}} Odontologo</h2>
-<mat-dialog-content >
-  <form [formGroup]="formOdontologo">
-  <mat-grid-list cols="2" rowHeight="80px" gutterSize="10px">
-    <mat-grid-tile>
-      <mat-form-field appearance="outline">
-        <mat-label>Nombre</mat-label>
-        <input matInput autocomplete="off" formControlName="nombre">
-        <mat-icon matSuffix style="font-size: 24px; color: lightblue;">account_box</mat-icon>
-      </mat-form-field>
-    </mat-grid-tile>
-    <mat-grid-tile >
-      <mat-form-field appearance="outline">
-        <mat-label >Apellido</mat-label>
-        <input matInput autocomplete="off" formControlName="apellido">
-        <mat-icon matSuffix style="font-size: 24px; color: lightblue;">contact_phone</mat-icon>
-      </mat-form-field>
-    </mat-grid-tile>
-    <mat-grid-tile>
-      <mat-form-field appearance="outline">
-        <mat-label>Edad</mat-label>
-        <input matInput autocomplete="off" formControlName="edad">
-        <mat-icon matSuffix style="font-size: 24px; color: lightblue;">cake</mat-icon>
-      </mat-form-field>
-    </mat-grid-tile>
-    <mat-grid-tile>
-      <mat-form-field appearance="outline">
-        <mat-label>Experiencia</mat-label>
-        <input matInput autocomplete="off" formControlName="experiencia">
-        <mat-icon matSuffix style="font-size: 24px; color: lightblue;">stars icon</mat-icon>
-      </mat-form-field>
-    </mat-grid-tile>
-    <mat-grid-tile>
-      <mat-form-field appearance="outline">
-        <mat-label>Especialidad</mat-label>
-        <input matInput autocomplete="off" formControlName="especialidad">
-        <mat-icon matSuffix style="font-size: 24px; color: lightblue;">local_hospital</mat-icon>
-      </mat-form-field>
-    </mat-grid-tile>
-    <mat-grid-tile>
-      <mat-form-field appearance="outline">
-        <mat-label>Email</mat-label>
-        <input matInput autocomplete="off" formControlName="email">
-        <mat-icon matSuffix style="font-size: 24px; color: lightblue;">mail outline icon</mat-icon>
-      </mat-form-field>
-    </mat-grid-tile>
-  </mat-grid-list>
-</form>
+<div class="modal-header">
+  <div class="modal-icon-container">
+    <mat-icon>medication</mat-icon>
+  </div>
+  <div>
+    <h2 mat-dialog-title style="margin: 0; padding: 0; border: none;">{{accion}} odontólogo</h2>
+    <p class="modal-subtitle">Complete la ficha profesional del odontólogo.</p>
+  </div>
+</div>
+
+<mat-dialog-content class="premium-dialog-content">
+  <form [formGroup]="formOdontologo" class="modal-form">
+
+    <div class="form-section">
+      <h3 class="section-title"><mat-icon>person</mat-icon> Información personal</h3>
+
+      <div class="form-row">
+        <mat-form-field appearance="outline" class="flex-half">
+          <mat-label>Nombres</mat-label>
+          <input matInput autocomplete="off" formControlName="nombre" placeholder="Ej. Ana">
+          <mat-icon matPrefix>badge</mat-icon>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="flex-half">
+          <mat-label>Apellidos</mat-label>
+          <input matInput autocomplete="off" formControlName="apellido" placeholder="Ej. Silva">
+          <mat-icon matPrefix>family_restroom</mat-icon>
+        </mat-form-field>
+      </div>
+
+      <div class="form-row">
+        <mat-form-field appearance="outline" class="flex-half">
+          <mat-label>Edad</mat-label>
+          <input matInput type="number" autocomplete="off" formControlName="edad" placeholder="Años">
+          <mat-icon matPrefix>cake</mat-icon>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="flex-half">
+          <mat-label>Correo electrónico</mat-label>
+          <input matInput autocomplete="off" formControlName="email" placeholder="correo@ejemplo.com">
+          <mat-icon matPrefix>email</mat-icon>
+        </mat-form-field>
+      </div>
+    </div>
+
+    <mat-divider style="margin: 20px 0;"></mat-divider>
+
+    <div class="form-section">
+      <h3 class="section-title"><mat-icon>work</mat-icon> Perfil Profesional</h3>
+
+      <div class="form-row">
+        <mat-form-field appearance="outline" class="flex-half">
+          <mat-label>Especialidad médica</mat-label>
+          <input matInput autocomplete="off" formControlName="especialidad" placeholder="Ej. Ortodoncia">
+          <mat-icon matPrefix>local_hospital</mat-icon>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="flex-half">
+          <mat-label>Años de experiencia</mat-label>
+          <input matInput type="number" autocomplete="off" formControlName="experiencia" placeholder="Ej. 5">
+          <mat-icon matPrefix>stars</mat-icon>
+        </mat-form-field>
+      </div>
+    </div>
+
+  </form>
 </mat-dialog-content>
-<mat-dialog-actions align="end">
-  <button mat-raised-button mat-dialog-close color="warn">Volver</button>
-  <button mat-raised-button
-          color="primary"
-          [disabled]="formOdontologo.invalid"
-          (click)="agregarEditarOdontologo()">
+
+<mat-dialog-actions align="end" class="premium-dialog-actions">
+  <button mat-button mat-dialog-close class="btn-cancel">Cancelar</button>
+  <button mat-raised-button color="primary" [disabled]="formOdontologo.invalid" (click)="agregarEditarOdontologo()"
+    class="btn-submit">
+    <mat-icon>{{ accion === 'Crear' ? 'save' : 'update' }}</mat-icon>
     {{accionBoton}}
   </button>
 </mat-dialog-actions>

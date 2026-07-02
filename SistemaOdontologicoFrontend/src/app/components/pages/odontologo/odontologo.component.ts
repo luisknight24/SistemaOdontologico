@@ -57,8 +57,8 @@ export class OdontologoComponent {
   mostrarOdontologo() {
     this._odontologoServicio.ObtenerOdontologo().subscribe({
       next: (data) => {
-        if (data.status)
-          this.dataSource.data = data.value;
+        if (data.estado)
+          this.dataSource.data = data.valor;
         else
           this._snackBar.open("No se encontraron datos", 'Oops!', { duration: 2000 });
       },
@@ -96,7 +96,7 @@ export class OdontologoComponent {
       if (result === "eliminar") {
         this._odontologoServicio.eliminarOdontologo(odontologo.id).subscribe({
           next: (data) => {
-            if (data.status) {
+            if (data.estado) {
               this.mostrarAlerta("El paciente fue eliminado", "Listo!")
               this.mostrarOdontologo();
             } else {

@@ -1,0 +1,96 @@
+<div class="page-container fade-in">
+  <div class="page-header-container">
+    <div>
+      <h1 class="page-title">Mi perfil</h1>
+      <p class="page-subtitle">Visualiza tus datos y gestiona tus credenciales de acceso.</p>
+    </div>
+  </div>
+
+  <div class="perfil-grid">
+    <!-- Datos Generales -->
+    <mat-card class="content-card profile-card">
+      <mat-card-content class="card-content-padding">
+        <div class="profile-header">
+          <div class="avatar-large">{{correoUsuario.charAt(0) | uppercase}}</div>
+          <div class="profile-info">
+            <h2 class="profile-name">{{nombreUsuario}}</h2>
+            <span class="badge badge-accent">{{rolUsuario}}</span>
+          </div>
+        </div>
+
+        <mat-divider class="dark-divider margin-y-20"></mat-divider>
+
+        <h3 class="section-title"><mat-icon>manage_accounts</mat-icon> Datos de la cuenta</h3>
+
+        <div class="form-grid mt-4">
+          <mat-form-field appearance="outline" class="readonly-field">
+            <mat-label>Correo electrónico</mat-label>
+            <input matInput [value]="correoUsuario" readonly>
+            <mat-icon matPrefix>email</mat-icon>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="readonly-field">
+            <mat-label>Rol en el sistema</mat-label>
+            <input matInput [value]="rolUsuario" readonly>
+            <mat-icon matPrefix>shield_person</mat-icon>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="readonly-field">
+            <mat-label>Estado de cuenta</mat-label>
+            <input matInput value="Activo" readonly>
+            <mat-icon matPrefix>verified_user</mat-icon>
+          </mat-form-field>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Cambio de Contraseña -->
+    <mat-card class="content-card password-card">
+      <mat-card-content class="card-content-padding">
+        <h3 class="section-title"><mat-icon>lock_reset</mat-icon> Actualizar contraseña</h3>
+        <p class="text-muted mb-4">Asegúrate de usar una contraseña fuerte y segura.</p>
+
+        <form [formGroup]="formPassword" (ngSubmit)="actualizarClave()" class="password-form">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Contraseña actual</mat-label>
+            <mat-icon matPrefix>lock_open</mat-icon>
+            <input matInput [type]="hideActual ? 'password' : 'text'" formControlName="claveActual">
+            <button mat-icon-button matSuffix (click)="hideActual = !hideActual" type="button">
+              <mat-icon>{{hideActual ? 'visibility_off' : 'visibility'}}</mat-icon>
+            </button>
+            <mat-error *ngIf="formPassword.get('claveActual')?.hasError('required')">Requerido</mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width mt-2">
+            <mat-label>Nueva contraseña</mat-label>
+            <mat-icon matPrefix>lock</mat-icon>
+            <input matInput [type]="hideNueva ? 'password' : 'text'" formControlName="claveNueva">
+            <button mat-icon-button matSuffix (click)="hideNueva = !hideNueva" type="button">
+              <mat-icon>{{hideNueva ? 'visibility_off' : 'visibility'}}</mat-icon>
+            </button>
+            <mat-error *ngIf="formPassword.get('claveNueva')?.hasError('required')">Requerido</mat-error>
+            <mat-error *ngIf="formPassword.get('claveNueva')?.hasError('minlength')">Mínimo 6 caracteres</mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width mt-2">
+            <mat-label>Confirmar nueva contraseña</mat-label>
+            <mat-icon matPrefix>lock</mat-icon>
+            <input matInput [type]="hideConfirmar ? 'password' : 'text'" formControlName="claveConfirmar">
+            <button mat-icon-button matSuffix (click)="hideConfirmar = !hideConfirmar" type="button">
+              <mat-icon>{{hideConfirmar ? 'visibility_off' : 'visibility'}}</mat-icon>
+            </button>
+            <mat-error *ngIf="formPassword.get('claveConfirmar')?.hasError('required')">Requerido</mat-error>
+            <mat-error *ngIf="formPassword.hasError('mismatch')">Las contraseñas no coinciden</mat-error>
+          </mat-form-field>
+
+          <div class="form-actions-end mt-4">
+            <button mat-raised-button color="primary" type="submit" [disabled]="formPassword.invalid" class="btn-action w-100">
+              <mat-icon>save</mat-icon>
+              Actualizar credenciales
+            </button>
+          </div>
+        </form>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

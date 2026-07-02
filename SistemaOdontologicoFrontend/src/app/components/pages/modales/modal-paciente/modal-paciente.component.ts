@@ -66,7 +66,7 @@ export class ModalPacienteComponent implements OnInit {
     if (this.pacienteEditar) {
       this._pacienteServices.editarPaciente(_paciente).subscribe({
         next: (data) => {
-          if (data.status) {
+          if (data.estado) {
             this.mostrarAlerta("El paciente fue editado", "Exito");
             this.dialogoReferencia.close('editado')
           } else {
@@ -82,7 +82,7 @@ export class ModalPacienteComponent implements OnInit {
     } else {
       this._pacienteServices.guardarPaciente(_paciente).subscribe({
         next: (data) => {
-          if (data.status) {
+          if (data.estado) {
             this.mostrarAlerta("El paciente fue registrado", "Exito");
             this.dialogoReferencia.close('agregado')
           } else {

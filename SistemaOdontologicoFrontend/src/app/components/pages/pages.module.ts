@@ -21,14 +21,12 @@ import { ModalCitaComponent } from './modales/modal-cita/modal-cita.component';
 import { ModalServicioComponent } from './modales/modal-servicio/modal-servicio.component';
 import { ModalEliminarServicioComponent } from './modales/modal-eliminar-servicio/modal-eliminar-servicio.component';
 
-//Modulos
 import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 
 
 
-//controles para la fecha
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MomentDateModule } from '@angular/material-moment-adapter';
@@ -38,11 +36,15 @@ import { ModalVerServicioComponent } from './modales/modal-ver-servicio/modal-ve
 import { ModalVerPacienteComponent } from './modales/modal-ver-paciente/modal-ver-paciente.component';
 import { ModalVerUsuarioComponent } from './modales/modal-ver-usuario/modal-ver-usuario.component';
 import { ModalVerCitaComponent } from './modales/modal-ver-cita/modal-ver-cita.component'; /*npm install moment --save | npm i @angular/material-moment-adapter*/
+import { DashboardComponent } from './dashboard/dashboard.component';
+import { PerfilComponent } from './perfil/perfil.component';
+import { ConfiguracionComponent } from './configuracion/configuracion.component';
 
 
 @NgModule({
   declarations: [
     PagesComponent,
+    DashboardComponent,
     NavegacionComponent,
     UsuarioComponent,
     ModalUsuarioComponent,
@@ -65,6 +67,8 @@ import { ModalVerCitaComponent } from './modales/modal-ver-cita/modal-ver-cita.c
     ModalVerPacienteComponent,
     ModalVerUsuarioComponent,
     ModalVerCitaComponent,
+    PerfilComponent,
+    ConfiguracionComponent,
   ],
   imports: [
     CommonModule,

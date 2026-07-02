@@ -1,0 +1,57 @@
+<div class="dashboard-container fade-in">
+  <div class="welcome-banner glass-panel">
+    <div class="banner-content">
+      <h1>Panel de control odontológico</h1>
+      <p>Bienvenido al sistema de administración y control de citas odontológicas SoftDental.</p>
+    </div>
+  </div>
+
+  <div class="stats-grid">
+    <div class="stat-card glass-panel glow-primary">
+      <div class="card-content">
+        <span class="card-label">Pacientes</span>
+        <span class="card-value">{{ totalPacientes }}</span>
+      </div>
+      <div class="card-icon">
+        <mat-icon>accessibility</mat-icon>
+      </div>
+    </div>
+
+    <div class="stat-card glass-panel glow-success">
+      <div class="card-content">
+        <span class="card-label">Odontólogos</span>
+        <span class="card-value">{{ totalOdontologos }}</span>
+      </div>
+      <div class="card-icon">
+        <mat-icon>medical_services</mat-icon>
+      </div>
+    </div>
+
+    <div class="stat-card glass-panel glow-accent">
+      <div class="card-content">
+        <span class="card-label">Citas Totales</span>
+        <span class="card-value">{{ totalCitas }}</span>
+      </div>
+      <div class="card-icon">
+        <mat-icon>calendar_today</mat-icon>
+      </div>
+    </div>
+
+    <div class="stat-card glass-panel glow-warn">
+      <div class="card-content">
+        <span class="card-label">Ingresos</span>
+        <span class="card-value">S/ {{ totalIngresos }}</span>
+      </div>
+      <div class="card-icon">
+        <mat-icon>monetization_on</mat-icon>
+      </div>
+    </div>
+  </div>
+
+  <div class="chart-container glass-panel">
+    <h3>Distribución de reservaciones (Citas por mes)</h3>
+    <div class="chart-wrapper">
+      <canvas id="chartCitas"></canvas>
+    </div>
+  </div>
+</div>

@@ -33,7 +33,6 @@ export class ModalVerUsuarioComponent {
     this.loading = true;
     const usuarioId = this.data.usuario.id; 
   
-    // Obtiene el ID del objeto odontologo de los datos
     this._servicioService.ObtenerUsuarioId(usuarioId).subscribe(data => {
       this.usuario = data;
       this.loading = false;

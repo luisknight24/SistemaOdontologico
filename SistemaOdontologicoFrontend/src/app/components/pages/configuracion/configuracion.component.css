@@ -1,0 +1,47 @@
+.config-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 24px;
+}
+
+.setting-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+}
+
+.setting-info h4 {
+  margin: 0 0 4px 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-main);
+}
+
+.setting-info p {
+  margin: 0;
+  font-size: 14px;
+  color: var(--text-muted);
+}
+
+.margin-y-15 {
+  margin: 15px 0 !important;
+}
+
+.mb-4 {
+  margin-bottom: 24px;
+}
+
+.save-actions {
+  grid-column: 1 / -1;
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 10px;
+}
+
+.btn-save {
+  padding: 0 32px;
+  height: 48px;
+  font-size: 16px;
+  border-radius: 12px;
+}

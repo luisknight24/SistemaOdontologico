@@ -1,68 +1,87 @@
-<h2 mat-dialog-title>{{accion}} Pacientes</h2>
-<mat-dialog-content>
-  <form [formGroup]="formPaciente">
-  <mat-grid-list cols="2" rowHeight="80px" gutterSize="10px">
-    <mat-grid-tile>
-      <mat-form-field appearance="outline">
-        <mat-label>Nombre</mat-label>
-        <input matInput autocomplete="off" formControlName="nombre">
-        <mat-icon matSuffix style="font-size: 24px; color: lightblue;">account_box</mat-icon>
-      </mat-form-field>
-    </mat-grid-tile>
-    <mat-grid-tile >
-      <mat-form-field appearance="outline">
-        <mat-label >Apellido</mat-label>
-        <input matInput autocomplete="off" formControlName="apellido">
-        <mat-icon matSuffix style="font-size: 24px; color: lightblue;">contact_phone</mat-icon>
-      </mat-form-field>
-    </mat-grid-tile>
-    <mat-grid-tile>
-      <mat-form-field appearance="outline">
-        <mat-label>Edad</mat-label>
-        <input matInput autocomplete="off" formControlName="edad">
-        <mat-icon matSuffix style="font-size: 24px; color: lightblue;">cake</mat-icon>
-      </mat-form-field>
-    </mat-grid-tile>
-    <mat-grid-tile>
-      <mat-form-field appearance="outline">
-        <mat-label>Género</mat-label>
-        <mat-select formControlName="genero">
-          <mat-option value="Masculino">Masculino</mat-option>
-          <mat-option value="Femenino">Femenino</mat-option>
-        </mat-select>
-        <mat-icon matSuffix style="font-size: 24px; color: lightblue;">male</mat-icon>
-      </mat-form-field>
-    </mat-grid-tile>
-    <mat-grid-tile>
-      <mat-form-field appearance="outline">
-        <mat-label>Direccion</mat-label>
-        <input matInput autocomplete="off" formControlName="direccion">
-        <mat-icon matSuffix style="font-size: 24px; color: lightblue;">location_on</mat-icon>
-      </mat-form-field>
-    </mat-grid-tile>
-    <mat-grid-tile>
-      <mat-form-field appearance="outline">
-        <mat-label>Telefono</mat-label>
-        <input matInput autocomplete="off" formControlName="telefono">
-        <mat-icon matSuffix style="font-size: 24px; color: lightblue;">phone</mat-icon>
-      </mat-form-field>
-    </mat-grid-tile>
-    <mat-grid-tile>
-      <mat-form-field appearance="outline">
-        <mat-label>Email</mat-label>
-        <input matInput autocomplete="off" formControlName="email">
-        <mat-icon matSuffix style="font-size: 24px; color: lightblue;">email</mat-icon>
-      </mat-form-field>
-    </mat-grid-tile>
-  </mat-grid-list>
-</form>
+<div class="modal-header">
+  <div class="modal-icon-container">
+    <mat-icon>personal_injury</mat-icon>
+  </div>
+  <div>
+    <h2 mat-dialog-title style="margin: 0; padding: 0; border: none; align-items: center;">{{accion}} Paciente</h2>
+    <p class="modal-subtitle">Complete la ficha de información del paciente.</p>
+  </div>
+</div>
+
+<mat-dialog-content class="premium-dialog-content">
+  <form [formGroup]="formPaciente" class="modal-form">
+
+    <div class="form-section">
+      <h3 class="section-title"><mat-icon>person</mat-icon> Información personal</h3>
+
+      <div class="form-row">
+        <mat-form-field appearance="outline" class="flex-half">
+          <mat-label>Nombres</mat-label>
+          <input matInput autocomplete="off" formControlName="nombre" placeholder="Ej. Carlos">
+          <mat-icon matPrefix>badge</mat-icon>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="flex-half">
+          <mat-label>Apellidos</mat-label>
+          <input matInput autocomplete="off" formControlName="apellido" placeholder="Ej. Ramírez">
+          <mat-icon matPrefix>family_restroom</mat-icon>
+        </mat-form-field>
+      </div>
+
+      <div class="form-row">
+        <mat-form-field appearance="outline" class="flex-half">
+          <mat-label>Edad</mat-label>
+          <input matInput type="number" autocomplete="off" formControlName="edad" placeholder="Años">
+          <mat-icon matPrefix>cake</mat-icon>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="flex-half">
+          <mat-label>Género</mat-label>
+          <mat-icon matPrefix>wc</mat-icon>
+          <mat-select formControlName="genero">
+            <mat-option value="Masculino">Masculino</mat-option>
+            <mat-option value="Femenino">Femenino</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </div>
+
+    <mat-divider style="margin: 20px 0;"></mat-divider>
+
+    <div class="form-section">
+      <h3 class="section-title"><mat-icon>contact_page</mat-icon> Datos de contacto</h3>
+
+      <div class="form-row">
+        <mat-form-field appearance="outline" class="flex-grow">
+          <mat-label>Dirección de residencia</mat-label>
+          <input matInput autocomplete="off" formControlName="direccion" placeholder="Ej. Av. Principal 123">
+          <mat-icon matPrefix>location_on</mat-icon>
+        </mat-form-field>
+      </div>
+
+      <div class="form-row">
+        <mat-form-field appearance="outline" class="flex-half">
+          <mat-label>Teléfono móvil</mat-label>
+          <input matInput autocomplete="off" formControlName="telefono" placeholder="Ej. +51 987654321">
+          <mat-icon matPrefix>phone_iphone</mat-icon>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="flex-half">
+          <mat-label>Correo electrónico</mat-label>
+          <input matInput autocomplete="off" formControlName="email" placeholder="correo@ejemplo.com">
+          <mat-icon matPrefix>email</mat-icon>
+        </mat-form-field>
+      </div>
+    </div>
+
+  </form>
 </mat-dialog-content>
-<mat-dialog-actions align="end">
-  <button mat-raised-button mat-dialog-close color="warn">Volver</button>
-  <button mat-raised-button
-          color="primary"
-          [disabled]="formPaciente.invalid"
-          (click)="agregarEditarPaciente()">
+
+<mat-dialog-actions align="end" class="premium-dialog-actions">
+  <button mat-button mat-dialog-close class="btn-cancel">Cancelar</button>
+  <button mat-raised-button color="primary" [disabled]="formPaciente.invalid" (click)="agregarEditarPaciente()"
+    class="btn-submit">
+    <mat-icon>{{ accion === 'Crear' ? 'save' : 'update' }}</mat-icon>
     {{accionBoton}}
   </button>
 </mat-dialog-actions>

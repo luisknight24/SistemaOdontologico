@@ -1,43 +1,205 @@
-table {
-  width: 100%;
+.page-container {
+  padding: 0 24px 24px 24px;
+  max-width: 1400px;
+  margin: 0 auto;
 }
 
-.mat-form-field {
-  font-size: 14px;
-  width: 100%;
+.fade-in {
+  animation: fadeIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.page-header-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin: 24px 0;
 }
 
 .page-title {
-  margin: 20px 0px 0px 40px;
-  color: white;
+  margin: 0;
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--text-main);
 }
 
-.card {
-  margin: 20px 40px 40px 40px;
-  background-color: #ffffff;
+.page-subtitle {
+  margin: 4px 0 0 0;
+  color: var(--text-muted);
+  font-size: 0.875rem;
+}
+
+.content-card {
+  margin-bottom: 24px;
+  background-color: var(--bg-surface) !important;
+  border: 1px solid var(--border-color);
+}
+
+.card-header-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--color-primary-light);
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.card-content-padding {
+  padding: 24px !important;
+}
+
+.dark-divider {
+  border-top-color: var(--border-color) !important;
+  margin: 0 !important;
+}
+
+.margin-y-sm {
+  margin: 16px 0 !important;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 16px;
+}
+
+.form-actions-end {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 16px;
+}
+
+.btn-action {
+  border-radius: 8px;
+  padding: 0 20px;
+}
+
+
+.btn-search-height {
+  height: 52px;
+  border-radius: 8px;
+  margin-bottom: 22px;
+}
+
+.table-actions-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+
+.table-bar-title {
+  margin: 0;
+  font-size: 1.1rem;
+  color: var(--text-main);
+  font-weight: 600;
+}
+
+.search-field {
+  width: 100%;
+  max-width: 400px;
+}
+
+.table-container {
+  background: rgba(15, 17, 21, 0.3);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+table {
+  width: 100%;
+  background: transparent !important;
+}
+
+.flex-align-center {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.text-bold {
+  font-weight: 600;
+  color: var(--color-primary-light);
+}
+
+.text-center {
+  text-align: center !important;
+}
+
+.text-ellipsis {
+  max-width: 150px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--text-muted);
+}
+
+.user-avatar-small {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--color-primary-dark);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 0.85rem;
+  margin-right: 8px;
+}
+
+.badge {
+  padding: 4px 10px;
   border-radius: 20px;
-  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
-.btn-info {
-  background-color: #007bff;
-  color: #ffffff;
+.badge-accent {
+  background-color: rgba(139, 92, 246, 0.15);
+  color: #c084fc;
 }
 
-.mat-raised-button.btn-info {
-  background-color: #00BCD4; /* Blue */
-  color: white;
-  border-color: #00BCD4;
+.badge-neutral {
+  background-color: var(--bg-surface-hover);
+  color: var(--text-muted);
 }
 
-.mat-raised-button.btn-info:hover {
-  background-color: #00A0CE; /* Light blue */
+.empty-state {
+  text-align: center;
+  padding: 60px 20px !important;
+  color: var(--text-muted);
 }
 
-.mat-raised-button.btn-info:active {
-  background-color: #00838F; /* Dark blue */
+.empty-state-icon {
+  font-size: 48px;
+  width: 48px;
+  height: 48px;
+  opacity: 0.3;
+  margin-bottom: 12px;
 }
-th {
-  color: white;
-  background-color: #17789e;
+
+.premium-paginator {
+  background: transparent !important;
+  border-top: 1px solid var(--border-color);
+  color: var(--text-muted) !important;
 }

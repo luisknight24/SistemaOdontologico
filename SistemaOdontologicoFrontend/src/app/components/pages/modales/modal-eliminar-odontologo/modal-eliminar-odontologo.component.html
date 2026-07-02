@@ -1,9 +1,25 @@
-<h1 mat-dialog-title>Eliminar Odontologo</h1>
-<div mat-dialog-content >
-  ¿Desea eliminar el odontologo "{{OdontologoEliminar.apellido}} {{OdontologoEliminar.nombre}}"?
-</div>
-<div mat-dialog-actions>
-  <button mat-raised-button mat-dialog-close>No,volver</button>
-  <button mat-raised-button color="warn" cdkFocusInitial (click)="eliminarOdontologo()">Si, eliminar</button>
+<div class="danger-modal-header">
+  <div class="danger-icon-container">
+    <mat-icon>warning</mat-icon>
+  </div>
+  <div>
+    <h2 mat-dialog-title style="margin: 0; padding: 0; border: none; color: #dc2626;">Eliminar Odontólogo</h2>
+  </div>
 </div>
 
+<div mat-dialog-content class="danger-dialog-content">
+  <p class="warning-text">Estás a punto de eliminar al odontólogo:</p>
+  <div class="target-item">
+    <mat-icon>medication</mat-icon>
+    <span>{{OdontologoEliminar.apellido}} {{OdontologoEliminar.nombre}}</span>
+  </div>
+  <p class="consequence-text">Esta acción es irreversible y los datos no podrán recuperarse. ¿Estás seguro de continuar?</p>
+</div>
+
+<div mat-dialog-actions align="end" class="premium-dialog-actions">
+  <button mat-button mat-dialog-close class="btn-cancel">Cancelar</button>
+  <button mat-raised-button color="warn" cdkFocusInitial (click)="eliminarOdontologo()" class="btn-delete">
+    <mat-icon>delete_forever</mat-icon>
+    Sí, eliminar
+  </button>
+</div>

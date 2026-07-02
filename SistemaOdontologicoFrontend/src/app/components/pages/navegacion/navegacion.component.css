@@ -1,69 +1,296 @@
+:host {
+  /* Variables de Tema Oscuro */
+  --bg-base: #0f1115;
+  --bg-surface: rgba(30, 33, 40, 0.65);
+  --bg-surface-hover: rgba(45, 50, 60, 0.8);
 
+  --border-color: rgba(255, 255, 255, 0.08);
+
+  --text-main: #f8fafc;
+  --text-muted: #94a3b8;
+
+  /* Colores de acento (Teal médico moderno) */
+  --color-primary: #14b8a6;
+  --color-primary-light: #2dd4bf;
+  --color-primary-dark: #0f766e;
+  --color-warn: #f43f5e;
+
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.5);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
+  --radius-lg: 12px;
+}
+
+:host-context(body.light-mode) {
+  --bg-base: #f8fafc;
+  --bg-surface: rgba(255, 255, 255, 0.85);
+  --bg-surface-hover: rgba(241, 245, 249, 0.95);
+  --border-color: rgba(15, 23, 42, 0.08);
+  --text-main: #0f172a;
+  --text-muted: #64748b;
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+}
+
+/* ============================
+   TOOLBAR & HEADER
+   ============================ */
+.glass-toolbar {
+  background-color: var(--bg-surface) !important;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border-color);
+  box-shadow: var(--shadow-sm);
+  color: var(--text-main);
+}
+
+.toolbar-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.brand-section {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.menu-btn {
+  color: var(--text-main) !important;
+}
+
+.brand-logo-wrapper {
+  background: rgba(20, 184, 166, 0.15);
+  border-radius: 8px;
+  padding: 6px;
+  display: flex;
+}
+
+.brand-icon {
+  color: var(--color-primary);
+  font-size: 24px;
+  height: 24px;
+  width: 24px;
+}
+
+.brand-title {
+  margin: 0;
+  color: var(--text-main);
+  font-weight: 700;
+  font-size: 1.25rem;
+  letter-spacing: 0.5px;
+}
+
+/* ============================
+   USER MENU
+   ============================ */
+.user-menu-btn {
+  border-radius: 30px !important;
+  padding: 4px 12px 4px 4px !important;
+  background: transparent;
+  border: 1px solid transparent;
+  transition: all 0.3s ease;
+}
+
+.user-menu-btn:hover {
+  background: var(--bg-surface-hover);
+  border-color: var(--border-color);
+}
+
+.user-info-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.user-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--color-primary-light), var(--color-primary-dark));
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 16px;
+  box-shadow: var(--shadow-sm);
+}
+
+.user-details {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+}
+
+.user-email {
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--text-main);
+  line-height: 1.2;
+}
+
+.user-role {
+  font-size: 12px;
+  color: var(--text-muted);
+  line-height: 1.4;
+}
+
+.dropdown-icon {
+  color: var(--text-muted);
+}
+
+/* Premium Dark Menu Overrides */
+::ng-deep .premium-dark-menu {
+  background-color: #1e222a !important;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg) !important;
+  box-shadow: var(--shadow-lg) !important;
+}
+
+::ng-deep body.light-mode .premium-dark-menu {
+  background-color: var(--bg-surface) !important;
+  border-color: var(--border-color) !important;
+}
+
+::ng-deep .premium-dark-menu .mat-mdc-menu-item {
+  color: var(--text-main) !important;
+}
+
+::ng-deep .premium-dark-menu .mat-mdc-menu-item:hover {
+  background-color: var(--bg-surface-hover) !important;
+}
+
+.menu-icon-primary {
+  color: var(--color-primary) !important;
+}
+
+.menu-icon-warn {
+  color: var(--color-warn) !important;
+}
+
+.text-warn {
+  color: var(--color-warn);
+  font-weight: 500;
+}
+
+/* ============================
+   LAYOUT & SIDENAV
+   ============================ */
+.content-container {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  top: 64px;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: var(--bg-base);
+  /* Fondo oscuro general */
+}
 
 .sidenav-container {
-    height: 100%;
-  }
-  
-  .sidenav {
-    width: 200px;
-  }
-  
-  .sidenav .mat-toolbar {
-    background: inherit;
-    
-  }
-  
-  .mat-toolbar.mat-primary {
-    position: sticky;
-    top: 0;
-    z-index: 1;
-  }
-  .example-spacer {
-    flex: 1 1 auto;
-  }
-  
+  flex: 1;
+  background-color: transparent !important;
+}
 
-  .mat-toolbar {
-    position: relative;
-    z-index: 1;
-  }
-  
-  .content-container {
-    margin-top: 64px; /* Ajusta el valor según el tamaño de tu barra de herramientas */
-    position: relative;
-    z-index: 0;
-   
-  }
+.dark-sidenav {
+  width: 280px;
+  background-color: var(--bg-surface) !important;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-right: 1px solid var(--border-color) !important;
+  box-shadow: var(--shadow-md);
+}
 
-  .mat-sidenav{
+.sidenav-header {
+  padding: 24px 20px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 
-    background-color:  #157E8E;
+.app-logo {
+  width: 64px;
+  height: 64px;
+  background: rgba(20, 184, 166, 0.1);
+  border: 1px solid rgba(20, 184, 166, 0.2);
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 12px;
+  box-shadow: 0 0 15px rgba(20, 184, 166, 0.1);
+}
 
+.app-logo mat-icon {
+  color: var(--color-primary);
+  font-size: 32px;
+  height: 32px;
+  width: 32px;
+}
 
-  }
+.sidenav-title {
+  margin: 0;
+  color: var(--text-muted);
+  font-weight: 600;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
 
-  .mat-line {
-    color: white;
-  }
-  
+.dark-divider {
+  border-top-color: var(--border-color) !important;
+  margin: 0 20px !important;
+}
 
-  .white-icon {
-    color: white;
-  }
+/* ============================
+   NAVELIST
+   ============================ */
+.menu-list {
+  padding: 16px 12px !important;
+}
 
+.menu-list .mat-mdc-list-item {
+  border-radius: 8px !important;
+  margin-bottom: 4px;
+  color: var(--text-main) !important;
+  transition: all 0.2s ease-in-out;
+}
 
-  .menu-list {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 75%; /* Asegura que el contenedor ocupe todo el espacio vertical */
-  }
-  
-  .example-icon {
-    margin-top: auto; /* Mueve el botón hacia abajo */
-  }
-  .icon-display {
-    transform: scale(2);
- }
+.menu-list .mat-mdc-list-item:hover {
+  background-color: var(--bg-surface-hover) !important;
+}
 
+.menu-list .active-link {
+  background: rgba(20, 184, 166, 0.15) !important;
+  color: var(--color-primary) !important;
+  border-left: 3px solid var(--color-primary);
+}
+
+.menu-list .active-link .nav-icon {
+  color: var(--color-primary) !important;
+}
+
+.nav-icon {
+  color: var(--text-muted);
+}
+
+/* ============================
+   MAIN CONTENT
+   ============================ */
+.main-content {
+  background-color: transparent !important;
+  padding: 2rem;
+  overflow-y: auto;
+}
+
+.page-wrapper {
+  max-width: 1400px;
+  margin: 0 auto;
+}

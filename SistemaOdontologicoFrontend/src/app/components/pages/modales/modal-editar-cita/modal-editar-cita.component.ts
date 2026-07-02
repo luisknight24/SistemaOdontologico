@@ -86,8 +86,8 @@ export class ModalEditarCitaComponent implements OnInit {
 
     this._servicioServicio.obtenerServicio().subscribe({
       next: (data) => {
-        if (data.status)
-          this.options2 = data.value;
+        if (data.estado)
+          this.options2 = data.valor;
       },
       error: (e) => {
       },
@@ -97,8 +97,8 @@ export class ModalEditarCitaComponent implements OnInit {
     })
     this._odontologoServicio.ObtenerOdontologo().subscribe({
       next: (data) => {
-        if (data.status)
-          this.options = data.value;
+        if (data.estado)
+          this.options = data.valor;
       },
       error: (e) => {
       },
@@ -108,8 +108,8 @@ export class ModalEditarCitaComponent implements OnInit {
     })
     this._pacienteServicio.obtenerPaciente().subscribe({
       next: (data) => {
-        if (data.status)
-          this.options3 = data.value;
+        if (data.estado)
+          this.options3 = data.valor;
       },
       error: (e) => {
       },
@@ -148,7 +148,6 @@ export class ModalEditarCitaComponent implements OnInit {
   }
 
   displayOdontologo(odontologo: Odontologo): string {
-    // return odontologo.apellido ;
     if (odontologo && odontologo.apellido && odontologo.nombre) {
       return odontologo.apellido + " " + odontologo.nombre;
     } else {
@@ -194,18 +193,18 @@ export class ModalEditarCitaComponent implements OnInit {
       };
       this._CitaServicio.editarCita(citaDTO).subscribe({
         next: (data) => {
-          if (data.status) {
-            this.mostrarAlerta("La Cita fue editada", "Exito");
+          if (data.estado) {
+            this.mostrarAlerta("El producto fue editado", "Exito");
             this.dialogoReferencia.close('editado')
           } else {
-            this.mostrarAlertaError("No se pudo editar la cita", "Error", "Error específico: la cita no se pudo editar debido a ...");
+            this.mostrarAlertaError("No se pudo editar el producto", "Error", "Error específico: el producto no se pudo editar debido a ...");
           }
         },
         error: (e) => { },
         complete: () => {
           this._CitaServicio.obtenerCita().subscribe({
             next: (data) => {
-              if (data.status) {
+              if (data.estado) {
 
               } else {
                 this._snackBar.open("No se encontraron datos", 'Oops!', { duration: 2000 });

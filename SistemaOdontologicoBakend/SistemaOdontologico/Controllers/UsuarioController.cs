@@ -26,13 +26,13 @@ namespace SistemaOdontologico.Controllers
       var rsp = new Response<SesionDTO>();
       try
       {
-        rsp.status = true;
-        rsp.value = await _UsuarioServicios.ValidarCredenciales(login.Correo,login.Clave);
+        rsp.estado = true;
+        rsp.valor = await _UsuarioServicios.ValidarCredenciales(login.Correo,login.Clave);
       }
       catch (Exception ex)
       {
-        rsp.status = false;
-        rsp.msg = ex.Message;
+        rsp.estado = false;
+        rsp.mensaje = ex.Message;
       }
       return Ok(rsp);
     }
@@ -44,13 +44,13 @@ namespace SistemaOdontologico.Controllers
       var rsp = new Response<List<UsuarioDTO>>();
       try
       {
-        rsp.status = true;
-        rsp.value = await _UsuarioServicios.listaUsuarios();
+        rsp.estado = true;
+        rsp.valor = await _UsuarioServicios.listaUsuarios();
       }
       catch (Exception ex)
       {
-        rsp.status = false;
-        rsp.msg = ex.Message;
+        rsp.estado = false;
+        rsp.mensaje = ex.Message;
       }
       return Ok(rsp);
     }
@@ -60,10 +60,10 @@ namespace SistemaOdontologico.Controllers
     {
       try
       {
-        var usuario = await _UsuarioServicios.obtenerPorIdUsuario(id);
-        if (usuario == null)
+        var odontologo = await _UsuarioServicios.obtenerPorIdUsuario(id);
+        if (odontologo == null)
           return NotFound();
-        return Ok(usuario);
+        return Ok(odontologo);
       }
       catch
       {
@@ -78,13 +78,13 @@ namespace SistemaOdontologico.Controllers
       var rsp = new Response<UsuarioDTO>();
       try
       {
-        rsp.status = true;
-        rsp.value = await _UsuarioServicios.crearUsuario(usuario);
+        rsp.estado = true;
+        rsp.valor = await _UsuarioServicios.crearUsuario(usuario);
       }
       catch (Exception ex)
       {
-        rsp.status = false;
-        rsp.msg = ex.Message;
+        rsp.estado = false;
+        rsp.mensaje = ex.Message;
       }
       return Ok(rsp);
     }
@@ -96,13 +96,13 @@ namespace SistemaOdontologico.Controllers
       var rsp = new Response<bool>();
       try
       {
-        rsp.status = true;
-        rsp.value = await _UsuarioServicios.editarUsuario(Usuario);
+        rsp.estado = true;
+        rsp.valor = await _UsuarioServicios.editarUsuario(Usuario);
       }
       catch (Exception ex)
       {
-        rsp.status = false;
-        rsp.msg = ex.Message;
+        rsp.estado = false;
+        rsp.mensaje = ex.Message;
       }
       return Ok(rsp);
     }
@@ -114,13 +114,13 @@ namespace SistemaOdontologico.Controllers
       var rsp = new Response<bool>();
       try
       {
-        rsp.status = true;
-        rsp.value = await _UsuarioServicios.eliminarUsuario(id);
+        rsp.estado = true;
+        rsp.valor = await _UsuarioServicios.eliminarUsuario(id);
       }
       catch (Exception ex)
       {
-        rsp.status = false;
-        rsp.msg = ex.Message;
+        rsp.estado = false;
+        rsp.mensaje = ex.Message;
       }
       return Ok(rsp);
     }

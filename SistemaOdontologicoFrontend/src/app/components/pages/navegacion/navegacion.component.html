@@ -1,64 +1,76 @@
-<mat-toolbar color="primary" style="background-color: #157E8E">
-  <mat-toolbar-row>
-    <mat-icon style="height: 28px; margin-right: 3px;">medical_services</mat-icon>
-    <h1>Sistema odontológico</h1>
-    <button mat-icon-button (click)="drawer.toggle();" style="position: fixed; right: 20px;">
-      
-   <mat-icon >menu</mat-icon>
- 
-    </button>
-    
-    <span style="flex: 1 1 auto;">
-    </span>
-    <label style="font-size: 14px; margin-right: 60px;">
-      {{correoUsuario}} | {{rolUsuario}}
+<mat-toolbar class="glass-toolbar">
+  <mat-toolbar-row class="toolbar-row">
+    <!-- Header Izquierdo: Menú y Marca -->
+    <div class="brand-section">
+      <button mat-icon-button (click)="drawer.toggle()" class="menu-btn">
+        <mat-icon>menu</mat-icon>
+      </button>
+      <div class="brand-logo-wrapper">
+        <mat-icon class="brand-icon">health_and_safety</mat-icon>
+      </div>
+      <h1 class="brand-title">SoftDental</h1>
+    </div>
 
-    </label>
-   
-    
+    <!-- Header Derecho: Usuario -->
+    <div class="user-section">
+      <button mat-button [matMenuTriggerFor]="userMenu" class="user-menu-btn">
+        <div class="user-info-container">
+          <div class="user-avatar">
+            {{correoUsuario?.charAt(0) | uppercase}}
+          </div>
+          <div class="user-details">
+            <span class="user-email">{{correoUsuario}}</span>
+            <span class="user-role">{{rolUsuario}}</span>
+          </div>
+          <mat-icon class="dropdown-icon">arrow_drop_down</mat-icon>
+        </div>
+      </button>
+
+      <mat-menu #userMenu="matMenu" xPosition="before" class="premium-dark-menu">
+        <button mat-menu-item [routerLink]="['/pages/perfil']">
+          <mat-icon class="menu-icon-primary">account_circle</mat-icon>
+          <span>Mi perfil</span>
+        </button>
+        <button mat-menu-item [routerLink]="['/pages/configuracion']">
+          <mat-icon class="menu-icon-primary">settings</mat-icon>
+          <span>Configuración</span>
+        </button>
+        <mat-divider></mat-divider>
+        <button mat-menu-item (click)="cerrarSession()">
+          <mat-icon class="menu-icon-warn">logout</mat-icon>
+          <span class="text-warn">Cerrar sesión</span>
+        </button>
+      </mat-menu>
+    </div>
   </mat-toolbar-row>
- 
 </mat-toolbar>
 
-<div class="content-container"  style="margin-top: -7px;"  > <!-- Contenedor para el contenido principal -->
-  <mat-sidenav-container class="sidenav-container" style="background-image: url('./assets/ConsultorioDental6.jpg'); background-size: cover; background-position: center;" >
-    <mat-sidenav #drawer class="sidenav"  
-      [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
-      [mode]="(isHandset$ | async) ? 'over' : 'side'"
-      [opened]="true">
-      <!-- Contenido del sidenav -->
+<div class="content-container">
+  <mat-sidenav-container class="sidenav-container">
+    <mat-sidenav #drawer class="dark-sidenav" [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
+      [mode]="(isHandset$ | async) ? 'over' : 'side'" [opened]="true">
 
-      <mat-nav-list class="menu-list" >
-   
-        <mat-list-item *ngFor="let menu of listaMenu" [routerLink]="menu.url">
-          <mat-icon mat-list-icon>{{menu.icono}}</mat-icon>
-          <div mat-line>{{menu.nombre}}</div>
+      <div class="sidenav-header">
+        <div class="app-logo">
+          <mat-icon>medical_services</mat-icon>
+        </div>
+        <h3 class="sidenav-title">Menú Principal</h3>
+      </div>
+      <mat-divider class="dark-divider"></mat-divider>
+
+      <mat-nav-list class="menu-list">
+        <mat-list-item *ngFor="let menu of listaMenu" [routerLink]="menu.url" routerLinkActive="active-link">
+          <mat-icon mat-list-icon class="nav-icon">{{menu.icono}}</mat-icon>
+          <div mat-line class="nav-text">{{menu.nombre}}</div>
         </mat-list-item>
-        
-        <span class="example-spacer"></span>
-          <button mat-icon-button size="100px" class="icon-display" aria-label="Example icon-button with heart icon"
-                   (click)="cerrarSession()">
-            <mat-icon>input</mat-icon>
-          </button>
-
-        
-       
-
       </mat-nav-list>
+
     </mat-sidenav>
 
- 
-  
-    <router-outlet></router-outlet>
-    <!-- Contenido de la página principal -->
-    <mat-sidenav-content>
-      <div style="height: 91vh">
+    <mat-sidenav-content class="main-content">
+      <div class="page-wrapper">
         <router-outlet></router-outlet>
-    
       </div>
-    
     </mat-sidenav-content>
   </mat-sidenav-container>
 </div>
-
-

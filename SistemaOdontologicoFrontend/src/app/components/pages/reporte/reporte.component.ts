@@ -49,9 +49,9 @@ export class ReporteComponent implements OnInit {
   ngOnInit(): void {
     this._CitaServicio.obtenerCita().subscribe({
       next: (data) => {
-        if (data.status) {
-          this.ELEMENT_DATA = data.value;
-          this.dataSource.data = data.value;
+        if (data.estado) {
+          this.ELEMENT_DATA = data.valor;
+          this.dataSource.data = data.valor;
         } else {
           this.ELEMENT_DATA = [];
           this.dataSource.data = [];
@@ -93,16 +93,16 @@ export class ReporteComponent implements OnInit {
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
   }
-  FiltrarCitaFecha() {
+  onSubmitForm() {
     const _fechaInicio: any = moment(this.formGroup.value.fechaInicio).format('DD/MM/YYYY')
     const _fechaFin: any = moment(this.formGroup.value.fechaFin).format('DD/MM/YYYY')
     if (_fechaInicio === "Invalid date" || _fechaFin === "Invalid date") {
       this._snackBar.open("Debe ingresar ambas fechas", 'Oops!', { duration: 2000 });
       this._CitaServicio.obtenerCita().subscribe({
         next: (data) => {
-          if (data.status) {
-            this.ELEMENT_DATA = data.value;
-            this.dataSource.data = data.value;
+          if (data.estado) {
+            this.ELEMENT_DATA = data.valor;
+            this.dataSource.data = data.valor;
           } else {
             this.ELEMENT_DATA = [];
             this.dataSource.data = [];
@@ -119,9 +119,9 @@ export class ReporteComponent implements OnInit {
       _fechaFin,
     ).subscribe({
       next: (data) => {
-        if (data.status) {
-          this.ELEMENT_DATA = data.value;
-          this.dataSource.data = data.value;
+        if (data.estado) {
+          this.ELEMENT_DATA = data.valor;
+          this.dataSource.data = data.valor;
         }
         else {
           this.ELEMENT_DATA = [];
@@ -135,5 +135,27 @@ export class ReporteComponent implements OnInit {
       }
     })
   }
- 
+  onSubmitForm1() {
+    const _fechaInicio: any = moment(this.formGroup.value.fechaInicio, 'DD/MM/YYYY');
+    const _fechaFin: any = moment(this.formGroup.value.fechaFin, 'DD/MM/YYYY');
+    if (!_fechaInicio && !_fechaFin) {
+    return;
+  }
+    if (!_fechaInicio.isValid() || !_fechaFin.isValid()) {
+      this._snackBar.open("Debe ingresar ambas fechas", 'Oops!', { duration: 2000 });
+      this.dataSource.data = this.ELEMENT_DATA;
+      return;
+    }
+    const filteredData = this.ELEMENT_DATA.filter((item) => {
+      const fechaReserva: any = moment(item.fechaReserva, 'DD/MM/YYYY');
+      return fechaReserva.isBetween(_fechaInicio, _fechaFin, null, '[]');
+    });
+  
+    if (filteredData.length > 0) {
+      this.dataSource.data = filteredData;
+    } else {
+      this.dataSource.data = [];
+      this._snackBar.open("No se encontraron datos", 'Oops!', { duration: 2000 });
+    }
+  }
 }

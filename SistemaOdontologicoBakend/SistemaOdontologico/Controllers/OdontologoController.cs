@@ -28,13 +28,13 @@ namespace SistemaOdontologico.Controllers
       var rsp = new Response<List<OdontologoDTO>>();
       try
       {
-        rsp.status = true;
-        rsp.value = await _OdontologoServicios.listaOdontontologos();
+        rsp.estado = true;
+        rsp.valor = await _OdontologoServicios.listaOdontontologos();
       }
       catch (Exception ex)
       {
-        rsp.status = false;
-        rsp.msg = ex.Message;
+        rsp.estado = false;
+        rsp.mensaje = ex.Message;
       }
       return Ok(rsp);
     }
@@ -46,13 +46,13 @@ namespace SistemaOdontologico.Controllers
       var rsp = new Response<OdontologoDTO>();
       try
       {
-        rsp.status = true;
-        rsp.value = await _OdontologoServicios.crearOdontontologo(odontologo);
+        rsp.estado = true;
+        rsp.valor = await _OdontologoServicios.crearOdontontologo(odontologo);
       }
       catch (Exception ex)
       {
-        rsp.status = false;
-        rsp.msg = ex.Message;
+        rsp.estado = false;
+        rsp.mensaje = ex.Message;
       }
       return Ok(rsp);
     }
@@ -64,13 +64,13 @@ namespace SistemaOdontologico.Controllers
       var rsp = new Response<bool>();
       try
       {
-        rsp.status = true;
-        rsp.value = await _OdontologoServicios.editarOdontontologo(odontologo);
+        rsp.estado = true;
+        rsp.valor = await _OdontologoServicios.editarOdontontologo(odontologo);
       }
       catch (Exception ex)
       {
-        rsp.status = false;
-        rsp.msg = ex.Message;
+        rsp.estado = false;
+        rsp.mensaje = ex.Message;
       }
       return Ok(rsp);
     }
@@ -82,13 +82,13 @@ namespace SistemaOdontologico.Controllers
       var rsp = new Response<bool>();
       try
       {
-        rsp.status = true;
-        rsp.value = await _OdontologoServicios.eliminarOdontontologo(id);
+        rsp.estado = true;
+        rsp.valor = await _OdontologoServicios.eliminarOdontontologo(id);
       }
       catch (Exception ex)
       {
-        rsp.status = false;
-        rsp.msg = ex.Message;
+        rsp.estado = false;
+        rsp.mensaje = ex.Message;
       }
       return Ok(rsp);
     }

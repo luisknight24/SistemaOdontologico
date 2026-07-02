@@ -103,8 +103,8 @@ export class CitaComponent implements OnInit {
 
     this._servicioServicio.obtenerServicio().subscribe({
       next: (data) => {
-        if (data.status)
-          this.options2 = data.value;
+        if (data.estado)
+          this.options2 = data.valor;
       },
       error: (e) => {
       },
@@ -114,8 +114,8 @@ export class CitaComponent implements OnInit {
     })
     this._odontologoServicio.ObtenerOdontologo().subscribe({
       next: (data) => {
-        if (data.status)
-          this.options = data.value;
+        if (data.estado)
+          this.options = data.valor;
       },
       error: (e) => {
       },
@@ -124,8 +124,8 @@ export class CitaComponent implements OnInit {
     })
     this._pacienteServicio.obtenerPaciente().subscribe({
       next: (data) => {
-        if (data.status)
-          this.options3 = data.value;
+        if (data.estado)
+          this.options3 = data.valor;
       },
       error: (e) => {
       },
@@ -151,9 +151,9 @@ export class CitaComponent implements OnInit {
 
     this._CitaServicios.obtenerCita().subscribe({
       next: (data) => {
-        if (data.status) {
+        if (data.estado) {
 
-          this.dataSource.data = data.value;
+          this.dataSource.data = data.valor;
         } else {
           this._snackBar.open("No se encontraron datos", 'Oops!', { duration: 2000 });
         }
@@ -175,8 +175,8 @@ export class CitaComponent implements OnInit {
   mostrarOdontologo() {
     this._odontologoServicio.ObtenerOdontologo().subscribe({
       next: (data) => {
-        if (data.status)
-          this.dataSource.data = data.value;
+        if (data.estado)
+          this.dataSource.data = data.valor;
         else
           this._snackBar.open("No se encontraron datos", 'Oops!', { duration: 2000 });
       },
@@ -190,8 +190,8 @@ export class CitaComponent implements OnInit {
   mostrarPaciente() {
     this._pacienteServicio.obtenerPaciente().subscribe({
       next: (data) => {
-        if (data.status)
-          this.dataSource.data = data.value;
+        if (data.estado)
+          this.dataSource.data = data.valor;
         else
           this._snackBar.open("No se encontraron datos", 'Oops!', { duration: 2000 });
       },
@@ -205,8 +205,8 @@ export class CitaComponent implements OnInit {
   mostrarServicio() {
     this._servicioServicio.obtenerServicio().subscribe({
       next: (data) => {
-        if (data.status)
-          this.dataSource.data = data.value;
+        if (data.estado)
+          this.dataSource.data = data.valor;
         else
           this._snackBar.open("No se encontraron datos", 'Oops!', { duration: 2000 });
       },
@@ -228,7 +228,6 @@ export class CitaComponent implements OnInit {
     return servicio.nombreServicio;
   }
   displayOdontologo(odontologo: Odontologo): string {
-    // return odontologo.apellido ;
     if (odontologo && odontologo.apellido && odontologo.nombre) {
       return odontologo.apellido + " " + odontologo.nombre;
     } else {
@@ -289,10 +288,10 @@ export class CitaComponent implements OnInit {
       };
       this._citaServicio.registrarCita(citaDTO).subscribe({
         next: (data) => {
-          if (data.status) {
+          if (data.estado) {
             this.dialog.open(ModalCitaComponent, {
               data: {
-                numero: data.value.numeroDocumento
+                numero: data.valor.numeroDocumento
               },
             });
           } else {
@@ -308,8 +307,8 @@ export class CitaComponent implements OnInit {
           this.deshabilitado = false;
           this._CitaServicios.obtenerCita().subscribe({
             next: (data) => {
-              if (data.status) {
-                this.dataSource.data = data.value;
+              if (data.estado) {
+                this.dataSource.data = data.valor;
               } else {
                 this._snackBar.open("No se encontraron datos", 'Oops!', { duration: 2000 });
               }
@@ -342,8 +341,8 @@ export class CitaComponent implements OnInit {
       if (result === "editado") {
         this._CitaServicios.obtenerCita().subscribe({
           next: (data) => {
-            if (data.status) {
-              this.dataSource.data = data.value;
+            if (data.estado) {
+              this.dataSource.data = data.valor;
             } else {
               this._snackBar.open("No se encontraron datos", 'Oops!', { duration: 2000 });
             }
@@ -368,12 +367,12 @@ export class CitaComponent implements OnInit {
       if (result.isConfirmed)
         this._citaServicio.eliminarCita(reporte.id).subscribe({
           next: (data) => {
-            if (data.status) {
+            if (data.estado) {
               this.mostrarAlerta("La cita fue eliminada", "Listo!")
               this._CitaServicios.obtenerCita().subscribe({
                 next: (data) => {
-                  if (data.status) {
-                    this.dataSource.data = data.value;
+                  if (data.estado) {
+                    this.dataSource.data = data.valor;
                   } else {
                     this._snackBar.open("No se encontraron datos", 'Oops!', { duration: 2000 });
                   }

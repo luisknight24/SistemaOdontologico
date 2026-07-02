@@ -1,27 +1,45 @@
-<h2 mat-dialog-title>{{accion}} Servicio</h2>
-<mat-dialog-content>
-  <form [formGroup]="formServicio">
-    <mat-grid-list cols="2" rowHeight="80px" gutterSize="10px">
-      <mat-grid-tile>
-        <mat-form-field appearance="outline">
-          <mat-label>Nombre</mat-label>
-          <input matInput autocomplete="off" formControlName="nombreServicio">
-          <mat-icon matSuffix style="font-size: 24px; color: lightblue;">local_pharmacy</mat-icon>
+<div class="modal-header">
+  <div class="modal-icon-container">
+    <mat-icon>local_pharmacy</mat-icon>
+  </div>
+  <div>
+    <h2 mat-dialog-title style="margin: 0; padding: 0; border: none;">{{accion}} servicio</h2>
+    <p class="modal-subtitle">Complete los datos del servicio odontológico ofrecido.</p>
+  </div>
+</div>
+
+<mat-dialog-content class="premium-dialog-content">
+  <form [formGroup]="formServicio" class="modal-form">
+
+    <div class="form-section">
+      <h3 class="section-title"><mat-icon>receipt_long</mat-icon> Detalles del Servicio</h3>
+
+      <div class="form-row">
+        <mat-form-field appearance="outline" class="flex-grow">
+          <mat-label>Nombre del Servicio</mat-label>
+          <input matInput autocomplete="off" formControlName="nombreServicio"
+            placeholder="Ej. Extracción muela del juicio">
+          <mat-icon matPrefix>medical_services</mat-icon>
         </mat-form-field>
-      </mat-grid-tile>
-      <mat-grid-tile>
-        <mat-form-field appearance="outline">
-          <mat-label>Precio</mat-label>
-          <input matInput autocomplete="off" formControlName="precio">
-          <mat-icon matSuffix style="font-size: 24px; color: lightblue;">monetization_on</mat-icon>
+      </div>
+
+      <div class="form-row">
+        <mat-form-field appearance="outline" class="flex-grow">
+          <mat-label>Costo del servicio</mat-label>
+          <input matInput type="number" autocomplete="off" formControlName="precio" placeholder="0.00">
+          <mat-icon matPrefix>monetization_on</mat-icon>
         </mat-form-field>
-      </mat-grid-tile>
-    </mat-grid-list>
+      </div>
+    </div>
+
   </form>
 </mat-dialog-content>
-<mat-dialog-actions align="end">
-  <button mat-raised-button mat-dialog-close color="warn">Volver</button>
-  <button mat-raised-button color="primary" [disabled]="formServicio.invalid" (click)="agregarEditarServicio()">
+
+<mat-dialog-actions align="end" class="premium-dialog-actions">
+  <button mat-button mat-dialog-close class="btn-cancel">Cancelar</button>
+  <button mat-raised-button color="primary" [disabled]="formServicio.invalid" (click)="agregarEditarServicio()"
+    class="btn-submit">
+    <mat-icon>{{ accion === 'Crear' ? 'save' : 'update' }}</mat-icon>
     {{accionBoton}}
   </button>
 </mat-dialog-actions>

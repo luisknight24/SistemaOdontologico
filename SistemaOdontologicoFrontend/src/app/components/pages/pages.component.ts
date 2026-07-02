@@ -34,7 +34,7 @@ rolUsuario:string="";
       this._menuServicio.getRoles(usuario.idUsuario).subscribe({
         next: (data)=>{
 
-          if(data.status)this.listaMenu=data.value;
+          if(data.estado)this.listaMenu=data.valor;
 
 
         },

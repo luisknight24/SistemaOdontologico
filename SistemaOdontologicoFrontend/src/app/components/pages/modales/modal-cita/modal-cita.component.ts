@@ -11,7 +11,6 @@ import { OdontologoService } from  'src/app/servicios/odontologo.service';
 import { PacienteService } from  'src/app/servicios/paciente.service';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatDialog } from '@angular/material/dialog';
-//import { ModalCitaComponent } from '../modales/modal-cita/modal-cita.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
 @Component({
   selector: 'app-modal-cita',
