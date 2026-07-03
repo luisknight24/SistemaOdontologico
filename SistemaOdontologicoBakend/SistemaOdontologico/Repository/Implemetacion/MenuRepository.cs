@@ -45,7 +45,7 @@ namespace SistemaOdontologico.Repositorios.Implemetacion
             }
             else if (usuario.RolId == 2) // Odontólogo
             {
-                tbResultado = tbResultado.Where(m => m.Nombre != "Usuarios" && m.Nombre != "Servicios");
+                tbResultado = tbResultado.Where(m => m.Nombre != "Usuarios" && m.Nombre != "Servicios" && m.Nombre != "Odontólogos");
             }
         }
 

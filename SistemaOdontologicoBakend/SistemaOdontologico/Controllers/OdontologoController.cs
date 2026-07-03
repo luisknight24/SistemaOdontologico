@@ -15,10 +15,12 @@ namespace SistemaOdontologico.Controllers
   public class OdontologoController : ControllerBase
   {
     private readonly IOdontologoRepository _OdontologoServicios;
+    private readonly IUsuarioRepository _UsuarioRepositorio;
 
-    public OdontologoController(IOdontologoRepository odontologoServicios)
+    public OdontologoController(IOdontologoRepository odontologoServicios, IUsuarioRepository usuarioRepositorio)
     {
       _OdontologoServicios = odontologoServicios;
+      _UsuarioRepositorio = usuarioRepositorio;
     }
 
     [HttpGet]
@@ -48,6 +50,27 @@ namespace SistemaOdontologico.Controllers
       {
         rsp.estado = true;
         rsp.valor = await _OdontologoServicios.crearOdontontologo(odontologo);
+
+        if (rsp.valor != null)
+        {
+          try
+          {
+            var nuevoUsuario = new UsuarioDTO
+            {
+              NombreApellidos = $"{odontologo.Nombre} {odontologo.Apellido}",
+              Correo = odontologo.Email,
+              RolId = 2, // 2 = Odontólogo
+              Clave = "Odonto2026*",
+              EsActivo = 1
+            };
+            await _UsuarioRepositorio.crearUsuario(nuevoUsuario);
+          }
+          catch (Exception ex)
+          {
+            // Logging the error, but we don't fail the Odontologo creation
+            Console.WriteLine($"Error automatizando creación de usuario para odontólogo: {ex.Message}");
+          }
+        }
       }
       catch (Exception ex)
       {
