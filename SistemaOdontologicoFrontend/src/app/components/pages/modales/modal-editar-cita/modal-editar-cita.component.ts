@@ -166,7 +166,7 @@ export class ModalEditarCitaComponent implements OnInit {
   }
 
   editarCita() {
-    const _fechaReserva: any = moment(this.formCita.value.fechaReserva, 'dd/mm/yyyy');
+    const _fechaReserva: any = moment(this.formCita.value.fechaReserva).format('DD/MM/YYYY');
     const _cantidad: number = this.formCita.value.cantidad;
     const _precio: number = this.agregarServicio ? parseFloat(this.agregarServicio.precio) : 0;
     const _total: number = _precio;

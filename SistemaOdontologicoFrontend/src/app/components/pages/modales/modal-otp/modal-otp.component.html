@@ -1,0 +1,25 @@
+<h2 mat-dialog-title>Verificación de Seguridad</h2>
+<mat-dialog-content>
+  <div style="text-align: center; margin-bottom: 20px;">
+    <mat-icon style="font-size: 48px; height: 48px; width: 48px; color: #10b981;">mark_email_read</mat-icon>
+  </div>
+  <p style="text-align: center; margin-bottom: 20px; color: var(--text-main);">
+    Hemos enviado un código de seguridad de 6 dígitos al correo: <br>
+    <strong>{{data.correo}}</strong>
+  </p>
+  <form [formGroup]="formOtp" (ngSubmit)="verificarOTP()">
+    <mat-form-field appearance="outline" style="width: 100%;">
+      <mat-label>Código OTP</mat-label>
+      <input matInput formControlName="codigo" placeholder="123456" maxlength="6" autocomplete="off"
+        style="text-align: center; font-size: 24px; letter-spacing: 10px;">
+      <mat-error *ngIf="formOtp.get('codigo')?.hasError('required')">El código es requerido</mat-error>
+      <mat-error *ngIf="formOtp.get('codigo')?.hasError('minlength')">El código debe tener 6 dígitos</mat-error>
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions align="center" style="padding-bottom: 20px;">
+  <button mat-button color="warn" (click)="cancelar()">Cancelar</button>
+  <button mat-raised-button color="primary" [disabled]="formOtp.invalid || loading" (click)="verificarOTP()">
+    Verificar y Activar Cuenta
+  </button>
+</mat-dialog-actions>

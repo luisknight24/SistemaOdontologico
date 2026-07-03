@@ -16,7 +16,6 @@ namespace SistemaOdontologico.Utilidades
                 try
                 {
                     var context = services.GetRequiredService<SistemaOdontologicoDbContext>();
-                    
                     // Ejecuta migraciones pendientes de manera automática
                     context.Database.Migrate();
 
@@ -124,6 +123,70 @@ namespace SistemaOdontologico.Utilidades
                         {
                             UltimoNumero = 0
                         });
+                        context.SaveChanges();
+                    }
+
+                    // 6. Sembrar Pacientes de prueba
+                    if (!context.Pacientes.Any())
+                    {
+                        var pacientes = new List<Paciente>
+                        {
+                            new Paciente { Nombre = "María", Apellido = "Gómez", Edad = 34, Genero = "Femenino", Direccion = "Calle 1", Telefono = "12345678", Email = "maria@example.com" },
+                            new Paciente { Nombre = "Pedro", Apellido = "López", Edad = 45, Genero = "Masculino", Direccion = "Calle 2", Telefono = "87654321", Email = "pedro@example.com" }
+                        };
+                        context.Pacientes.AddRange(pacientes);
+                        context.SaveChanges();
+                    }
+
+                    // 7. Sembrar Odontólogos de prueba
+                    if (!context.Odontologos.Any())
+                    {
+                        var odontologos = new List<Odontologo>
+                        {
+                            new Odontologo { Nombre = "Dr. Carlos", Apellido = "Ruiz", Experiencia = 10, Especialidad = "Ortodoncia", Edad = 40, Email = "carlos@example.com" },
+                            new Odontologo { Nombre = "Dra. Ana", Apellido = "Silva", Experiencia = 5, Especialidad = "Endodoncia", Edad = 32, Email = "ana@example.com" }
+                        };
+                        context.Odontologos.AddRange(odontologos);
+                        context.SaveChanges();
+                    }
+
+                    // 8. Sembrar Servicios de prueba
+                    if (!context.Servicios.Any())
+                    {
+                        var servicios = new List<Servicio>
+                        {
+                            new Servicio { NombreServicio = "Limpieza Dental", precio = 50.00m },
+                            new Servicio { NombreServicio = "Extracción", precio = 80.00m },
+                            new Servicio { NombreServicio = "Blanqueamiento", precio = 150.00m }
+                        };
+                        context.Servicios.AddRange(servicios);
+                        context.SaveChanges();
+                    }
+
+                    // 9. Sembrar Citas de prueba
+                    if (!context.Citas.Any())
+                    {
+                        var paciente1 = context.Pacientes.First();
+                        var odontologo1 = context.Odontologos.First();
+                        var servicio1 = context.Servicios.First();
+
+                        var cita = new Cita
+                        {
+                            NumeroDocumento = "00001",
+                            Total = servicio1.precio,
+                            DetalleCita = new List<DetalleCita>
+                            {
+                                new DetalleCita
+                                {
+                                    PacienteId = paciente1.Id,
+                                    OdontologoId = odontologo1.Id,
+                                    ServicioId = servicio1.Id,
+                                    FechaReserva = DateTime.Now.AddDays(1),
+                                    Precio = servicio1.precio
+                                }
+                            }
+                        };
+                        context.Citas.Add(cita);
                         context.SaveChanges();
                     }
                 }

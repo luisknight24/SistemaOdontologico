@@ -1,102 +1,107 @@
-<h2 mat-dialog-title>Editar Cita</h2>
-<mat-dialog-content>
-  <form [formGroup]="formCita">
-    <mat-grid-list cols="2" rowHeight="80px" gutterSize="30px" style="height: 510px; width: 510px;">
-      <mat-grid-tile [colspan]="1">
-        <mat-form-field class="example-full-width" appearance="fill">
-          <!-- <mat-label>Paciente</mat-label> -->
-          <div class="label-container">
-            <mat-label class="label">Paciente:</mat-label>
-            <span class="divider"></span>
-            <span class="label-value">{{ citaEditar.paciente}}</span>
-          </div>
-          <mat-icon matSuffix style="font-size: 24px; color: lightblue;">person</mat-icon>
+<div class="modal-header">
+  <div class="modal-icon-container">
+    <mat-icon aria-hidden="true">edit_calendar</mat-icon>
+  </div>
+  <div>
+    <h2 mat-dialog-title style="margin: 0; padding: 0; border: none;">Editar Cita</h2>
+    <p class="modal-subtitle">Modifique los datos de la reservación médica.</p>
+  </div>
+</div>
+
+<mat-dialog-content class="premium-dialog-content">
+  <form [formGroup]="formCita" class="modal-form">
+
+    <div class="form-section">
+      <h3 class="section-title"><mat-icon aria-hidden="true">event</mat-icon> Datos de la cita</h3>
+
+      <div class="form-row">
+        <mat-form-field appearance="outline" class="flex-half">
+          <mat-label>Paciente</mat-label>
+          <mat-icon matPrefix aria-hidden="true">person</mat-icon>
           <input type="text"
-                 placeholder="Buscar..."
-                 aria-label="Number"
+                 placeholder="Buscar paciente…"
                  matInput
                  [matAutocomplete]="autoPaciente"
-                 formControlName="paciente"
-                 style="">
+                 formControlName="paciente">
+          <mat-hint *ngIf="citaEditar.paciente">Actual: {{ citaEditar.paciente }}</mat-hint>
           <mat-autocomplete autoActiveFirstOption #autoPaciente="matAutocomplete"
                             (optionSelected)="pacienteSeleccionado($event)"
-                            [displayWith]="displayPaciente">
+                            [displayWith]="displayPaciente"
+                            panelClass="dark-autocomplete">
             <mat-option *ngFor="let option of filteredPacientes" [value]="option">
-              {{option.apellido}} {{option.nombre}}
+              <span class="autocomplete-option">
+                <mat-icon aria-hidden="true">person</mat-icon>
+                {{option.apellido}} {{option.nombre}}
+              </span>
             </mat-option>
           </mat-autocomplete>
         </mat-form-field>
-      </mat-grid-tile>
 
-      <mat-grid-tile [colspan]="1">
-        <mat-form-field class="example-full-width" appearance="fill">
-          <!-- <mat-label>Servicio</mat-label> -->
-          <div class="label-container">
-            <mat-label class="label">Servicio:</mat-label>
-            <span class="divider"></span>
-            <span class="label-value">{{ citaEditar.servicio}}</span>
-          </div>
-          <mat-icon matSuffix style="font-size: 24px; color: lightblue;">local_pharmacy</mat-icon>
+        <mat-form-field appearance="outline" class="flex-half">
+          <mat-label>Servicio</mat-label>
+          <mat-icon matPrefix aria-hidden="true">local_pharmacy</mat-icon>
           <input type="text"
-                 placeholder="Buscar..."
-                 aria-label="Number"
+                 placeholder="Buscar servicio…"
                  matInput
                  [matAutocomplete]="autoServicio"
                  formControlName="servicio">
+          <mat-hint *ngIf="citaEditar.servicio">Actual: {{ citaEditar.servicio }}</mat-hint>
           <mat-autocomplete autoActiveFirstOption #autoServicio="matAutocomplete"
                             (optionSelected)="servicioSeleccionado($event)"
-                            [displayWith]="displayServicio">
+                            [displayWith]="displayServicio"
+                            panelClass="dark-autocomplete">
             <mat-option *ngFor="let option of filteredServicios" [value]="option">
-              {{option.nombreServicio}}
+              <span class="autocomplete-option">
+                <mat-icon aria-hidden="true">medical_services</mat-icon>
+                {{option.nombreServicio}}
+              </span>
             </mat-option>
           </mat-autocomplete>
         </mat-form-field>
-      </mat-grid-tile>
+      </div>
 
-      <mat-grid-tile [colspan]="1">
-        <mat-form-field class="example-full-width" appearance="fill">
-          <!-- <mat-label>Odontologo</mat-label> -->
-          <div class="label-container">
-            <mat-label class="label">Odontólogo:</mat-label>
-            <span class="divider"></span>
-            <span class="label-value">{{citaEditar.odontologo}}</span>
-          </div>
-          <mat-icon matSuffix style="font-size: 24px; color: lightblue;">healing</mat-icon>
+      <div class="form-row">
+        <mat-form-field appearance="outline" class="flex-half">
+          <mat-label>Odontólogo</mat-label>
+          <mat-icon matPrefix aria-hidden="true">healing</mat-icon>
           <input type="text"
-                 placeholder="Buscar..."
-                 aria-label="Number"
+                 placeholder="Buscar odontólogo…"
                  matInput
                  [matAutocomplete]="autoOdontologo"
                  formControlName="odontologo">
+          <mat-hint *ngIf="citaEditar.odontologo">Actual: {{ citaEditar.odontologo }}</mat-hint>
           <mat-autocomplete autoActiveFirstOption #autoOdontologo="matAutocomplete"
                             (optionSelected)="odontologoSeleccionado($event)"
-                            [displayWith]="displayOdontologo">
+                            [displayWith]="displayOdontologo"
+                            panelClass="dark-autocomplete">
             <mat-option *ngFor="let options of filteredOdontologo" [value]="options">
-              {{options.apellido}} {{options.nombre}}
+              <span class="autocomplete-option">
+                <mat-icon aria-hidden="true">medication</mat-icon>
+                {{options.apellido}} {{options.nombre}}
+              </span>
             </mat-option>
           </mat-autocomplete>
         </mat-form-field>
-      </mat-grid-tile>
-   
 
-      <mat-grid-tile [colspan]="1">
-        <mat-form-field appearance="fill">
-          <!-- <mat-label>Fecha de Reserva</mat-label> -->
-          <div class="label-container">
-            <mat-label class="label">Fecha de reserva:</mat-label>
-            <span class="divider"></span>
-            <span class="label-value">{{ citaEditar.fechaReserva}}</span>
-          </div>
-          <input matInput [matDatepicker]="picker1" formControlName="fechaReserva" showTime="false">
-          <mat-datepicker-toggle matSuffix [for]="picker1" style="font-size: 20px; color: lightblue;"></mat-datepicker-toggle>
+        <mat-form-field appearance="outline" class="flex-half">
+          <mat-label>Fecha de reserva</mat-label>
+          <mat-icon matPrefix aria-hidden="true">calendar_today</mat-icon>
+          <input matInput [matDatepicker]="picker1" formControlName="fechaReserva" showTime="false"
+                 placeholder="Seleccione fecha…">
+          <mat-hint *ngIf="citaEditar.fechaReserva">Actual: {{ citaEditar.fechaReserva }}</mat-hint>
+          <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
           <mat-datepicker #picker1></mat-datepicker>
-          
         </mat-form-field>
-      </mat-grid-tile>
-    </mat-grid-list>
+      </div>
+    </div>
+
   </form>
 </mat-dialog-content>
-<mat-dialog-actions align="end">
-  <button mat-raised-button mat-dialog-close color="warn">Cancelar</button>
-  <button mat-raised-button color="primary" (click)="editarCita()">Guardar</button>
+
+<mat-dialog-actions align="end" class="premium-dialog-actions">
+  <button mat-button mat-dialog-close class="btn-cancel">Cancelar</button>
+  <button mat-raised-button color="primary" (click)="editarCita()" class="btn-submit">
+    <mat-icon aria-hidden="true">save</mat-icon>
+    Guardar cambios
+  </button>
 </mat-dialog-actions>

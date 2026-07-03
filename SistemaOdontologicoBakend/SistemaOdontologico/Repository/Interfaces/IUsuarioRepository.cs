@@ -15,5 +15,8 @@ namespace SistemaOdontologico.Repositorios.Interfaces
     Task<bool> editarUsuario(UsuarioDTO modelo);
     Task<bool> eliminarUsuario(int id);
     Task<UsuarioDTO> obtenerPorIdUsuario(int id);
+    Task<string> GenerarOTP(string correo);
+    Task<string> RegistroPendiente(UsuarioDTO modelo);
+    Task<UsuarioDTO> ValidarOTP(string correo, string otp);
   }
 }

@@ -44,8 +44,18 @@ export class UsuarioService {
   }
 
   EliminarUsuario(id: number): Observable<ResponseApi> {
-
     return this.http.delete<ResponseApi>(`${this.urlApi}Eliminar/${id}`);
+  }
 
+  RegistroPendiente(request: Usuario): Observable<ResponseApi> {
+    return this.http.post<ResponseApi>(`${this.urlApi}RegistroPendiente`, request);
+  }
+
+  GenerarOTP(correo: string): Observable<ResponseApi> {
+    return this.http.post<ResponseApi>(`${this.urlApi}GenerarOTP?correo=${encodeURIComponent(correo)}`, {});
+  }
+
+  ValidarOTP(correo: string, codigo: string): Observable<ResponseApi> {
+    return this.http.post<ResponseApi>(`${this.urlApi}ValidarOTP?correo=${encodeURIComponent(correo)}&codigo=${encodeURIComponent(codigo)}`, {});
   }
 }

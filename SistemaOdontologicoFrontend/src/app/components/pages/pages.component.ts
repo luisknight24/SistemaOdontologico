@@ -31,7 +31,7 @@ rolUsuario:string="";
     if(usuario!=null){
       this.correoUsuario=usuario.correo;
       this.rolUsuario=usuario.rolDescripcion;
-      this._menuServicio.getRoles(usuario.idUsuario).subscribe({
+      this._menuServicio.getRoles(usuario.id).subscribe({
         next: (data)=>{
 
           if(data.estado)this.listaMenu=data.valor;

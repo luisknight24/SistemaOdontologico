@@ -1,44 +1,73 @@
+<div class="premium-modal-header">
+    <div class="modal-icon-container">
+        <mat-icon aria-hidden="true">personal_injury</mat-icon>
+    </div>
+    <div>
+        <h2 class="modal-title">Ficha del Paciente</h2>
+        <p class="modal-subtitle">Información personal y datos de contacto.</p>
+    </div>
+</div>
 
-<div class="larger-modal-container">
-    <div class="title-container">
-        <h1>Ver Paciente</h1>
+<div mat-dialog-content class="premium-modal-content custom-scrollbar" *ngIf="paciente != null">
+    <div class="details-grid grid-two-columns">
+        <div class="detail-card">
+            <mat-icon aria-hidden="true">badge</mat-icon>
+            <div class="detail-info">
+                <span class="detail-label">Nombre</span>
+                <span class="detail-value text-bold-highlight">{{ paciente.nombre }}</span>
+            </div>
+        </div>
+
+        <div class="detail-card">
+            <mat-icon aria-hidden="true">family_restroom</mat-icon>
+            <div class="detail-info">
+                <span class="detail-label">Apellido</span>
+                <span class="detail-value text-bold-highlight">{{ paciente.apellido }}</span>
+            </div>
+        </div>
+
+        <div class="detail-card">
+            <mat-icon aria-hidden="true">cake</mat-icon>
+            <div class="detail-info">
+                <span class="detail-label">Edad</span>
+                <span class="detail-value">{{ paciente.edad }} años</span>
+            </div>
+        </div>
+
+        <div class="detail-card">
+            <mat-icon aria-hidden="true">wc</mat-icon>
+            <div class="detail-info">
+                <span class="detail-label">Género</span>
+                <span class="detail-value">{{ paciente.genero }}</span>
+            </div>
+        </div>
+
+        <div class="detail-card">
+            <mat-icon aria-hidden="true">location_on</mat-icon>
+            <div class="detail-info">
+                <span class="detail-label">Dirección</span>
+                <span class="detail-value">{{ paciente.direccion }}</span>
+            </div>
+        </div>
+
+        <div class="detail-card">
+            <mat-icon aria-hidden="true">phone_iphone</mat-icon>
+            <div class="detail-info">
+                <span class="detail-label">Teléfono</span>
+                <span class="detail-value">{{ paciente.telefono }}</span>
+            </div>
+        </div>
+
+        <div class="detail-card full-width-card">
+            <mat-icon aria-hidden="true">email</mat-icon>
+            <div class="detail-info">
+                <span class="detail-label">Correo electrónico</span>
+                <span class="detail-value">{{ paciente.email }}</span>
+            </div>
+        </div>
     </div>
-    <div *ngIf="paciente != null" class="container-wide">
-        <mat-grid-list cols="1" rowHeight="auto">
-            <mat-card class="card custom-card-wide  larger-card">
-                <mat-card-title class="title-container">{{ paciente.nombre }}</mat-card-title>
-                <mat-card-content>
-                    <div class="grid-container">
-                        <div class="grid-item">
-                            <p class="large-font"><strong>nombre:</strong> {{ paciente.nombre }}</p>
-                        </div>
-                        <div class="grid-item">
-                            <p class="large-font"><strong>apellido:</strong> {{ paciente.apellido }}</p>
-                        </div>
-                        <div class="grid-item">
-                            <p class="large-font"><strong>edad:</strong> {{ paciente.edad }}</p>
-                        </div>
-                        <div class="grid-item">
-                            <p class="large-font"><strong>genero:</strong> {{ paciente.genero }}</p>
-                        </div>
-                        <div class="grid-item">
-                            <p class="large-font"><strong>direccion:</strong> {{ paciente.direccion }}</p>
-                        </div>
-                        <div class="grid-item">
-                            <p class="large-font"><strong>telefono:</strong> {{ paciente.telefono }}</p>
-                        </div>
-                        <div class="grid-item">
-                            <p class="large-font"><strong>email:</strong> {{ paciente.email }}</p>
-                        </div>
-                    </div>
-                </mat-card-content>
-                <mat-card-actions>
-                    <!-- Agrega acciones aquí si es necesario -->
-                </mat-card-actions>
-                <mat-card-actions class="button-container">
-                    <button mat-raised-button mat-dialog-close color="warn">Volver</button>
-                </mat-card-actions>
-            </mat-card>
-        </mat-grid-list>
-    </div>
+</div>
+
+<div mat-dialog-actions align="end" class="premium-dialog-actions">
+    <button mat-raised-button mat-dialog-close color="primary" class="btn-submit">Cerrar</button>
 </div>

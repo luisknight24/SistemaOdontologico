@@ -1,6 +1,6 @@
 <div class="body">
   <div class="background-container">
-    <img src="./assets/hero-login.png" alt="OdontoSys Pro - Fondo Médico">
+    <img src="./assets/hero-login.png" alt="OdontoSys Pro - Fondo Médico" width="1920" height="1080">
   </div>
   <div class="glass-overlay">
     <mat-card class="loginCard">
@@ -19,28 +19,31 @@
             </mat-form-field>
             <mat-form-field class="full-width" appearance="outline">
               <mat-label>Contraseña</mat-label>
-              <input matInput [type]="hidePassword ? 'password' : 'text'" formControlName="password" autocomplete="off" placeholder="Ingrese su contraseña">
-              <button mat-icon-button matSuffix (click)="hidePassword = !hidePassword" [attr.aria-label]="'Ocultar contraseña'" [attr.aria-pressed]="hidePassword" type="button" style="color: #7c7577;">
+              <input matInput [type]="hidePassword ? 'password' : 'text'" formControlName="password" autocomplete="off"
+                placeholder="Ingrese su contraseña">
+              <button mat-icon-button matSuffix (click)="hidePassword = !hidePassword"
+                [attr.aria-label]="'Ocultar contraseña'" [attr.aria-pressed]="hidePassword" type="button"
+                style="color: #7c7577;">
                 <mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
               </button>
             </mat-form-field>
           </div>
-          
-          <button class="full-width btn-info" mat-raised-button type="submit">
+
+          <button style="margin-bottom: 10px;" class="full-width btn-info" mat-raised-button type="submit">
             Ingresar
             <mat-icon matSuffix>login</mat-icon>
           </button>
         </form>
         <div class="mt-4">
-          <button class="btn-register" mat-button (click)="agregarUsuario()">
+          <button style="margin-top: -25px;" class="btn-register" mat-button (click)="agregarUsuario()">
             Registrarse
             <mat-icon matSuffix>person_add</mat-icon>
           </button>
         </div>
       </mat-card-content>
-     
+
       <div class="spinner-border" mode="indeterminate" *ngIf="loading">
-        <span class="sr-only">Cargando...</span>
+        <span class="sr-only">Cargando…</span>
       </div>
     </mat-card>
   </div>

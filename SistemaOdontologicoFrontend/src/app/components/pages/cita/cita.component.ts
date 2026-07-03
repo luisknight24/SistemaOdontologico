@@ -15,6 +15,7 @@ import { ModalEditarCitaComponent } from '../modales/modal-editar-cita/modal-edi
 import { CitaService } from '../../../servicios/cita.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ModalCitaComponent } from '../modales/modal-cita/modal-cita.component';
+import { RolNavegacionService } from '../../../servicios/rol-navegacion.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MAT_DATE_FORMATS } from '@angular/material/core';
 import * as moment from 'moment';
@@ -66,6 +67,8 @@ export class CitaComponent implements OnInit {
   agregarOdontologo!: Odontologo;
   fechaReserva: string = "";
   totalPagar: number = 0;
+  currentUser: any;
+  isPaciente: boolean = false;
   formGroup: FormGroup;
   displayedColumns: string[] = ['numero', 'paciente', 'servicio', 'odontologo', 'fechaReserva', 'precio', 'acciones', 'accion'];
   dataSource = new MatTableDataSource(this.ELEMENT_DATA);
@@ -80,14 +83,18 @@ export class CitaComponent implements OnInit {
     private dialog: MatDialog,
     private _snackBar: MatSnackBar,
     private _CitaServicios: CitaService,
-
+    private _rolNavegacion: RolNavegacionService
   ) {
+    this.currentUser = this._rolNavegacion.obtenerSession();
+    if (this.currentUser && this.currentUser.rolDescripcion === 'Paciente') {
+      this.isPaciente = true;
+    }
+
     this.formGroup = this.fb.group({
       paciente: ['', Validators.required],
       servicio: ['', Validators.required],
-      odontologo: ['', Validators.required],
-      fechaReserva: ['', Validators.required],
-      descripcionPaciente: ['', Validators.required]
+      odontologo: [this.isPaciente ? 'Auto-asignado' : '', this.isPaciente ? [] : [Validators.required]],
+      fechaReserva: ['', Validators.required]
     })
 
     this.formGroup.get('servicio')?.valueChanges.subscribe(value => {
@@ -124,8 +131,17 @@ export class CitaComponent implements OnInit {
     })
     this._pacienteServicio.obtenerPaciente().subscribe({
       next: (data) => {
-        if (data.estado)
+        if (data.estado) {
           this.options3 = data.valor;
+          if (this.isPaciente) {
+            const currentPaciente = this.options3.find(p => p.email === this.currentUser.correo);
+            if (currentPaciente) {
+              this.agregarPaciente = currentPaciente;
+              this.formGroup.patchValue({ paciente: currentPaciente });
+              this.formGroup.get('paciente')?.disable();
+            }
+          }
+        }
       },
       error: (e) => {
       },
@@ -152,8 +168,13 @@ export class CitaComponent implements OnInit {
     this._CitaServicios.obtenerCita().subscribe({
       next: (data) => {
         if (data.estado) {
-
-          this.dataSource.data = data.valor;
+          if (this.isPaciente) {
+            this.dataSource.data = data.valor.filter((cita: any) => 
+              cita.detalleCita && cita.detalleCita.some((d: any) => d.pacienteid === this.agregarPaciente?.id)
+            );
+          } else {
+            this.dataSource.data = data.valor;
+          }
         } else {
           this._snackBar.open("No se encontraron datos", 'Oops!', { duration: 2000 });
         }
@@ -254,7 +275,7 @@ export class CitaComponent implements OnInit {
   }
 
   registrarCita() {
-    const _fechaReserva: any = moment(this.formGroup.value.fechaReserva, 'dd/mm/yyyy');
+    const _fechaReserva: any = moment(this.formGroup.value.fechaReserva).format('DD/MM/YYYY');
     const _cantidad: number = this.formGroup.value.cantidad;
     const _precio: number = parseFloat(this.agregarServicio.precio);
     const _total: number = _precio;
@@ -263,10 +284,10 @@ export class CitaComponent implements OnInit {
     const nuevaCita: DetalleCita = {
       id: this.agregarCita == null ? 0 : this.agregarCita.id,
       pacienteid: this.agregarPaciente.id,
-      odontologoid: this.agregarOdontologo.id,
+      odontologoid: this.isPaciente ? (this.options.length > 0 ? this.options[0].id : 0) : this.agregarOdontologo.id,
       servicioid: this.agregarServicio.id,
       descripcionPaciente: this.agregarPaciente.nombre,
-      descripcionOdontologo: this.agregarOdontologo.apellido,
+      descripcionOdontologo: this.isPaciente ? (this.options.length > 0 ? this.options[0].apellido : 'Pendiente') : this.agregarOdontologo.apellido,
       servicio: this.agregarServicio.nombreServicio,
       fechaReserva: _fechaReserva,
       precioTexto: this.agregarServicio.precio

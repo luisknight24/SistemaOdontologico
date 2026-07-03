@@ -17,6 +17,8 @@ namespace SistemaOdontologico.Repositorios.Implemetacion
   {
     private readonly IGenericRepository<Usuario> _UsuarioRepositorio;
     private readonly IMapper _mapper;
+    private static Dictionary<string, (string Codigo, DateTime Expiracion)> _otpCache = new Dictionary<string, (string, DateTime)>();
+    private static Dictionary<string, UsuarioDTO> _pendingRegistrations = new Dictionary<string, UsuarioDTO>();
 
     public UsuarioRepository(IGenericRepository<Usuario> usuarioRepositorio, IMapper mapper)
     {
@@ -84,6 +86,10 @@ namespace SistemaOdontologico.Repositorios.Implemetacion
     {
       try
       {
+        var existingUser = await _UsuarioRepositorio.Consultar(u => u.Correo == modelo.Correo);
+        if (existingUser.FirstOrDefault() != null)
+          throw new TaskCanceledException("El correo ya está registrado");
+
         // Encripta la contraseña del modelo
         string hashedPassword = BCrypt.Net.BCrypt.HashPassword(modelo.Clave);
         // Actualiza la propiedad 'Clave' del modelo con la contraseña encriptada
@@ -107,6 +113,10 @@ namespace SistemaOdontologico.Repositorios.Implemetacion
     {
       try
       {
+        var existingUserQuery = await _UsuarioRepositorio.Consultar(u => u.Correo == modelo.Correo && u.Id != modelo.Id);
+        if (existingUserQuery.FirstOrDefault() != null)
+          throw new TaskCanceledException("El correo ya está registrado por otro usuario");
+
         // Encripta la contraseña del modelo
         string hashedPassword = BCrypt.Net.BCrypt.HashPassword(modelo.Clave);
         // Actualiza la propiedad 'Clave' del modelo con la contraseña encriptada
@@ -145,6 +155,84 @@ namespace SistemaOdontologico.Repositorios.Implemetacion
       {
         throw;
       }
+    }
+
+    public async Task<string> RegistroPendiente(UsuarioDTO modelo)
+    {
+        try
+        {
+            var existingUser = await _UsuarioRepositorio.Consultar(u => u.Correo == modelo.Correo);
+            if (existingUser.FirstOrDefault() != null)
+                throw new TaskCanceledException("El correo ya está registrado");
+
+            // Save temporarily
+            _pendingRegistrations[modelo.Correo] = modelo;
+
+            return await GenerarOTP(modelo.Correo);
+        }
+        catch
+        {
+            throw;
+        }
+    }
+
+    public async Task<string> GenerarOTP(string correo)
+    {
+        var random = new Random();
+        var otp = random.Next(100000, 999999).ToString();
+        _otpCache[correo] = (otp, DateTime.Now.AddMinutes(10));
+        
+        // Simulating email sending
+        Console.WriteLine($"\n========================================");
+        Console.WriteLine($"MOCK EMAIL SENT TO: {correo}");
+        Console.WriteLine($"YOUR OTP CODE IS: {otp}");
+        Console.WriteLine($"========================================\n");
+        
+        return await Task.FromResult(otp);
+    }
+
+    public async Task<UsuarioDTO> ValidarOTP(string correo, string otp)
+    {
+        if (_otpCache.TryGetValue(correo, out var cache))
+        {
+            if (cache.Codigo == otp && cache.Expiracion > DateTime.Now)
+            {
+                _otpCache.Remove(correo);
+
+                // Si es un registro pendiente, crear el usuario ahora
+                if (_pendingRegistrations.TryGetValue(correo, out var pendingUser))
+                {
+                    _pendingRegistrations.Remove(correo);
+
+                    // Encripta la contraseña del modelo
+                    string hashedPassword = BCrypt.Net.BCrypt.HashPassword(pendingUser.Clave);
+                    pendingUser.Clave = hashedPassword;
+                    pendingUser.EsActivo = 1;
+
+                    var UsuarioCreado = await _UsuarioRepositorio.Crear(_mapper.Map<Usuario>(pendingUser));
+
+                    if (UsuarioCreado.Id == 0)
+                        throw new TaskCanceledException("No se pudo Crear el usuario tras validar OTP");
+                    var query = await _UsuarioRepositorio.Consultar(u => u.Id == UsuarioCreado.Id);
+                    UsuarioCreado = query.Include(rol => rol.Rol).First();
+                    return _mapper.Map<UsuarioDTO>(UsuarioCreado);
+                }
+                else
+                {
+                    var queryUsuario = await _UsuarioRepositorio.Consultar(u => u.Correo == correo);
+                    var usuario = queryUsuario.FirstOrDefault();
+                    if (usuario != null)
+                    {
+                        usuario.EsActivo = true;
+                        await _UsuarioRepositorio.Editar(usuario);
+                        var query = await _UsuarioRepositorio.Consultar(u => u.Id == usuario.Id);
+                        usuario = query.Include(rol => rol.Rol).First();
+                        return _mapper.Map<UsuarioDTO>(usuario);
+                    }
+                }
+            }
+        }
+        return null;
     }
   }
 }

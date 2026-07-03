@@ -4,6 +4,8 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Odontologo } from '../../../../interfaces/odontologo';
 import { OdontologoService} from '../../../../servicios/odontologo.service';
+import { Servicio } from '../../../../interfaces/servicio';
+import { ServiciosService } from '../../../../servicios/servicios.service';
 
 @Component({
   selector: 'app-modal-odontologo',
@@ -14,13 +16,15 @@ export class ModalOdontologoComponent {
   formOdontologo: FormGroup;
   accion: string = "Agregar"
   accionBoton: string = "Guardar";
-  
+  listaServicios: Servicio[] = [];
+
   constructor(
     private dialogoReferencia: MatDialogRef<ModalOdontologoComponent>,
     @Inject(MAT_DIALOG_DATA) public odontologoEditar: Odontologo,
     private fb: FormBuilder,
     private _snackBar: MatSnackBar,
-    private _odontologoServices: OdontologoService
+    private _odontologoServices: OdontologoService,
+    private _serviciosService: ServiciosService
   ) {
     this.formOdontologo = this.fb.group({
       nombre: ['', Validators.required],
@@ -47,6 +51,15 @@ export class ModalOdontologoComponent {
         email: this.odontologoEditar.email  
       })
     }
+
+    this._serviciosService.obtenerServicio().subscribe({
+      next: (data) => {
+        if (data.estado) {
+          this.listaServicios = data.valor;
+        }
+      },
+      error: (e) => {}
+    });
   }
   agregarEditarOdontologo() {
     const _odontologo: Odontologo = {

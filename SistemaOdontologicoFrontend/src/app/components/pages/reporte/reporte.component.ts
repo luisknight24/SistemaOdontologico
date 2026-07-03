@@ -65,23 +65,98 @@ export class ReporteComponent implements OnInit {
   createPdf(){
     const _fechaInicio: any = moment(this.formGroup.value.fechaInicio).format('DD/MM/YYYY');
     const _fechaFin: any = moment(this.formGroup.value.fechaFin).format('DD/MM/YYYY');
-    const docDefinition = {
+
+    // Calculate total if applicable
+    const totalMonto = this.ELEMENT_DATA.reduce((acc, current) => {
+      // Assuming precio is a string like "100.00" or similar
+      const val = parseFloat(current.precio?.toString().replace(',', '.') || '0');
+      return acc + (isNaN(val) ? 0 : val);
+    }, 0);
+
+    const docDefinition: any = {
+      pageSize: 'A4',
+      pageMargins: [40, 60, 40, 60],
+      header: {
+        text: 'SoftDental - Sistema de Reservaciones Odontológicas',
+        margin: [40, 20, 40, 0],
+        fontSize: 10,
+        color: '#666666',
+        alignment: 'right'
+      },
       content: [
-        { text: 'Reporte', style: 'header' },
-        { text: 'Fecha de inicio: ' + _fechaInicio, style: 'subheader' },
-        { text: 'Fecha de fin: ' + _fechaFin, style: 'subheader' },
+        { text: 'Reporte de Citas', style: 'header' },
+        {
+          columns: [
+            { text: `Desde: ${_fechaInicio}`, style: 'subheader' },
+            { text: `Hasta: ${_fechaFin}`, style: 'subheader', alignment: 'right' }
+          ]
+        },
         '\n',
         {
           table: {
             headerRows: 1,
-            widths: ['auto','auto','auto','auto','auto','auto'],
+            widths: ['auto', '*', '*', 'auto', 'auto', 'auto'],
             body: [
-              [ 'Codigo','Paciente','Odontologo','Servicio','Precio','Fecha de Reserva'],
-             ...this.ELEMENT_DATA.map(row => [ row.numeroDocumento,row.paciente,row.odontologo,row.servicio,row.precio,row.fechaReserva])
+              [
+                { text: 'CÓDIGO', style: 'tableHeader' },
+                { text: 'PACIENTE', style: 'tableHeader' },
+                { text: 'ODONTÓLOGO', style: 'tableHeader' },
+                { text: 'SERVICIO', style: 'tableHeader' },
+                { text: 'PRECIO', style: 'tableHeader' },
+                { text: 'FECHA RESERVA', style: 'tableHeader' }
+              ],
+              ...this.ELEMENT_DATA.map(row => [
+                { text: row.numeroDocumento, style: 'tableBody' },
+                { text: row.paciente, style: 'tableBody' },
+                { text: row.odontologo, style: 'tableBody' },
+                { text: row.servicio, style: 'tableBody' },
+                { text: `S/ ${row.precio}`, style: 'tableBody' },
+                { text: row.fechaReserva, style: 'tableBody' }
+              ])
             ]
-          }
+          },
+          layout: 'lightHorizontalLines'
+        },
+        '\n\n',
+        {
+          text: `Total Ingresos del Periodo: S/ ${totalMonto.toFixed(2)}`,
+          style: 'totales'
         }
       ],
+      styles: {
+        header: {
+          fontSize: 22,
+          bold: true,
+          color: '#157e8e',
+          margin: [0, 0, 0, 10]
+        },
+        subheader: {
+          fontSize: 12,
+          color: '#555555',
+          margin: [0, 5, 0, 5]
+        },
+        tableHeader: {
+          bold: true,
+          fontSize: 11,
+          color: '#ffffff',
+          fillColor: '#157e8e',
+          alignment: 'center',
+          margin: [0, 5, 0, 5]
+        },
+        tableBody: {
+          fontSize: 10,
+          margin: [0, 4, 0, 4]
+        },
+        totales: {
+          fontSize: 14,
+          bold: true,
+          color: '#333333',
+          alignment: 'right'
+        }
+      },
+      defaultStyle: {
+        font: 'Roboto'
+      }
     };
 
     pdfMake.createPdf(docDefinition).open();

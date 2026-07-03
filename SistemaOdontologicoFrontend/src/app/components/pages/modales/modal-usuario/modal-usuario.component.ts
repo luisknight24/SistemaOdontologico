@@ -7,6 +7,8 @@ import { Usuario } from '../../../../interfaces/usuario';
 
 import { UsuarioService} from '../../../../servicios/usuario.service';
 import { RolService } from '../../../../servicios/rol.service';
+import { ModalOtpComponent } from '../modal-otp/modal-otp.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-modal-usuario',
@@ -20,24 +22,35 @@ export class ModalUsuarioComponent implements OnInit, AfterViewInit {
   accion:string ="Agregar"
   accionBoton: string = "Guardar";
   listaRoles: Rol[] = [];
+  isPublicRegistration: boolean = false;
+  usuarioEditar: any = null;
 
   constructor(
     private dialogoReferencia: MatDialogRef<ModalUsuarioComponent>,
-    @Inject(MAT_DIALOG_DATA) public usuarioEditar: Usuario,
+    @Inject(MAT_DIALOG_DATA) public dataObj: any,
     private fb: FormBuilder,
     private _snackBar: MatSnackBar,
     private _rolServicio:  RolService,
-    private _usuarioServicio: UsuarioService
+    private _usuarioServicio: UsuarioService,
+    private _dialog: MatDialog
   )
   {
     this.formUsuario = this.fb.group({
       nombreApellido: ['', Validators.required],
-      correo: ['', Validators.required],
+      correo: ['', [Validators.required, Validators.email]],
       id: ['', Validators.required],
-      clave: ['', Validators.required],
+      clave: ['', [Validators.required, Validators.minLength(6), Validators.pattern(/(?=.*[A-Z])/)]],
       esActivo: ['1', Validators.required],
     })
-    if (this.usuarioEditar!=null) {
+    if (this.dataObj && this.dataObj.isPublicRegistration) {
+      this.isPublicRegistration = true;
+      this.usuarioEditar = null;
+    } else {
+      this.isPublicRegistration = false;
+      this.usuarioEditar = this.dataObj;
+    }
+
+    if (this.usuarioEditar != null) {
       this.accion = "Editar";
       this.accionBoton = "Actualizar";
     }
@@ -63,6 +76,11 @@ export class ModalUsuarioComponent implements OnInit, AfterViewInit {
         esActivo: this.usuarioEditar.esActivo.toString()
       })
     }
+    
+    if (this.isPublicRegistration) {
+      this.formUsuario.get('id')?.clearValidators();
+      this.formUsuario.get('id')?.updateValueAndValidity();
+    }
   }
 
   ngAfterViewInit() {   
@@ -73,26 +91,54 @@ export class ModalUsuarioComponent implements OnInit, AfterViewInit {
       id: this.usuarioEditar == null ? 0 : this.usuarioEditar.id,
       nombreApellidos: this.formUsuario.value.nombreApellido,
       correo: this.formUsuario.value.correo,
-      rolId: this.formUsuario.value.id,
+      rolId: this.isPublicRegistration ? 3 : this.formUsuario.value.id, // 3 is usually Paciente, we'll verify
       rolDescripcion : "",
       clave: this.formUsuario.value.clave,
-      esActivo: parseInt(this.formUsuario.value.esActivo)
+      esActivo: this.isPublicRegistration ? 0 : parseInt(this.formUsuario.value.esActivo)
     }
     if (this.usuarioEditar==null) {
-      this._usuarioServicio.GuardarUsuario(_usuario).subscribe({
-        next: (data) => {
-          if (data.estado) {
-            this.mostrarAlerta("El usuario fue registrado", "Exito");
-            this.dialogoReferencia.close('agregado')
-          } else {
-            this.mostrarAlerta("No se pudo registrar el usuario", "Error");
+      if (this.isPublicRegistration) {
+        this._usuarioServicio.RegistroPendiente(_usuario).subscribe({
+          next: (data) => {
+            if (data.estado) {
+              this.mostrarAlerta("Se ha enviado un código de verificación a su correo", "Exito");
+              
+              this._dialog.open(ModalOtpComponent, {
+                disableClose: true,
+                panelClass: 'force-dark-theme',
+                data: { correo: this.formUsuario.value.correo }
+              }).afterClosed().subscribe(result => {
+                if (result === 'activado') {
+                   this.dialogoReferencia.close('agregado');
+                }
+              });
+            } else {
+              const errorMsg = data.mensaje ? data.mensaje : "No se pudo registrar el usuario";
+              this.mostrarAlerta(errorMsg, "Error");
+            }
+          },
+          error: (e) => {
+          },
+          complete: () => {
           }
-        },
-        error: (e) => {
-        },
-        complete: () => {
-        }
-      })
+        });
+      } else {
+        this._usuarioServicio.GuardarUsuario(_usuario).subscribe({
+          next: (data) => {
+            if (data.estado) {
+              this.mostrarAlerta("El usuario fue registrado", "Exito");
+              this.dialogoReferencia.close('agregado');
+            } else {
+              const errorMsg = data.mensaje ? data.mensaje : "No se pudo registrar el usuario";
+              this.mostrarAlerta(errorMsg, "Error");
+            }
+          },
+          error: (e) => {
+          },
+          complete: () => {
+          }
+        });
+      }
     } else {
       this._usuarioServicio.EditarUsuario(_usuario).subscribe({
         next: (data) => {
@@ -100,7 +146,8 @@ export class ModalUsuarioComponent implements OnInit, AfterViewInit {
             this.mostrarAlerta("El usuario fue editado", "Exito");
             this.dialogoReferencia.close('editado')
           } else {
-            this.mostrarAlerta("No se pudo editar el usuario", "Error");
+            const errorMsg = data.mensaje ? data.mensaje : "No se pudo editar el usuario";
+            this.mostrarAlerta(errorMsg, "Error");
           }
         },
         error: (e) => {

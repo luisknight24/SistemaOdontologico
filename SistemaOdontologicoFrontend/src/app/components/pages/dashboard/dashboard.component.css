@@ -137,6 +137,10 @@
   margin-bottom: 32px;
 }
 
+:host-context(body.light-mode) .welcome-banner {
+  background: linear-gradient(135deg, rgba(20, 184, 166, 0.15) 0%, rgba(203, 213, 225, 0.6) 100%);
+}
+
 .welcome-banner h1 {
   font-size: 2rem;
   font-weight: 700;
@@ -203,10 +207,19 @@
 }
 
 .card-value {
-  font-size: 2.25rem;
+  font-size: clamp(1.5rem, 2vw + 0.5rem, 2.25rem);
   font-weight: 700;
   color: var(--text-main);
   margin-top: 4px;
+  line-height: 1.1;
+  word-break: break-word;
+}
+
+.currency-symbol {
+  font-size: 1.25rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  margin-right: 2px;
 }
 
 .card-icon mat-icon {

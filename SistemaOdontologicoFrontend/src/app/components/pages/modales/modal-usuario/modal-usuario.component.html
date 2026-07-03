@@ -27,6 +27,8 @@
           <mat-label>Correo electrónico</mat-label>
           <input matInput autocomplete="off" formControlName="correo" placeholder="ejemplo@clinica.com">
           <mat-icon matPrefix>email</mat-icon>
+          <mat-error *ngIf="formUsuario.get('correo')?.hasError('required')">El correo es obligatorio</mat-error>
+          <mat-error *ngIf="formUsuario.get('correo')?.hasError('email')">Ingrese un correo válido (ej: usuario@dominio.com)</mat-error>
         </mat-form-field>
       </div>
     </div>
@@ -36,7 +38,7 @@
     <div class="form-section">
       <h3 class="section-title"><mat-icon>security</mat-icon> Seguridad y permisos</h3>
 
-      <div class="form-row">
+      <div class="form-row" *ngIf="!isPublicRegistration">
         <mat-form-field appearance="outline" class="flex-half">
           <mat-label>Rol del sistema</mat-label>
           <mat-icon matPrefix>shield_person</mat-icon>
@@ -67,6 +69,9 @@
             <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
           </button>
           <mat-hint *ngIf="accion === 'Crear'">La contraseña es obligatoria para nuevos usuarios.</mat-hint>
+          <mat-error *ngIf="formUsuario.get('clave')?.hasError('required')">La contraseña es obligatoria</mat-error>
+          <mat-error *ngIf="formUsuario.get('clave')?.hasError('minlength')">Debe tener al menos 6 caracteres</mat-error>
+          <mat-error *ngIf="formUsuario.get('clave')?.hasError('pattern')">Debe contener al menos una letra mayúscula</mat-error>
         </mat-form-field>
       </div>
     </div>

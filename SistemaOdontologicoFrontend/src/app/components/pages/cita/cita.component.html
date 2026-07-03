@@ -23,7 +23,8 @@
             <input type="text" placeholder="Buscar paciente..." matInput [matAutocomplete]="auto"
               formControlName="paciente">
             <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete"
-              (optionSelected)="pacienteSeleccionado($event)" [displayWith]="displayPaciente">
+              (optionSelected)="pacienteSeleccionado($event)" [displayWith]="displayPaciente"
+              panelClass="dark-autocomplete">
               <mat-option *ngFor="let option of filteredPacientes" [value]="option">
                 <div class="autocomplete-option">
                   <mat-icon class="text-primary-light">person</mat-icon>
@@ -39,7 +40,8 @@
             <input type="text" placeholder="Buscar servicio..." matInput [matAutocomplete]="autoServicio"
               formControlName="servicio">
             <mat-autocomplete autoActiveFirstOption #autoServicio="matAutocomplete"
-              (optionSelected)="servicioSeleccionado($event)" [displayWith]="displayServicio">
+              (optionSelected)="servicioSeleccionado($event)" [displayWith]="displayServicio"
+              panelClass="dark-autocomplete">
               <mat-option *ngFor="let option of filteredServicios" [value]="option">
                 <div class="autocomplete-option-between">
                   <span>{{option.nombreServicio}}</span>
@@ -49,13 +51,14 @@
             </mat-autocomplete>
           </mat-form-field>
 
-          <mat-form-field appearance="outline" class="form-field">
+          <mat-form-field appearance="outline" class="form-field" *ngIf="!isPaciente">
             <mat-label>Odontólogo asignado</mat-label>
             <mat-icon matSuffix>badge</mat-icon>
             <input type="text" placeholder="Buscar odontólogo..." matInput [matAutocomplete]="autoOdontologo"
               formControlName="odontologo" (click)="openAutocompletePanel()">
             <mat-autocomplete autoActiveFirstOption #autoOdontologo="matAutocomplete"
-              (optionSelected)="odontologoSeleccionado($event)" [displayWith]="displayOdontologo">
+              (optionSelected)="odontologoSeleccionado($event)" [displayWith]="displayOdontologo"
+              panelClass="dark-autocomplete">
               <mat-option *ngFor="let options of filteredOdontologo" [value]="options">
                 <div class="autocomplete-option">
                   <mat-icon class="text-accent">medication</mat-icon>
@@ -74,7 +77,8 @@
         </div>
 
         <div class="form-actions-end">
-          <button mat-raised-button color="primary" type="submit" [disabled]="formGroup.invalid" class="btn-action">
+          <button mat-raised-button color="primary" style="cursor: pointer;" type="submit"
+            [disabled]="formGroup.invalid" class="btn-action">
             <mat-icon>save</mat-icon> Confirmar reserva
           </button>
         </div>
@@ -103,9 +107,7 @@
           <ng-container matColumnDef="paciente">
             <th mat-header-cell *matHeaderCellDef> Paciente </th>
             <td mat-cell *matCellDef="let element">
-              <div class="flex-align-center">
-                <mat-icon class="text-muted-icon">face</mat-icon> {{element.paciente}}
-              </div>
+              <div class="flex-align-center">{{element.paciente}}</div>
             </td>
           </ng-container>
 
@@ -125,8 +127,7 @@
             <th mat-header-cell *matHeaderCellDef> Fecha </th>
             <td mat-cell *matCellDef="let element">
               <div class="flex-align-center">
-                <mat-icon class="text-accent-icon">calendar_today</mat-icon> {{element.fechaReserva |
-                date:'dd/MM/yyyy'}}
+                <mat-icon class="text-accent-icon">calendar_today</mat-icon> {{element.fechaReserva}}
               </div>
             </td>
           </ng-container>

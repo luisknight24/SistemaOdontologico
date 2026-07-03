@@ -101,7 +101,8 @@ namespace SistemaOdontologico.Utilidades
           .ForMember(destino => destino.Paciente, opt => opt.Ignore())
           .ForMember(destino => destino.Odontologo, opt => opt.Ignore())
           .ForMember(destino => destino.Servicio, opt => opt.Ignore()) 
-          .ForMember(destino => destino.Precio, opt => opt.MapFrom(origen => Decimal.Parse(origen.PrecioTexto)));
+          .ForMember(destino => destino.Precio, opt => opt.MapFrom(origen => Decimal.Parse(origen.PrecioTexto)))
+          .ForMember(destino => destino.FechaReserva, opt => opt.MapFrom(origen => DateTime.ParseExact(origen.FechaReserva, "dd/MM/yyyy", CultureInfo.InvariantCulture)));
       #endregion DetalleCita
 
       #region Reporte

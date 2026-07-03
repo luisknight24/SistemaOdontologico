@@ -61,7 +61,9 @@ export class LoginComponent  {
   }
   agregarUsuario() {
     this.dialog.open(ModalUsuarioComponent, {
-        disableClose: true
+        disableClose: true,
+        panelClass: 'force-dark-theme',
+        data: { isPublicRegistration: true }
       }).afterClosed().subscribe(result => {
         
         if (result === "agregado") {
@@ -97,7 +99,11 @@ onLogin() {
     next: (data) => {
       if (data.estado) {
         this._rolNavegacion.guardarSesionUsuario(data.valor);
-        this.router.navigate(['pages']);
+        if (data.valor.rolDescripcion === 'Paciente') {
+          this.router.navigate(['pages/cita']);
+        } else {
+          this.router.navigate(['pages']);
+        }
       } else {
         this._snackBar.open("No se encontraron coincidencias", 'Oops!', { duration: 3000 });
       }

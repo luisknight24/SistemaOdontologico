@@ -51,7 +51,11 @@
       <div class="form-row">
         <mat-form-field appearance="outline" class="flex-half">
           <mat-label>Especialidad médica</mat-label>
-          <input matInput autocomplete="off" formControlName="especialidad" placeholder="Ej. Ortodoncia">
+          <mat-select formControlName="especialidad">
+            <mat-option *ngFor="let servicio of listaServicios" [value]="servicio.nombreServicio">
+              {{servicio.nombreServicio}}
+            </mat-option>
+          </mat-select>
           <mat-icon matPrefix>local_hospital</mat-icon>
         </mat-form-field>
 

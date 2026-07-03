@@ -124,5 +124,68 @@ namespace SistemaOdontologico.Controllers
       }
       return Ok(rsp);
     }
+
+    [HttpPost]
+    [Route("RegistroPendiente")]
+    public async Task<IActionResult> RegistroPendiente([FromBody] UsuarioDTO usuario)
+    {
+      var rsp = new Response<string>();
+      try
+      {
+        rsp.estado = true;
+        rsp.valor = await _UsuarioServicios.RegistroPendiente(usuario);
+      }
+      catch (Exception ex)
+      {
+        rsp.estado = false;
+        rsp.mensaje = ex.Message;
+      }
+      return Ok(rsp);
+    }
+
+    [HttpPost]
+    [Route("GenerarOTP")]
+    public async Task<IActionResult> GenerarOTP([FromQuery] string correo)
+    {
+      var rsp = new Response<string>();
+      try
+      {
+        rsp.estado = true;
+        rsp.valor = await _UsuarioServicios.GenerarOTP(correo);
+      }
+      catch (Exception ex)
+      {
+        rsp.estado = false;
+        rsp.mensaje = ex.Message;
+      }
+      return Ok(rsp);
+    }
+
+    [HttpPost]
+    [Route("ValidarOTP")]
+    public async Task<IActionResult> ValidarOTP([FromQuery] string correo, [FromQuery] string codigo)
+    {
+      var rsp = new Response<UsuarioDTO>();
+      try
+      {
+        var user = await _UsuarioServicios.ValidarOTP(correo, codigo);
+        if (user != null)
+        {
+            rsp.estado = true;
+            rsp.valor = user;
+        }
+        else
+        {
+            rsp.estado = false;
+            rsp.mensaje = "OTP Inválido o expirado.";
+        }
+      }
+      catch (Exception ex)
+      {
+        rsp.estado = false;
+        rsp.mensaje = ex.Message;
+      }
+      return Ok(rsp);
+    }
   }
 }

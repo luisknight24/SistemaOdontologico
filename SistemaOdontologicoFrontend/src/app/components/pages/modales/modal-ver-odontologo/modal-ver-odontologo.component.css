@@ -1,40 +1,7 @@
-.container-wide {
-  width: 100%;
-  margin: 0 auto;
-}
-.card.custom-card-wide {
-  width: 120%;
-}
-.grid-container {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  grid-gap: 10px; 
-}
-.button-container {
-  display: flex;
-  justify-content: center; 
-  align-items: center; 
-  margin-top: 10px; 
-}
-.grid-item {
+/* All premium modal styles are now centralized in styles.css */
+/* Only component-specific overrides go here */
 
-}
-.title-container {
-  display: flex;
-  justify-content: center; 
-  align-items: center; 
-  margin-bottom: 20px; 
-}
-.large-font {
-  font-size: 16px; 
-}
-.larger-modal-container {
-  width: 90%; 
-  max-width: 800px; 
-  margin: 0 auto; 
-  padding: 2px; 
-}
-.larger-card {
-  width: 100%; 
-  max-width: 100%; 
+.btn-submit {
+  padding: 0 24px;
+  border-radius: 8px;
 }

@@ -2,11 +2,11 @@
   <mat-toolbar-row class="toolbar-row">
     <!-- Header Izquierdo: Menú y Marca -->
     <div class="brand-section">
-      <button mat-icon-button (click)="drawer.toggle()" class="menu-btn">
-        <mat-icon>menu</mat-icon>
+      <button mat-icon-button (click)="drawer.toggle()" class="menu-btn" aria-label="Abrir menú de navegación">
+        <mat-icon aria-hidden="true">menu</mat-icon>
       </button>
       <div class="brand-logo-wrapper">
-        <mat-icon class="brand-icon">health_and_safety</mat-icon>
+        <mat-icon class="brand-icon" aria-hidden="true">health_and_safety</mat-icon>
       </div>
       <h1 class="brand-title">SoftDental</h1>
     </div>
@@ -22,7 +22,7 @@
             <span class="user-email">{{correoUsuario}}</span>
             <span class="user-role">{{rolUsuario}}</span>
           </div>
-          <mat-icon class="dropdown-icon">arrow_drop_down</mat-icon>
+          <mat-icon class="dropdown-icon" aria-hidden="true">arrow_drop_down</mat-icon>
         </div>
       </button>
 
@@ -52,7 +52,7 @@
 
       <div class="sidenav-header">
         <div class="app-logo">
-          <mat-icon>medical_services</mat-icon>
+          <mat-icon aria-hidden="true">medical_services</mat-icon>
         </div>
         <h3 class="sidenav-title">Menú Principal</h3>
       </div>

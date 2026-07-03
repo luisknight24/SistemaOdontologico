@@ -17,6 +17,7 @@ import { ModalEliminarUsuarioComponent } from './modales/modal-eliminar-usuario/
 import { ModalEliminarOdontologoComponent } from './modales/modal-eliminar-odontologo/modal-eliminar-odontologo.component';
 import { ModalEliminarPacienteComponent } from './modales/modal-eliminar-paciente/modal-eliminar-paciente.component';
 import { ReporteComponent } from './reporte/reporte.component';
+import { ModalOtpComponent } from './modales/modal-otp/modal-otp.component';
 import { ModalCitaComponent } from './modales/modal-cita/modal-cita.component';
 import { ModalServicioComponent } from './modales/modal-servicio/modal-servicio.component';
 import { ModalEliminarServicioComponent } from './modales/modal-eliminar-servicio/modal-eliminar-servicio.component';
@@ -58,6 +59,7 @@ import { ConfiguracionComponent } from './configuracion/configuracion.component'
     ModalEliminarOdontologoComponent,
     ModalEliminarPacienteComponent,
     ReporteComponent,
+    ModalOtpComponent,
     ModalCitaComponent,
     ModalServicioComponent,
     ModalEliminarServicioComponent,

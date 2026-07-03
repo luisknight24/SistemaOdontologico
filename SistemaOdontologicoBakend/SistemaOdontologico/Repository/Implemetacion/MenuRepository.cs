@@ -36,6 +36,19 @@ namespace SistemaOdontologico.Repositorios.Implemetacion
                                         join m in tbMenu on mr.MenuId equals m.Id
                                         select m).AsQueryable();
 
+        var usuario = tbUsuario.FirstOrDefault();
+        if (usuario != null)
+        {
+            if (usuario.RolId == 3) // Paciente
+            {
+                tbResultado = tbResultado.Where(m => m.Nombre != "Dashboard");
+            }
+            else if (usuario.RolId == 2) // Odontólogo
+            {
+                tbResultado = tbResultado.Where(m => m.Nombre != "Usuarios" && m.Nombre != "Servicios");
+            }
+        }
+
         var listaMenus = tbResultado.ToList();
         return _mapper.Map<List<MenuDTO>>(listaMenus);
       }
