@@ -42,6 +42,10 @@ namespace SistemaOdontologico.Repositorios
           string numeroVenta = ceros + correlativo.UltimoNumero.ToString();
           numeroVenta = numeroVenta.Substring(numeroVenta.Length - CantidadDigitos, CantidadDigitos);
           entidad.NumeroDocumento = numeroVenta;
+          if (string.IsNullOrEmpty(entidad.Estado))
+          {
+              entidad.Estado = "Pendiente";
+          }
           await _DbContext.Citas.AddAsync(entidad);
           await _DbContext.SaveChangesAsync();
           citaGenerada = entidad;

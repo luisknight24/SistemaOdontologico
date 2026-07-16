@@ -5,10 +5,13 @@ using SistemaOdontologico.DTO;
 using SistemaOdontologico.Utilidades;
 using System.Globalization;
 
+using Microsoft.AspNetCore.Authorization;
+
 namespace SistemaOdontologico.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class DashboardController : ControllerBase
     {
         private readonly SistemaOdontologicoDbContext _dbContext;
@@ -29,24 +32,26 @@ namespace SistemaOdontologico.Controllers
 
                 dto.TotalPacientes = await _dbContext.Pacientes.CountAsync();
                 dto.TotalOdontologos = await _dbContext.Odontologos.CountAsync();
-                dto.TotalCitas = await _dbContext.Citas.CountAsync();
+                dto.TotalCitas = await _dbContext.Citas.Where(c => c.Estado == "Confirmada").CountAsync();
 
-                decimal? totalIngresos = await _dbContext.Citas.SumAsync(c => c.Total);
+                decimal? totalIngresos = await _dbContext.Citas.Where(c => c.Estado == "Confirmada").SumAsync(c => c.Total);
                 dto.TotalIngresos = Convert.ToString(totalIngresos.GetValueOrDefault(), new CultureInfo("es-EC"));
 
                 // Agrupamos citas por mes de reserva.
                 var detalles = await _dbContext.DetalleCita
-                    .Where(d => d.FechaReserva != null)
+                    .Include(d => d.Cita)
+                    .Where(d => d.FechaReserva != null && d.Cita.Estado == "Confirmada")
                     .ToListAsync();
 
                 var agrupado = detalles
-                    .GroupBy(d => d.FechaReserva.Value.ToString("MMMM", new CultureInfo("es-ES")))
+                    .GroupBy(d => d.FechaReserva.Value.Month)
+                    .OrderBy(g => g.Key)
                     .Select(g => new CitasPorMesDTO
                     {
-                        Mes = char.ToUpper(g.Key[0]) + g.Key.Substring(1),
+                        Mes = char.ToUpper(g.First().FechaReserva.Value.ToString("MMMM", new CultureInfo("es-ES"))[0]) 
+                              + g.First().FechaReserva.Value.ToString("MMMM", new CultureInfo("es-ES")).Substring(1),
                         Cantidad = g.Count()
                     })
-                    .Take(4)
                     .ToList();
 
                 dto.GraficoCitas = agrupado;

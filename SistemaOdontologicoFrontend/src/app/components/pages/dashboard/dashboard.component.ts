@@ -54,16 +54,16 @@ export class DashboardComponent implements OnInit {
             label: 'Número de Citas',
             data: valores,
             backgroundColor: [
-              'rgba(21, 126, 142, 0.7)',
-              'rgba(38, 166, 154, 0.7)',
-              'rgba(106, 90, 205, 0.7)',
-              'rgba(255, 112, 67, 0.7)'
+              'rgba(217, 119, 6, 0.7)',
+              'rgba(251, 191, 36, 0.7)',
+              'rgba(146, 64, 14, 0.7)',
+              'rgba(253, 230, 138, 0.7)'
             ],
             borderColor: [
-              'rgba(21, 126, 142, 1)',
-              'rgba(38, 166, 154, 1)',
-              'rgba(106, 90, 205, 1)',
-              'rgba(255, 112, 67, 1)'
+              'rgba(217, 119, 6, 1)',
+              'rgba(251, 191, 36, 1)',
+              'rgba(146, 64, 14, 1)',
+              'rgba(253, 230, 138, 1)'
             ],
             borderWidth: 2,
             borderRadius: 6

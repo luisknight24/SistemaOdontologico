@@ -9,11 +9,10 @@ import { ReusableModule } from './components/reusable/reusable.module';
 
 //Modulos
 import { ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-
-
+import { InterceptorJwt } from './interceptors/jwt.interceptor';
 
 @NgModule({
   declarations: [
@@ -39,7 +38,9 @@ import { CommonModule } from '@angular/common';
     CommonModule,
    
   ],  
- 
+  providers: [
+    { provide: HTTP_INTERCEPTORS, useClass: InterceptorJwt, multi: true }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

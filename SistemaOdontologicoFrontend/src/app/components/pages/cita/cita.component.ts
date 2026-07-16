@@ -70,7 +70,7 @@ export class CitaComponent implements OnInit {
   currentUser: any;
   isPaciente: boolean = false;
   formGroup: FormGroup;
-  displayedColumns: string[] = ['numero', 'paciente', 'servicio', 'odontologo', 'fechaReserva', 'precio', 'acciones', 'accion'];
+  displayedColumns: string[] = ['numero', 'paciente', 'servicio', 'odontologo', 'fechaReserva', 'precio', 'estado', 'acciones', 'accion'];
   dataSource = new MatTableDataSource(this.ELEMENT_DATA);
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
@@ -110,8 +110,10 @@ export class CitaComponent implements OnInit {
 
     this._servicioServicio.obtenerServicio().subscribe({
       next: (data) => {
-        if (data.estado)
+        if (data.estado) {
           this.options2 = data.valor;
+          this.filteredServicios = data.valor;
+        }
       },
       error: (e) => {
       },
@@ -121,8 +123,10 @@ export class CitaComponent implements OnInit {
     })
     this._odontologoServicio.ObtenerOdontologo().subscribe({
       next: (data) => {
-        if (data.estado)
+        if (data.estado) {
           this.options = data.valor;
+          this.filteredOdontologo = data.valor;
+        }
       },
       error: (e) => {
       },
@@ -133,12 +137,50 @@ export class CitaComponent implements OnInit {
       next: (data) => {
         if (data.estado) {
           this.options3 = data.valor;
+          this.filteredPacientes = data.valor;
           if (this.isPaciente) {
-            const currentPaciente = this.options3.find(p => p.email === this.currentUser.correo);
+            const currentPaciente = this.options3.find(p => p.email && this.currentUser.correo && p.email.toLowerCase() === this.currentUser.correo.toLowerCase());
             if (currentPaciente) {
               this.agregarPaciente = currentPaciente;
               this.formGroup.patchValue({ paciente: currentPaciente });
               this.formGroup.get('paciente')?.disable();
+            } else {
+              // Auto-crear ficha clínica si la cuenta está activa en localStorage pero no en la base de datos (por reinicios)
+              const nombres = this.currentUser.nombreApellidos ? this.currentUser.nombreApellidos.split(' ') : ['Paciente'];
+              const nombre = nombres[0] || 'Paciente';
+              const apellido = nombres.slice(1).join(' ') || 'Registrado';
+              
+              const nuevoPaciente: Paciente = {
+                id: 0,
+                nombre: nombre,
+                apellido: apellido,
+                email: this.currentUser.correo,
+                edad: 0,
+                genero: 'No especificado',
+                direccion: 'No especificada',
+                telefono: 'No especificado'
+              };
+              
+              this._pacienteServicio.guardarPaciente(nuevoPaciente).subscribe({
+                next: (res) => {
+                  if (res.estado) {
+                    this._pacienteServicio.obtenerPaciente().subscribe({
+                      next: (newData) => {
+                        if (newData.estado) {
+                          this.options3 = newData.valor;
+                          this.filteredPacientes = newData.valor;
+                          const createdPaciente = this.options3.find(p => p.email && this.currentUser.correo && p.email.toLowerCase() === this.currentUser.correo.toLowerCase());
+                          if (createdPaciente) {
+                            this.agregarPaciente = createdPaciente;
+                            this.formGroup.patchValue({ paciente: createdPaciente });
+                            this.formGroup.get('paciente')?.disable();
+                          }
+                        }
+                      }
+                    });
+                  }
+                }
+              });
             }
           }
         }
@@ -168,13 +210,7 @@ export class CitaComponent implements OnInit {
     this._CitaServicios.obtenerCita().subscribe({
       next: (data) => {
         if (data.estado) {
-          if (this.isPaciente) {
-            this.dataSource.data = data.valor.filter((cita: any) => 
-              cita.detalleCita && cita.detalleCita.some((d: any) => d.pacienteid === this.agregarPaciente?.id)
-            );
-          } else {
-            this.dataSource.data = data.valor;
-          }
+          this.setTableData(data.valor);
         } else {
           this._snackBar.open("No se encontraron datos", 'Oops!', { duration: 2000 });
         }
@@ -191,6 +227,16 @@ export class CitaComponent implements OnInit {
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
+  }
+
+  private setTableData(citas: any[]) {
+    if (this.isPaciente) {
+      this.dataSource.data = citas.filter((cita: any) => 
+        cita.pacienteEmail && this.currentUser.correo && cita.pacienteEmail.toLowerCase() === this.currentUser.correo.toLowerCase()
+      );
+    } else {
+      this.dataSource.data = citas;
+    }
   }
 
   mostrarOdontologo() {
@@ -312,7 +358,8 @@ export class CitaComponent implements OnInit {
           if (data.estado) {
             this.dialog.open(ModalCitaComponent, {
               data: {
-                numero: data.valor.numeroDocumento
+                numero: data.valor.numeroDocumento,
+                isPaciente: this.isPaciente
               },
             });
           } else {
@@ -329,7 +376,7 @@ export class CitaComponent implements OnInit {
           this._CitaServicios.obtenerCita().subscribe({
             next: (data) => {
               if (data.estado) {
-                this.dataSource.data = data.valor;
+                this.setTableData(data.valor);
               } else {
                 this._snackBar.open("No se encontraron datos", 'Oops!', { duration: 2000 });
               }
@@ -363,7 +410,7 @@ export class CitaComponent implements OnInit {
         this._CitaServicios.obtenerCita().subscribe({
           next: (data) => {
             if (data.estado) {
-              this.dataSource.data = data.valor;
+              this.setTableData(data.valor);
             } else {
               this._snackBar.open("No se encontraron datos", 'Oops!', { duration: 2000 });
             }

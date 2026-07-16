@@ -1,1 +1,58 @@
-/* OTP styles */
+/* OTP Modal Premium Styles */
+
+.success-glow {
+  background: linear-gradient(135deg, var(--color-success), #34d399) !important;
+  box-shadow: 0 6px 16px rgba(16, 185, 129, 0.25) !important;
+}
+
+.email-highlight {
+  color: var(--color-primary-light);
+  font-weight: 600;
+  display: inline-block;
+  margin-top: 4px;
+  word-break: break-all;
+}
+
+.otp-form {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-width: 320px;
+  max-width: 400px;
+  margin: 16px auto 0 auto;
+}
+
+.otp-input {
+  text-align: center !important;
+  font-size: 24px !important;
+  letter-spacing: 12px !important;
+  font-weight: 700 !important;
+  font-family: monospace !important;
+  color: var(--text-main) !important;
+  padding: 8px 0 !important;
+}
+
+::ng-deep .otp-form .mat-mdc-form-field-infix {
+  padding-bottom: 12px !important;
+}
+
+.btn-cancel {
+  color: var(--text-muted) !important;
+  font-weight: 500;
+}
+
+.btn-cancel:hover {
+  background-color: var(--bg-surface-hover) !important;
+  color: var(--text-main) !important;
+}
+
+.btn-submit {
+  border-radius: 8px !important;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-submit mat-icon {
+  margin-right: 4px;
+}

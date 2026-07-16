@@ -6,11 +6,13 @@ using SistemaOdontologico.Utilidades;
 using SistemaOdontologico.Repositorios.Interfaces;
 using SistemaOdontologico.Repositorios.Implementacion;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 
 namespace SistemaOdontologico.Controllers
 {
   [Route("api/[controller]")]
   [ApiController]
+  [Authorize]
   public class UsuarioController : ControllerBase
   {
     private readonly IUsuarioRepository _UsuarioServicios;
@@ -21,6 +23,7 @@ namespace SistemaOdontologico.Controllers
 
     [HttpPost]
     [Route("IniciarSesion")]
+    [AllowAnonymous]
     public async Task<IActionResult> IniciarSesion([FromBody] LoginDTO login)
     {
       var rsp = new Response<SesionDTO>();
@@ -127,6 +130,7 @@ namespace SistemaOdontologico.Controllers
 
     [HttpPost]
     [Route("RegistroPendiente")]
+    [AllowAnonymous]
     public async Task<IActionResult> RegistroPendiente([FromBody] UsuarioDTO usuario)
     {
       var rsp = new Response<string>();
@@ -145,6 +149,7 @@ namespace SistemaOdontologico.Controllers
 
     [HttpPost]
     [Route("GenerarOTP")]
+    [AllowAnonymous]
     public async Task<IActionResult> GenerarOTP([FromQuery] string correo)
     {
       var rsp = new Response<string>();
@@ -163,6 +168,7 @@ namespace SistemaOdontologico.Controllers
 
     [HttpPost]
     [Route("ValidarOTP")]
+    [AllowAnonymous]
     public async Task<IActionResult> ValidarOTP([FromQuery] string correo, [FromQuery] string codigo)
     {
       var rsp = new Response<UsuarioDTO>();

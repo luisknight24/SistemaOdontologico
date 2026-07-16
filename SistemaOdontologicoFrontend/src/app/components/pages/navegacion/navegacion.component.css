@@ -9,10 +9,10 @@
   --text-main: #f8fafc;
   --text-muted: #94a3b8;
 
-  /* Colores de acento (Teal médico moderno) */
-  --color-primary: #14b8a6;
-  --color-primary-light: #2dd4bf;
-  --color-primary-dark: #0f766e;
+  /* Colores de acento (Ámbar Fotocurado & Amarillo Dorado) */
+  --color-primary: #d97706;
+  --color-primary-light: #fbbf24;
+  --color-primary-dark: #92400e;
   --color-warn: #f43f5e;
 
   --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.5);
@@ -62,19 +62,27 @@
   color: var(--text-main) !important;
 }
 
-.brand-logo-wrapper {
-  background: rgba(20, 184, 166, 0.15);
+.brand-logo-wrapper-small {
+  background: rgba(217, 119, 6, 0.12);
+  border: 1px solid rgba(217, 119, 6, 0.2);
   border-radius: 8px;
-  padding: 6px;
+  width: 32px;
+  height: 32px;
   display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.3s ease;
 }
 
-.brand-icon {
-  color: var(--color-primary);
-  font-size: 24px;
-  height: 24px;
-  width: 24px;
+.brand-logo-wrapper-small:hover {
+  transform: rotate(10deg);
 }
+
+.premium-svg-logo-small {
+  width: 18px;
+  height: 18px;
+}
+
 
 .brand-title {
   margin: 0;
@@ -208,40 +216,23 @@
 }
 
 .sidenav-header {
-  padding: 24px 20px;
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.app-logo {
-  width: 64px;
-  height: 64px;
-  background: rgba(20, 184, 166, 0.1);
-  border: 1px solid rgba(20, 184, 166, 0.2);
-  border-radius: 16px;
+  padding: 20px 24px;
   display: flex;
   align-items: center;
-  justify-content: center;
-  margin-bottom: 12px;
-  box-shadow: 0 0 15px rgba(20, 184, 166, 0.1);
+  justify-content: flex-start;
 }
 
-.app-logo mat-icon {
-  color: var(--color-primary);
-  font-size: 32px;
-  height: 32px;
-  width: 32px;
+.sidenav-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
 
-.sidenav-title {
-  margin: 0;
-  color: var(--text-muted);
-  font-weight: 600;
-  font-size: 13px;
-  text-transform: uppercase;
-  letter-spacing: 1px;
+.sidenav-brand-name {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text-main);
+  letter-spacing: -0.2px;
 }
 
 .dark-divider {
@@ -268,7 +259,7 @@
 }
 
 .menu-list .active-link {
-  background: rgba(20, 184, 166, 0.15) !important;
+  background: rgba(217, 119, 6, 0.15) !important;
   color: var(--color-primary) !important;
   border-left: 3px solid var(--color-primary);
 }

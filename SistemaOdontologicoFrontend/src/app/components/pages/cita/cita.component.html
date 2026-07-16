@@ -38,7 +38,7 @@
             <mat-label>Servicio odontológico</mat-label>
             <mat-icon matSuffix>medical_services</mat-icon>
             <input type="text" placeholder="Buscar servicio..." matInput [matAutocomplete]="autoServicio"
-              formControlName="servicio">
+              formControlName="servicio" #autoServicioTrigger="matAutocompleteTrigger" (click)="autoServicioTrigger.openPanel()">
             <mat-autocomplete autoActiveFirstOption #autoServicio="matAutocomplete"
               (optionSelected)="servicioSeleccionado($event)" [displayWith]="displayServicio"
               panelClass="dark-autocomplete">
@@ -61,7 +61,6 @@
               panelClass="dark-autocomplete">
               <mat-option *ngFor="let options of filteredOdontologo" [value]="options">
                 <div class="autocomplete-option">
-                  <mat-icon class="text-accent">medication</mat-icon>
                   <span>Dr(a). {{options.apellido}} {{options.nombre}}</span>
                 </div>
               </mat-option>
@@ -136,6 +135,19 @@
             <th mat-header-cell *matHeaderCellDef> Costo </th>
             <td mat-cell *matCellDef="let element">
               <span class="text-bold">S/ {{element.precio}}</span>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="estado">
+            <th mat-header-cell *matHeaderCellDef> Estado </th>
+            <td mat-cell *matCellDef="let element">
+              <span class="badge" [ngClass]="{
+                'badge-warning': element.estado === 'Pendiente',
+                'badge-success': element.estado === 'Confirmada',
+                'badge-neutral': element.estado === 'Cancelada'
+              }">
+                {{element.estado || 'Pendiente'}}
+              </span>
             </td>
           </ng-container>
 

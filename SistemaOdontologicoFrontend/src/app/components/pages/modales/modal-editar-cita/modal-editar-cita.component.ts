@@ -13,8 +13,9 @@ import { MatDialog } from '@angular/material/dialog';
 import * as moment from 'moment';
 import { Cita } from 'src/app/interfaces/cita';
 import { PacienteService } from 'src/app/servicios/paciente.service';
-import { ServiciosService } from 'src/app/servicios/servicios.service';;
-import { OdontologoService } from 'src/app/servicios/odontologo.service';;
+import { ServiciosService } from 'src/app/servicios/servicios.service';
+import { OdontologoService } from 'src/app/servicios/odontologo.service';
+import { RolNavegacionService } from 'src/app/servicios/rol-navegacion.service';
 export const MY_DATE_FORMATS = {
   parse: {
     dateInput: 'DD/MM/YYYY',
@@ -55,23 +56,31 @@ export class ModalEditarCitaComponent implements OnInit {
   ELEMENT_DATA: DetalleCita[] = [
   ];
   cita: DetalleCita | null = null;
+  currentUser: any;
+  isPaciente: boolean = false;
   constructor(
     private dialogoReferencia: MatDialogRef<ModalEditarCitaComponent>,
     @Inject(MAT_DIALOG_DATA) public cita12: Reporte,
     private fb: FormBuilder,
-    private _CitaServicio: CitaService,
+    private _CitaService: CitaService,
     private _odontologoServicio: OdontologoService,
     private _pacienteServicio: PacienteService,
     private _servicioServicio: ServiciosService,
+    private _rolNavegacion: RolNavegacionService,
     private dialog: MatDialog,
     private _snackBar: MatSnackBar
   ) {
+    this.currentUser = this._rolNavegacion.obtenerSession();
+    this.isPaciente = this.currentUser && this.currentUser.rolDescripcion === 'Paciente';
+    this.citaEditar = { ...this.cita12 };
+
     this.formCita = this.fb.group({
       paciente: ['', Validators.required],
       odontologo: ['', Validators.required],
       servicio: ['', Validators.required],
-      fechaRegistro: ['', Validators.required],
-      fechaReserva: ['', Validators.required]
+      fechaRegistro: [''],
+      fechaReserva: ['', Validators.required],
+      estado: ['', Validators.required]
     });
     this.formCita.get('servicio')?.valueChanges.subscribe(value => {
       this.filteredServicios = this._filterServicio(value)
@@ -86,30 +95,52 @@ export class ModalEditarCitaComponent implements OnInit {
 
     this._servicioServicio.obtenerServicio().subscribe({
       next: (data) => {
-        if (data.estado)
+        if (data.estado) {
           this.options2 = data.valor;
+          const currentServicio = this.options2.find(s => s.nombreServicio === this.citaEditar.servicio);
+          if (currentServicio) {
+            this.agregarServicio = currentServicio;
+            this.formCita.patchValue({ servicio: currentServicio });
+          }
+        }
       },
       error: (e) => {
       },
       complete: () => {
-       
       }
     })
     this._odontologoServicio.ObtenerOdontologo().subscribe({
       next: (data) => {
-        if (data.estado)
+        if (data.estado) {
           this.options = data.valor;
+          const currentOdontologo = this.options.find(o => (o.apellido + " " + o.nombre) === this.citaEditar.odontologo);
+          if (currentOdontologo) {
+            this.agregarOdontologo = currentOdontologo;
+            this.formCita.patchValue({ odontologo: currentOdontologo });
+            if (this.isPaciente) {
+              this.formCita.get('odontologo')?.disable();
+            }
+          }
+        }
       },
       error: (e) => {
       },
       complete: () => {
-
       }
     })
     this._pacienteServicio.obtenerPaciente().subscribe({
       next: (data) => {
-        if (data.estado)
+        if (data.estado) {
           this.options3 = data.valor;
+          const currentPaciente = this.options3.find(p => (p.apellido + " " + p.nombre) === this.citaEditar.paciente);
+          if (currentPaciente) {
+            this.agregarPaciente = currentPaciente;
+            this.formCita.patchValue({ paciente: currentPaciente });
+            if (this.isPaciente) {
+              this.formCita.get('paciente')?.disable();
+            }
+          }
+        }
       },
       error: (e) => {
       },
@@ -132,7 +163,14 @@ export class ModalEditarCitaComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.citaEditar = { ...this.cita12 };
+    const dateParsed = moment(this.citaEditar.fechaReserva, 'DD/MM/YYYY');
+    this.formCita.patchValue({
+      fechaReserva: dateParsed.isValid() ? dateParsed : '',
+      estado: this.citaEditar.estado || 'Pendiente'
+    });
+    if (this.isPaciente) {
+      this.formCita.get('estado')?.disable();
+    }
   }
 
   displayPaciente(paciente: Paciente): string {
@@ -189,9 +227,10 @@ export class ModalEditarCitaComponent implements OnInit {
       const citaDTO: Cita = {
         id: this.cita12 == null ? 0 : this.cita12.id,
         totalTexto: String(this.totalPagar.toFixed(0)),
+        estado: this.formCita.get('estado')?.value || this.citaEditar.estado || 'Pendiente',
         DetalleCita: this.ELEMENT_DATA,
       };
-      this._CitaServicio.editarCita(citaDTO).subscribe({
+      this._CitaService.editarCita(citaDTO).subscribe({
         next: (data) => {
           if (data.estado) {
             this.mostrarAlerta("El producto fue editado", "Exito");
@@ -202,7 +241,7 @@ export class ModalEditarCitaComponent implements OnInit {
         },
         error: (e) => { },
         complete: () => {
-          this._CitaServicio.obtenerCita().subscribe({
+          this._CitaService.obtenerCita().subscribe({
             next: (data) => {
               if (data.estado) {
 

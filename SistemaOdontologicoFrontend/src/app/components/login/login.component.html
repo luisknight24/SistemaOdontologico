@@ -3,48 +3,85 @@
     <img src="./assets/hero-login.png" alt="OdontoSys Pro - Fondo Médico" width="1920" height="1080">
   </div>
   <div class="glass-overlay">
-    <mat-card class="loginCard">
-      <div class="header">
-        <mat-icon class="header-icon">health_and_safety</mat-icon>
-        <h2>OdontoSys Pro</h2>
-        <p class="subtitle">Acceso Seguro</p>
-      </div>
-      <mat-card-content style="padding-bottom: 15px;">
-        <form (ngSubmit)="onLogin()" name="loginForm" [formGroup]="formLogin">
-          <div>
-            <mat-form-field class="full-width" appearance="outline">
-              <mat-label>Correo electrónico</mat-label>
-              <input formControlName="email" matInput autocomplete="off" placeholder="ejemplo@correo.com" />
-              <mat-icon matSuffix style="color: #7c7577;">mail</mat-icon>
-            </mat-form-field>
-            <mat-form-field class="full-width" appearance="outline">
-              <mat-label>Contraseña</mat-label>
-              <input matInput [type]="hidePassword ? 'password' : 'text'" formControlName="password" autocomplete="off"
-                placeholder="Ingrese su contraseña">
-              <button mat-icon-button matSuffix (click)="hidePassword = !hidePassword"
-                [attr.aria-label]="'Ocultar contraseña'" [attr.aria-pressed]="hidePassword" type="button"
-                style="color: #7c7577;">
-                <mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
-              </button>
-            </mat-form-field>
+    <div class="login-card-outer">
+      <mat-card class="loginCard horizontal-layout">
+        <!-- Panel Izquierdo: Marca/Identidad -->
+        <div class="brand-panel">
+          <div class="brand-overlay"></div>
+          <div class="brand-content">
+            <div class="logo-container-wrapper">
+              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="premium-svg-logo-login">
+                <path d="M7 4V20" stroke="url(#da-grad-login)" stroke-width="2.5" stroke-linecap="round" />
+                <path d="M7 4H13C17.5 4 19 7.5 19 12C19 16.5 17.5 20 13 20H7" stroke="url(#da-grad-login)"
+                  stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+                <path d="M12 4L15 20" stroke="url(#da-grad-login)" stroke-width="2.5" stroke-linecap="round" />
+                <path d="M9.5 12H15" stroke="url(#da-grad-login)" stroke-width="2.5" stroke-linecap="round" />
+                <defs>
+                  <linearGradient id="da-grad-login" x1="7" y1="4" x2="19" y2="20" gradientUnits="userSpaceOnUse">
+                    <stop stop-color="var(--color-primary-light)" />
+                    <stop offset="1" stop-color="var(--color-primary)" />
+                  </linearGradient>
+                </defs>
+              </svg>
+            </div>
+            <h2>DentAgend</h2>
+            <p class="subtitle-brand">Sistema inteligente de reservaciones odontológicas y gestión clínica.</p>
+          </div>
+        </div>
+
+        <!-- Panel Derecho: Formulario de Acceso -->
+        <div class="form-panel">
+          <div class="header">
+            <h2>Acceso al sistema</h2>
+            <p class="subtitle">Ingrese sus credenciales para continuar</p>
           </div>
 
-          <button style="margin-bottom: 10px;" class="full-width btn-info" mat-raised-button type="submit">
-            Ingresar
-            <mat-icon matSuffix>login</mat-icon>
-          </button>
-        </form>
-        <div class="mt-4">
-          <button style="margin-top: -25px;" class="btn-register" mat-button (click)="agregarUsuario()">
-            Registrarse
-            <mat-icon matSuffix>person_add</mat-icon>
-          </button>
-        </div>
-      </mat-card-content>
+          <mat-card-content class="login-card-content">
+            <form (ngSubmit)="onLogin()" name="loginForm" [formGroup]="formLogin">
+              <div class="form-inputs-container">
+                <mat-form-field class="full-width" appearance="outline">
+                  <mat-label>Correo electrónico</mat-label>
+                  <input formControlName="email" matInput autocomplete="off" placeholder="ejemplo@correo.com" />
+                  <mat-icon matSuffix class="input-icon">mail</mat-icon>
+                </mat-form-field>
 
-      <div class="spinner-border" mode="indeterminate" *ngIf="loading">
-        <span class="sr-only">Cargando…</span>
-      </div>
-    </mat-card>
+                <mat-form-field class="full-width" appearance="outline">
+                  <mat-label>Contraseña</mat-label>
+                  <input matInput [type]="hidePassword ? 'password' : 'text'" formControlName="password"
+                    autocomplete="off" placeholder="Ingrese su contraseña">
+                  <button mat-icon-button matSuffix (click)="hidePassword = !hidePassword"
+                    [attr.aria-label]="'Ocultar contraseña'" [attr.aria-pressed]="hidePassword" type="button"
+                    class="toggle-password-btn">
+                    <mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+                  </button>
+                </mat-form-field>
+              </div>
+
+              <button class="full-width btn-info" mat-raised-button type="submit">
+                <div class="btn-content-flex">
+                  <span>Ingresar</span>
+                  <mat-icon class="btn-icon-right">login</mat-icon>
+                </div>
+              </button>
+            </form>
+
+            <div class="register-container">
+              <button class="btn-register" mat-button (click)="agregarUsuario()">
+                <div class="btn-content-flex">
+                  <span>Registrarse</span>
+                  <mat-icon class="btn-icon-right">person_add</mat-icon>
+                </div>
+              </button>
+            </div>
+          </mat-card-content>
+        </div>
+
+        <div class="spinner-container" *ngIf="loading">
+          <div class="spinner-border" role="status">
+            <span class="visually-hidden">Cargando…</span>
+          </div>
+        </div>
+      </mat-card>
+    </div>
   </div>
 </div>

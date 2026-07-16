@@ -3,8 +3,8 @@
     <mat-icon aria-hidden="true">edit_calendar</mat-icon>
   </div>
   <div>
-    <h2 mat-dialog-title style="margin: 0; padding: 0; border: none;">Editar Cita</h2>
-    <p class="modal-subtitle">Modifique los datos de la reservación médica.</p>
+    <h2 mat-dialog-title style="margin: 0; padding: 0; border: none;">{{ isPaciente ? 'Modificar Solicitud' : 'Editar Cita' }}</h2>
+    <p class="modal-subtitle">{{ isPaciente ? 'Modifique los datos de su solicitud de reservación.' : 'Modifique los datos de la reservación médica.' }}</p>
   </div>
 </div>
 
@@ -91,6 +91,18 @@
           <mat-hint *ngIf="citaEditar.fechaReserva">Actual: {{ citaEditar.fechaReserva }}</mat-hint>
           <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
           <mat-datepicker #picker1></mat-datepicker>
+        </mat-form-field>
+      </div>
+
+      <div class="form-row" *ngIf="!isPaciente">
+        <mat-form-field appearance="outline" class="flex-half">
+          <mat-label>Estado de la cita</mat-label>
+          <mat-icon matPrefix aria-hidden="true">check_circle</mat-icon>
+          <mat-select formControlName="estado">
+            <mat-option value="Pendiente">Pendiente</mat-option>
+            <mat-option value="Confirmada">Confirmada</mat-option>
+            <mat-option value="Cancelada">Cancelada</mat-option>
+          </mat-select>
         </mat-form-field>
       </div>
     </div>

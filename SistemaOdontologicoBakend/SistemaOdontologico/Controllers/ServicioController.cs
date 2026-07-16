@@ -9,10 +9,13 @@ using SistemaOdontologico.Utilidades;
 using SistemaOdontologico.Repositorios.Interfaces;
 using SistemaOdontologico.Repositorios.Implementacion;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
+
 namespace SistemaOdontologico.Controllers
 {
   [Route("api/[controller]")]
   [ApiController]
+  [Authorize]
   public class ServicioController : ControllerBase
   {
     private readonly IServicioRepository _servicioServicio;

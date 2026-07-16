@@ -10,20 +10,35 @@ using SistemaOdontologico.DTO;
 using Microsoft.EntityFrameworkCore;
 using BCrypt.Net;
 using System.Security.Cryptography;
+using Microsoft.Extensions.Configuration;
+using System.Security.Claims;
+using System.IdentityModel.Tokens.Jwt;
+using Microsoft.IdentityModel.Tokens;
 
 namespace SistemaOdontologico.Repositorios.Implemetacion
 {
   public class UsuarioRepository : IUsuarioRepository
   {
     private readonly IGenericRepository<Usuario> _UsuarioRepositorio;
+    private readonly IGenericRepository<Paciente> _pacienteRepositorio;
+    private readonly IGenericRepository<Rol> _rolRepositorio;
     private readonly IMapper _mapper;
+    private readonly IConfiguration _configuration;
     private static Dictionary<string, (string Codigo, DateTime Expiracion)> _otpCache = new Dictionary<string, (string, DateTime)>();
     private static Dictionary<string, UsuarioDTO> _pendingRegistrations = new Dictionary<string, UsuarioDTO>();
 
-    public UsuarioRepository(IGenericRepository<Usuario> usuarioRepositorio, IMapper mapper)
+    public UsuarioRepository(
+        IGenericRepository<Usuario> usuarioRepositorio,
+        IGenericRepository<Paciente> pacienteRepositorio,
+        IGenericRepository<Rol> rolRepositorio,
+        IMapper mapper,
+        IConfiguration configuration)
     {
       _UsuarioRepositorio = usuarioRepositorio;
+      _pacienteRepositorio = pacienteRepositorio;
+      _rolRepositorio = rolRepositorio;
       _mapper = mapper;
+      _configuration = configuration;
     }
 
     public async Task<List<UsuarioDTO>> listaUsuarios()
@@ -32,7 +47,6 @@ namespace SistemaOdontologico.Repositorios.Implemetacion
       {
         var queryUsuario = await _UsuarioRepositorio.Consultar();
         var listaUsuario = queryUsuario.Include(rol => rol.Rol).ToList();
-        // Recorremos la lista de usuarios y reemplazamos el hash de la contraseña por el texto plano
         return _mapper.Map<List<UsuarioDTO>>(listaUsuario);
       }
       catch
@@ -60,21 +74,48 @@ namespace SistemaOdontologico.Repositorios.Implemetacion
       }
     }
     
+    private string GenerarTokenJwt(Usuario usuario)
+    {
+      var manejadorToken = new JwtSecurityTokenHandler();
+      var clave = Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]);
+
+      var descriptorToken = new SecurityTokenDescriptor
+      {
+        Subject = new ClaimsIdentity(new[]
+        {
+          new Claim(ClaimTypes.NameIdentifier, usuario.Id.ToString()),
+          new Claim(ClaimTypes.Email, usuario.Correo ?? string.Empty),
+          new Claim(ClaimTypes.Role, usuario.Rol?.Descripcion ?? "Paciente")
+        }),
+        Expires = DateTime.UtcNow.AddDays(1),
+        Issuer = _configuration["Jwt:Issuer"],
+        Audience = _configuration["Jwt:Audience"],
+        SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(clave), SecurityAlgorithms.HmacSha256Signature)
+      };
+
+      var token = manejadorToken.CreateToken(descriptorToken);
+      return manejadorToken.WriteToken(token);
+    }
+
     public async Task<SesionDTO> ValidarCredenciales(string correo, string clave)
     {
       try
       {  
         var queryUsuario = await _UsuarioRepositorio.Consultar(
-        u => u.Correo == correo
-       );
+          u => u.Correo == correo
+        );
         if (queryUsuario.FirstOrDefault() == null)
           throw new TaskCanceledException("El usuario no existe");
         Usuario devolverUsuario = queryUsuario.Include(rol => rol.Rol).First();
-        if (devolverUsuario.EsActivo == false) // Verificar el estado del usuario
+        if (devolverUsuario.EsActivo == false)
           throw new TaskCanceledException("El usuario está inactivo");
         if (!BCrypt.Net.BCrypt.Verify(clave, devolverUsuario.Clave))
           throw new TaskCanceledException("La contraseña es incorrecta");
-        return _mapper.Map<SesionDTO>(devolverUsuario);
+        
+        var sesion = _mapper.Map<SesionDTO>(devolverUsuario);
+        // Se genera el token firmado con los datos del usuario para el control de accesos
+        sesion.Token = GenerarTokenJwt(devolverUsuario);
+        return sesion;
       }
       catch
       {
@@ -90,15 +131,17 @@ namespace SistemaOdontologico.Repositorios.Implemetacion
         if (existingUser.FirstOrDefault() != null)
           throw new TaskCanceledException("El correo ya está registrado");
 
-        // Encripta la contraseña del modelo
+        // Se aplica hash seguro a la contraseña antes de persistir el registro
         string hashedPassword = BCrypt.Net.BCrypt.HashPassword(modelo.Clave);
-        // Actualiza la propiedad 'Clave' del modelo con la contraseña encriptada
         modelo.Clave = hashedPassword;
 
         var UsuarioCreado = await _UsuarioRepositorio.Crear(_mapper.Map<Usuario>(modelo));
 
         if (UsuarioCreado.Id == 0)
           throw new TaskCanceledException("No se pudo Crear");
+
+        await AutoCrearPacienteClase(UsuarioCreado);
+
         var query = await _UsuarioRepositorio.Consultar(u => u.Id == UsuarioCreado.Id);
         UsuarioCreado = query.Include(rol => rol.Rol).First();
         return _mapper.Map<UsuarioDTO>(UsuarioCreado);
@@ -117,9 +160,8 @@ namespace SistemaOdontologico.Repositorios.Implemetacion
         if (existingUserQuery.FirstOrDefault() != null)
           throw new TaskCanceledException("El correo ya está registrado por otro usuario");
 
-        // Encripta la contraseña del modelo
+        // Se aplica hash seguro a la contraseña antes de persistir el registro
         string hashedPassword = BCrypt.Net.BCrypt.HashPassword(modelo.Clave);
-        // Actualiza la propiedad 'Clave' del modelo con la contraseña encriptada
         modelo.Clave = hashedPassword;
 
         var UsuarioModelo = _mapper.Map<Usuario>(modelo);
@@ -165,7 +207,7 @@ namespace SistemaOdontologico.Repositorios.Implemetacion
             if (existingUser.FirstOrDefault() != null)
                 throw new TaskCanceledException("El correo ya está registrado");
 
-            // Save temporarily
+            // Registro temporal en caché para completar la validación OTP
             _pendingRegistrations[modelo.Correo] = modelo;
 
             return await GenerarOTP(modelo.Correo);
@@ -182,7 +224,7 @@ namespace SistemaOdontologico.Repositorios.Implemetacion
         var otp = random.Next(100000, 999999).ToString();
         _otpCache[correo] = (otp, DateTime.Now.AddMinutes(10));
         
-        // Simulating email sending
+        // Simulación de envío de correo por consola en entorno local
         Console.WriteLine($"\n========================================");
         Console.WriteLine($"MOCK EMAIL SENT TO: {correo}");
         Console.WriteLine($"YOUR OTP CODE IS: {otp}");
@@ -204,7 +246,7 @@ namespace SistemaOdontologico.Repositorios.Implemetacion
                 {
                     _pendingRegistrations.Remove(correo);
 
-                    // Encripta la contraseña del modelo
+                    // Se aplica hash seguro a la contraseña antes de persistir el registro
                     string hashedPassword = BCrypt.Net.BCrypt.HashPassword(pendingUser.Clave);
                     pendingUser.Clave = hashedPassword;
                     pendingUser.EsActivo = 1;
@@ -213,6 +255,9 @@ namespace SistemaOdontologico.Repositorios.Implemetacion
 
                     if (UsuarioCreado.Id == 0)
                         throw new TaskCanceledException("No se pudo Crear el usuario tras validar OTP");
+
+                    await AutoCrearPacienteClase(UsuarioCreado);
+
                     var query = await _UsuarioRepositorio.Consultar(u => u.Id == UsuarioCreado.Id);
                     UsuarioCreado = query.Include(rol => rol.Rol).First();
                     return _mapper.Map<UsuarioDTO>(UsuarioCreado);
@@ -233,6 +278,42 @@ namespace SistemaOdontologico.Repositorios.Implemetacion
             }
         }
         return null;
+    }
+
+    private async Task AutoCrearPacienteClase(Usuario usuarioCreado)
+    {
+        try
+        {
+            var rolesQuery = await _rolRepositorio.Consultar(r => r.Id == usuarioCreado.RolId);
+            var rol = rolesQuery.FirstOrDefault();
+            if (rol != null && rol.Descripcion == "Paciente")
+            {
+                var pacientesQuery = await _pacienteRepositorio.Consultar(p => p.Email == usuarioCreado.Correo);
+                var pacienteExistente = pacientesQuery.FirstOrDefault();
+                if (pacienteExistente == null)
+                {
+                    var nombres = usuarioCreado.NombreApellidos.Split(' ');
+                    var nombre = nombres.Length > 0 ? nombres[0] : "Paciente";
+                    var apellido = nombres.Length > 1 ? string.Join(' ', nombres.Skip(1)) : "Registrado";
+
+                    var nuevoPaciente = new Paciente
+                    {
+                        Nombre = nombre,
+                        Apellido = apellido,
+                        Email = usuarioCreado.Correo,
+                        Edad = 0,
+                        Genero = "No especificado",
+                        Direccion = "No especificada",
+                        Telefono = "No especificado"
+                    };
+                    await _pacienteRepositorio.Crear(nuevoPaciente);
+                }
+            }
+        }
+        catch
+        {
+            // Se omiten excepciones secundarias para no interrumpir el flujo principal de registro
+        }
     }
   }
 }

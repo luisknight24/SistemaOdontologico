@@ -7,11 +7,13 @@ using SistemaOdontologico.Utilidades;
 using SistemaOdontologico.Repositorios.Interfaces;
 using SistemaOdontologico.Repositorios.Implementacion;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 
 namespace SistemaOdontologico.Controllers
 {
   [Route("api/[controller]")]
   [ApiController]
+  [Authorize]
   public class OdontologoController : ControllerBase
   {
     private readonly IOdontologoRepository _OdontologoServicios;
@@ -67,7 +69,7 @@ namespace SistemaOdontologico.Controllers
           }
           catch (Exception ex)
           {
-            // Logging the error, but we don't fail the Odontologo creation
+            // Se registra el error sin interrumpir el flujo principal
             Console.WriteLine($"Error automatizando creación de usuario para odontólogo: {ex.Message}");
           }
         }

@@ -15,6 +15,7 @@ namespace SistemaOdontologico.Models
 
    [Column(TypeName = "decimal(18, 2)")]
    public Decimal? Total { get; set; }
+   public string? Estado { get; set; } = "Pendiente";
    public ICollection<DetalleCita> DetalleCita { get; set; }
   }
 }

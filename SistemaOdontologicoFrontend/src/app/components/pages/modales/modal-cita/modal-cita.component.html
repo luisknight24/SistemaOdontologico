@@ -3,12 +3,12 @@
     <mat-icon>verified</mat-icon>
   </div>
   <div>
-    <h2 mat-dialog-title style="margin: 0; padding: 0; border: none; color: #15803d;">¡Cita registrada!</h2>
+    <h2 mat-dialog-title style="margin: 0; padding: 0; border: none; color: #15803d;">{{ data.isPaciente ? '¡Solicitud de cita enviada!' : '¡Cita registrada!' }}</h2>
   </div>
 </div>
 
 <div mat-dialog-content class="success-dialog-content">
-  <p class="success-text">La reservación ha sido guardada exitosamente en el sistema.</p>
+  <p class="success-text">{{ data.isPaciente ? 'Un administrador revisará la solicitud para aprobarla próximamente. Se notificará a su correo una vez sea confirmada.' : 'La reservación ha sido guardada exitosamente en el sistema.' }}</p>
   <div class="ticket-container">
     <span class="ticket-label">N° de Ticket:</span>
     <span class="ticket-number">#{{data.numero}}</span>

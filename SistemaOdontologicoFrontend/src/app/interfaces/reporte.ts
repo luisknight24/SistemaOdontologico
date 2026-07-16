@@ -6,4 +6,6 @@ export interface Reporte {
     paciente: string,
     servicio: string,
     precio: string,
+    estado?: string,
+    pacienteEmail?: string,
 }

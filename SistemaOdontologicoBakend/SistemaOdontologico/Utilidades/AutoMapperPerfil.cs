@@ -121,6 +121,14 @@ namespace SistemaOdontologico.Utilidades
         .ForMember(destino =>
                     destino.precio,
                   opt => opt.MapFrom(origen => Convert.ToString(origen.Precio.Value, new CultureInfo("es-PE")))
+            )
+        .ForMember(destino =>
+                    destino.estado,
+                    opt => opt.MapFrom(origen => origen.Cita.Estado)
+            )
+        .ForMember(destino =>
+                    destino.pacienteEmail,
+                    opt => opt.MapFrom(origen => origen.Paciente.Email)
             );
       #endregion Reporte 
     }
