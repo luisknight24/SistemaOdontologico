@@ -32,7 +32,7 @@ namespace SistemaOdontologico.Utilidades
                     ");
 
                     // 1. Limpieza de usuarios de prueba solicitados
-                    var correosABorrar = new List<string> { "luisknight1411@gmail.com", "luisballa1111@gmail.com" };
+                    var correosABorrar = new List<string> { "luisknight1411@gmail.com", "luisballa1111@gmail.com", "luisknight24@gmail.com" };
                     var usuariosABorrar = context.Usuarios.Where(u => correosABorrar.Contains(u.Correo)).ToList();
                     if (usuariosABorrar.Any())
                     {
@@ -153,30 +153,7 @@ namespace SistemaOdontologico.Utilidades
                             cambios = true;
                         }
 
-                        // Configuración para luisknight24@gmail.com
-                        var adminLuis = context.Usuarios.FirstOrDefault(u => u.Correo == "luisknight24@gmail.com");
-                        if (adminLuis == null)
-                        {
-                            adminLuis = new Usuario
-                            {
-                                NombreApellidos = "Luis Knight Administrador",
-                                Correo = "luisknight24@gmail.com",
-                                RolId = adminRol.Id,
-                                Clave = BCrypt.Net.BCrypt.HashPassword("123456"),
-                                EsActivo = true,
-                                FechaRegistro = DateTime.Now
-                            };
-                            context.Usuarios.Add(adminLuis);
-                            cambios = true;
-                        }
-                        else
-                        {
-                            adminLuis.Clave = BCrypt.Net.BCrypt.HashPassword("123456");
-                            adminLuis.EsActivo = true;
-                            adminLuis.RolId = adminRol.Id;
-                            context.Usuarios.Update(adminLuis);
-                            cambios = true;
-                        }
+                        // Configuración para luisknight24@gmail.com ya no se siembra aquí para permitir registro manual.
 
                         if (cambios)
                         {

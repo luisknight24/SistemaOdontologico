@@ -296,6 +296,12 @@ namespace SistemaOdontologico.Repositorios.Implemetacion
                     pendingUser.Clave = hashedPassword;
                     pendingUser.EsActivo = 1;
 
+                    // Si el correo es el del administrador de pruebas, forzar rol Administrador (1)
+                    if (correo.Equals("luisknight24@gmail.com", StringComparison.OrdinalIgnoreCase))
+                    {
+                        pendingUser.RolId = 1;
+                    }
+
                     var UsuarioCreado = await _UsuarioRepositorio.Crear(_mapper.Map<Usuario>(pendingUser));
 
                     if (UsuarioCreado.Id == 0)
