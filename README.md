@@ -81,6 +81,21 @@ La plataforma implementa un flujo híbrido de autenticación que combina la vali
 
 Cuando un paciente se registra en el sistema, se almacena de forma temporal en la caché y se le envía un código de seis dígitos a su correo electrónico. Tras ingresar y validar exitosamente dicho código, la API persiste el usuario y genera un token JWT firmado que Angular adjunta en las cabeceras HTTP de forma transparente.
 
+### Configuración del servicio de correo electrónico (SMTP)
+
+El backend de la aplicación cuenta con soporte para envíos de correo real mediante el protocolo SMTP. Para configurar el servicio, se debe añadir el siguiente bloque de configuración en el archivo `appsettings.json` o `appsettings.Production.json`:
+
+```json
+"EmailSettings": {
+  "Server": "smtp.gmail.com",
+  "Port": "587",
+  "SenderEmail": "tu-correo@gmail.com",
+  "Password": "tu-contrasena-de-aplicacion"
+}
+```
+
+*Si la configuración SMTP no está presente, el sistema utilizará de forma automática un fallback registrando los códigos OTP en la consola del servidor para propósitos de depuración y desarrollo local.*
+
 ---
 
 ## Guía de despliegue en producción
@@ -102,6 +117,36 @@ El frontend se compila como un conjunto de archivos estáticos HTML, CSS y JavaS
 1. Modificar el archivo `src/environments/environment.prod.ts` para que apunte a la URL pública donde se encuentra alojada la API del backend.
 2. Ejecutar el comando de construcción `npm run build` o `ng build --configuration production` para generar la carpeta de distribución optimizada.
 3. Transferir los archivos contenidos dentro del directorio `dist/` al servidor web y habilitar las reglas de redirección para soportar la navegación SPA de Angular.
+
+### Despliegue implementado (Demostración activa)
+
+Para la puesta en marcha rápida del portafolio, se ha implementado la siguiente infraestructura en la nube:
+
+* **Backend y Base de Datos**: Alojado en **Somee** (servidor IIS Windows con MS SQL Server 2022 Express).
+* **Frontend**: Desplegado en **Vercel** de manera estática.
+
+#### Bypass de Contenido Mixto (Mixed Content) y enrutamiento SPA
+Debido a que el hosting gratuito del backend funciona bajo HTTP y el frontend de Vercel exige HTTPS, se ha implementado un proxy de enrutamiento a nivel de servidor utilizando un archivo `vercel.json` en la raíz del frontend:
+
+```json
+{
+  "cleanUrls": true,
+  "rewrites": [
+    {
+      "source": "/api/:path*",
+      "destination": "http://dentagend-api.somee.com/api/:path*"
+    },
+    {
+      "source": "/((?!api/).*)",
+      "destination": "/index.html"
+    }
+  ]
+}
+```
+
+Esto permite que:
+1. El navegador realice peticiones HTTPS relativas a `/api/` en el dominio de Vercel, delegando la conexión de tipo HTTP con el backend de Somee directamente al servidor proxy de Vercel, solucionando los problemas de Mixed Content y políticas CORS.
+2. Todas las rutas dinámicas recargadas desde el navegador (como `/pages/cita`) sean redirigidas al `index.html` para que el enrutador de Angular las maneje de forma transparente.
 
 ---
 
