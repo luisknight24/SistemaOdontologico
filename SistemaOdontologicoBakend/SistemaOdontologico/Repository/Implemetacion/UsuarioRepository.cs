@@ -224,13 +224,58 @@ namespace SistemaOdontologico.Repositorios.Implemetacion
         var otp = random.Next(100000, 999999).ToString();
         _otpCache[correo] = (otp, DateTime.Now.AddMinutes(10));
         
-        // Simulación de envío de correo por consola en entorno local
+        // Se intenta enviar el correo real mediante SMTP
+        try
+        {
+            var servidorSmtp = _configuration["EmailSettings:Server"];
+            var puertoSmtp = int.Parse(_configuration["EmailSettings:Port"] ?? "587");
+            var correoRemitente = _configuration["EmailSettings:SenderEmail"];
+            var contrasenaSmtp = _configuration["EmailSettings:Password"];
+
+            if (!string.IsNullOrEmpty(servidorSmtp) && !string.IsNullOrEmpty(correoRemitente) && !string.IsNullOrEmpty(contrasenaSmtp))
+            {
+                using (var clienteMail = new System.Net.Mail.SmtpClient(servidorSmtp, puertoSmtp))
+                {
+                    clienteMail.Credentials = new System.Net.NetworkCredential(correoRemitente, contrasenaSmtp);
+                    clienteMail.EnableSsl = true;
+
+                    using (var mensaje = new System.Net.Mail.MailMessage())
+                    {
+                        mensaje.From = new System.Net.Mail.MailAddress(correoRemitente, "DentAgend Clínicas");
+                        mensaje.To.Add(new System.Net.Mail.MailAddress(correo));
+                        mensaje.Subject = "Código de verificación - DentAgend";
+                        mensaje.IsBodyHtml = true;
+                        
+                        mensaje.Body = $@"
+                            <div style='font-family: Arial, sans-serif; padding: 20px; max-width: 600px; border: 1px solid #eee;'>
+                                <h2 style='color: #d97706;'>Código de validación de DentAgend</h2>
+                                <p>Estimado usuario,</p>
+                                <p>Se ha solicitado un código de verificación para registrar su cuenta en el sistema de reservaciones odontológicas.</p>
+                                <div style='background-color: #fef3c7; padding: 15px; text-align: center; border-radius: 5px; margin: 20px 0;'>
+                                    <span style='font-size: 24px; font-weight: bold; letter-spacing: 5px; color: #b45309;'>{otp}</span>
+                                </div>
+                                <p>Este código expira en 10 minutos por razones de seguridad.</p>
+                                <hr style='border: 0; border-top: 1px solid #eee; margin-top: 30px;' />
+                                <p style='font-size: 12px; color: #999;'>Este mensaje fue generado automáticamente. Por favor no responda a este correo.</p>
+                            </div>";
+
+                        await clienteMail.SendMailAsync(mensaje);
+                    }
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error al enviar correo electrónico: {ex.Message}");
+        }
+
+        // Simulación en consola como respaldo y depuración local
         Console.WriteLine($"\n========================================");
         Console.WriteLine($"MOCK EMAIL SENT TO: {correo}");
         Console.WriteLine($"YOUR OTP CODE IS: {otp}");
         Console.WriteLine($"========================================\n");
         
-        return await Task.FromResult(otp);
+        return otp;
     }
 
     public async Task<UsuarioDTO> ValidarOTP(string correo, string otp)

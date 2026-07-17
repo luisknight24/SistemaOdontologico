@@ -31,7 +31,21 @@ namespace SistemaOdontologico.Utilidades
                         END
                     ");
 
-                    // 1. Sembrar Roles
+                    // 1. Limpieza de usuarios de prueba solicitados
+                    var correosABorrar = new List<string> { "luisknight1411@gmail.com", "luisballa1111@gmail.com" };
+                    var usuariosABorrar = context.Usuarios.Where(u => correosABorrar.Contains(u.Correo)).ToList();
+                    if (usuariosABorrar.Any())
+                    {
+                        context.Usuarios.RemoveRange(usuariosABorrar);
+                    }
+                    var pacientesABorrar = context.Pacientes.Where(p => correosABorrar.Contains(p.Email)).ToList();
+                    if (pacientesABorrar.Any())
+                    {
+                        context.Pacientes.RemoveRange(pacientesABorrar);
+                    }
+                    context.SaveChanges();
+
+                    // 2. Sembrar Roles
                     if (!context.Rol.Any())
                     {
                         var roles = new List<Rol>
