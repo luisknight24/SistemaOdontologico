@@ -69,7 +69,7 @@
 
           <mat-form-field appearance="outline" class="form-field">
             <mat-label>Fecha de reserva</mat-label>
-            <input matInput [matDatepicker]="picker1" formControlName="fechaReserva">
+            <input matInput [matDatepicker]="picker1" formControlName="fechaReserva" [min]="minDate">
             <mat-datepicker-toggle matSuffix [for]="picker1" class="text-primary"></mat-datepicker-toggle>
             <mat-datepicker #picker1></mat-datepicker>
           </mat-form-field>

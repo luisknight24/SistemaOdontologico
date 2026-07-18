@@ -55,6 +55,8 @@ ngOnInit(): void {
 
     })
 
+  } else {
+    this.router.navigate(['login']);
   }
 }
 

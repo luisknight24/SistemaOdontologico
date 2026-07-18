@@ -30,7 +30,7 @@ namespace SistemaOdontologico.Repositorios
                 .CountAsync();
             if (appointmentCount >= 7)
             {
-              throw new Exception("The dentist already has 4 appointments on the specified date.");
+              throw new Exception("El odontólogo ya cuenta con el límite de 7 citas asignadas para la fecha seleccionada.");
             }
           }
           await _DbContext.SaveChangesAsync();          

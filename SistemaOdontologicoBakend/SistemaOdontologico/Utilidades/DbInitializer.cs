@@ -153,6 +153,52 @@ namespace SistemaOdontologico.Utilidades
                             cambios = true;
                         }
 
+                        // Configuración para paciente@gmail.com
+                        if (pacienteRol != null)
+                        {
+                            var pacienteUser = context.Usuarios.FirstOrDefault(u => u.Correo == "paciente@gmail.com");
+                            if (pacienteUser == null)
+                            {
+                                pacienteUser = new Usuario
+                                {
+                                    NombreApellidos = "Prueba Balladares",
+                                    Correo = "paciente@gmail.com",
+                                    RolId = pacienteRol.Id,
+                                    Clave = BCrypt.Net.BCrypt.HashPassword("123456"),
+                                    EsActivo = true,
+                                    FechaRegistro = DateTime.Now
+                                };
+                                context.Usuarios.Add(pacienteUser);
+                                cambios = true;
+                            }
+                            else
+                            {
+                                pacienteUser.NombreApellidos = "Prueba Balladares";
+                                pacienteUser.Clave = BCrypt.Net.BCrypt.HashPassword("123456");
+                                pacienteUser.EsActivo = true;
+                                pacienteUser.RolId = pacienteRol.Id;
+                                context.Usuarios.Update(pacienteUser);
+                                cambios = true;
+                            }
+
+                            var pacienteRecord = context.Pacientes.FirstOrDefault(p => p.Email == "paciente@gmail.com");
+                            if (pacienteRecord == null)
+                            {
+                                pacienteRecord = new Paciente
+                                {
+                                    Nombre = "Prueba",
+                                    Apellido = "Balladares",
+                                    Edad = 30,
+                                    Genero = "Masculino",
+                                    Direccion = "Calle de Prueba 123",
+                                    Telefono = "999999999",
+                                    Email = "paciente@gmail.com"
+                                };
+                                context.Pacientes.Add(pacienteRecord);
+                                cambios = true;
+                            }
+                        }
+
                         // Configuración para luisknight24@gmail.com ya no se siembra aquí para permitir registro manual.
 
                         if (cambios)

@@ -44,6 +44,8 @@ rolUsuario:string="";
 
       })
 
+    } else {
+      this.router.navigate(['login']);
     }
   }
 

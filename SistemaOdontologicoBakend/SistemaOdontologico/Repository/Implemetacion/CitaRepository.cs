@@ -26,6 +26,22 @@ namespace SistemaOdontologico.Repositorios.Implemetacion
     {
       try
       {
+        // Validar que la fecha de reserva no sea anterior a la fecha actual
+        if (modelo.DetalleCita != null)
+        {
+          foreach (var detalle in modelo.DetalleCita)
+          {
+            if (!string.IsNullOrEmpty(detalle.FechaReserva))
+            {
+              DateTime fechaReserva = DateTime.ParseExact(detalle.FechaReserva, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+              if (fechaReserva.Date < DateTime.Today)
+              {
+                throw new ArgumentException("La fecha de la reservación no puede ser menor a la fecha actual.");
+              }
+            }
+          }
+        }
+
         var CitaGenerada = await _citaRepository.Registrar(_mapper.Map<Cita>(modelo));
 
         if (CitaGenerada.Id == 0)
@@ -159,6 +175,22 @@ namespace SistemaOdontologico.Repositorios.Implemetacion
     {
       try
       {
+        // Validar que la fecha de reserva no sea anterior a la fecha actual al editar
+        if (modelo.DetalleCita != null)
+        {
+          foreach (var detalle in modelo.DetalleCita)
+          {
+            if (!string.IsNullOrEmpty(detalle.FechaReserva))
+            {
+              DateTime fechaReserva = DateTime.ParseExact(detalle.FechaReserva, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+              if (fechaReserva.Date < DateTime.Today)
+              {
+                throw new ArgumentException("La fecha de la reservación no puede ser menor a la fecha actual.");
+              }
+            }
+          }
+        }
+
         var OdontolgoModelo = _mapper.Map<Cita>(modelo);
         var OdontologoEncontrado = await _citaRepository.Obtener(u => u.Id == OdontolgoModelo.Id);
         if (OdontologoEncontrado == null)          

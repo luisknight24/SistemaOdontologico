@@ -220,22 +220,56 @@ td.mat-mdc-cell:has(.font-semibold),
 .mat-mdc-select-value-text, .mat-select-value-text {
   color: var(--text-main) !important;
 }
-.mat-mdc-option .mdc-list-item__primary-text, .mat-option-text {
+/* Disable default MDC overlay/state layer to prevent white backgrounds */
+.mat-mdc-option .mdc-list-item__ripple::before,
+.mat-mdc-option .mdc-list-item__ripple::after,
+.mat-mdc-option.mdc-list-item--selected .mdc-list-item__ripple::before,
+.mat-mdc-option.mat-mdc-option-active .mdc-list-item__ripple::before,
+.mat-mdc-option:hover .mdc-list-item__ripple::before,
+.mat-mdc-option:focus .mdc-list-item__ripple::before {
+  background-color: transparent !important;
+  opacity: 0 !important;
+}
+
+/* Force clean background and text colors directly on the option elements */
+.mat-mdc-option {
+  background-color: transparent !important;
+  color: var(--text-main) !important;
+  transition: background-color 0.15s ease;
+}
+
+.mat-mdc-option .mdc-list-item__primary-text,
+.mat-mdc-option .service-name,
+.mat-mdc-option .autocomplete-option {
   color: var(--text-main) !important;
 }
 
-/* Fix option hover and selected state */
-.mat-mdc-option:hover:not(.mdc-list-item--disabled), .mat-mdc-option:focus:not(.mdc-list-item--disabled), .mat-mdc-option.mat-mdc-option-active {
+/* Hover & Focus states */
+.mat-mdc-option:hover:not(.mdc-list-item--disabled),
+.mat-mdc-option:focus:not(.mdc-list-item--disabled),
+.mat-mdc-option.mat-mdc-option-active {
   background-color: var(--color-primary-dark) !important;
 }
-.mat-mdc-option:hover .mdc-list-item__primary-text, .mat-mdc-option:focus .mdc-list-item__primary-text, .mat-mdc-option.mat-mdc-option-active .mdc-list-item__primary-text {
+
+.mat-mdc-option:hover .mdc-list-item__primary-text,
+.mat-mdc-option:focus .mdc-list-item__primary-text,
+.mat-mdc-option.mat-mdc-option-active .mdc-list-item__primary-text,
+.mat-mdc-option:hover .service-name,
+.mat-mdc-option:focus .service-name,
+.mat-mdc-option.mat-mdc-option-active .service-name {
   color: #ffffff !important;
 }
 
-.mat-mdc-option.mdc-list-item--selected:not(.mat-mdc-option-multiple):not(.mat-mdc-option-disabled) {
+/* Selected state (amber background, white text) */
+.mat-mdc-option.mdc-list-item--selected:not(.mat-mdc-option-multiple):not(.mat-mdc-option-disabled),
+.mat-mdc-option.mat-selected:not(.mat-mdc-option-multiple):not(.mat-mdc-option-disabled) {
   background-color: var(--color-primary) !important;
 }
-.mat-mdc-option.mdc-list-item--selected .mdc-list-item__primary-text {
+
+.mat-mdc-option.mdc-list-item--selected .mdc-list-item__primary-text,
+.mat-mdc-option.mat-selected .mdc-list-item__primary-text,
+.mat-mdc-option.mdc-list-item--selected .service-name,
+.mat-mdc-option.mat-selected .service-name {
   color: #ffffff !important;
 }
 
@@ -250,7 +284,7 @@ td.mat-mdc-cell:has(.font-semibold),
   border: 1px solid var(--border-color) !important;
 }
 
-/* Custom Panel Class for Autocomplete (Material 14 / Non-MDC) */
+/* Custom Panel Class for Autocomplete (Material 15 / MDC and Non-MDC) */
 .dark-autocomplete.mat-autocomplete-panel,
 .cdk-overlay-pane .mat-autocomplete-panel.dark-autocomplete {
   background-color: #1a1d24 !important;
@@ -258,12 +292,19 @@ td.mat-mdc-cell:has(.font-semibold),
   border-radius: var(--radius-md) !important;
 }
 
+.dark-autocomplete .mat-mdc-option,
 .dark-autocomplete .mat-option,
-.dark-autocomplete .mat-option-text {
+.dark-autocomplete .mat-option-text,
+.dark-autocomplete .mdc-list-item__primary-text {
   color: #f8fafc !important;
   background-color: transparent !important;
 }
 
+.dark-autocomplete .mat-mdc-option:hover,
+.dark-autocomplete .mat-mdc-option:focus,
+.dark-autocomplete .mat-mdc-option.mat-mdc-option-active,
+.dark-autocomplete .mat-mdc-option.mdc-list-item--selected,
+.dark-autocomplete .mat-mdc-option.mat-selected,
 .dark-autocomplete .mat-option:hover,
 .dark-autocomplete .mat-option:focus,
 .dark-autocomplete .mat-option.mat-active,
@@ -272,16 +313,59 @@ td.mat-mdc-cell:has(.font-semibold),
   color: #f8fafc !important;
 }
 
+.dark-autocomplete .mat-mdc-option:hover .mdc-list-item__primary-text,
+.dark-autocomplete .mat-mdc-option:focus .mdc-list-item__primary-text,
+.dark-autocomplete .mat-mdc-option.mat-mdc-option-active .mdc-list-item__primary-text,
+.dark-autocomplete .mat-mdc-option.mdc-list-item--selected .mdc-list-item__primary-text,
+.dark-autocomplete .mat-mdc-option.mat-selected .mdc-list-item__primary-text {
+  color: #ffffff !important;
+}
+
 /* Fallback global por si el panelClass no se aplica correctamente */
 .cdk-overlay-pane .mat-autocomplete-panel {
   background-color: #1a1d24 !important;
 }
-.cdk-overlay-pane .mat-autocomplete-panel .mat-option {
-  color: #f8fafc !important;
+
+/* GLOBAL MAT-OPTION OVERRIDES (Material 14 Legacy) */
+.mat-option {
+  color: var(--text-main) !important;
+  transition: background-color 0.15s ease;
 }
-.cdk-overlay-pane .mat-autocomplete-panel .mat-option:hover,
-.cdk-overlay-pane .mat-autocomplete-panel .mat-option.mat-active {
-  background-color: rgba(217, 119, 6, 0.2) !important;
+
+.mat-option .mat-option-text,
+.mat-option .service-name,
+.mat-option span {
+  color: var(--text-main) !important;
+}
+
+/* Hover, Focus & Active states */
+.mat-option:hover:not(.mat-option-disabled),
+.mat-option:focus:not(.mat-option-disabled),
+.mat-option.mat-active {
+  background-color: var(--color-primary-dark) !important;
+}
+
+.mat-option:hover .mat-option-text,
+.mat-option:hover .service-name,
+.mat-option:hover span,
+.mat-option:focus .mat-option-text,
+.mat-option:focus .service-name,
+.mat-option:focus span,
+.mat-option.mat-active .mat-option-text,
+.mat-option.mat-active .service-name,
+.mat-option.mat-active span {
+  color: #ffffff !important;
+}
+
+/* Selected state (amber background, white text) */
+.mat-option.mat-selected:not(.mat-option-multiple):not(.mat-option-disabled) {
+  background-color: var(--color-primary) !important;
+}
+
+.mat-option.mat-selected:not(.mat-option-multiple) .mat-option-text,
+.mat-option.mat-selected:not(.mat-option-multiple) .service-name,
+.mat-option.mat-selected:not(.mat-option-multiple) span {
+  color: #ffffff !important;
 }
 
 
@@ -1184,17 +1268,31 @@ body.light-mode .cdk-overlay-pane .mat-autocomplete-panel.dark-autocomplete {
   background-color: var(--bg-surface) !important;
 }
 
+body.light-mode .dark-autocomplete .mat-mdc-option,
 body.light-mode .dark-autocomplete .mat-option,
 body.light-mode .dark-autocomplete .mat-option-text,
+body.light-mode .dark-autocomplete .mdc-list-item__primary-text,
+body.light-mode .cdk-overlay-pane .mat-autocomplete-panel .mat-mdc-option,
 body.light-mode .cdk-overlay-pane .mat-autocomplete-panel .mat-option,
-body.light-mode .cdk-overlay-pane .mat-autocomplete-panel .mat-option-text {
+body.light-mode .cdk-overlay-pane .mat-autocomplete-panel .mat-option-text,
+body.light-mode .cdk-overlay-pane .mat-autocomplete-panel .mdc-list-item__primary-text {
   color: var(--text-main) !important;
 }
 
+body.light-mode .dark-autocomplete .mat-mdc-option:hover,
+body.light-mode .dark-autocomplete .mat-mdc-option:focus,
+body.light-mode .dark-autocomplete .mat-mdc-option.mat-mdc-option-active,
+body.light-mode .dark-autocomplete .mat-mdc-option.mdc-list-item--selected,
+body.light-mode .dark-autocomplete .mat-mdc-option.mat-selected,
 body.light-mode .dark-autocomplete .mat-option:hover,
 body.light-mode .dark-autocomplete .mat-option:focus,
 body.light-mode .dark-autocomplete .mat-option.mat-active,
 body.light-mode .dark-autocomplete .mat-option.mat-selected,
+body.light-mode .cdk-overlay-pane .mat-autocomplete-panel .mat-mdc-option:hover,
+body.light-mode .cdk-overlay-pane .mat-autocomplete-panel .mat-mdc-option:focus,
+body.light-mode .cdk-overlay-pane .mat-autocomplete-panel .mat-mdc-option.mat-mdc-option-active,
+body.light-mode .cdk-overlay-pane .mat-autocomplete-panel .mat-mdc-option.mdc-list-item--selected,
+body.light-mode .cdk-overlay-pane .mat-autocomplete-panel .mat-mdc-option.mat-selected,
 body.light-mode .cdk-overlay-pane .mat-autocomplete-panel .mat-option:hover,
 body.light-mode .cdk-overlay-pane .mat-autocomplete-panel .mat-option:focus,
 body.light-mode .cdk-overlay-pane .mat-autocomplete-panel .mat-option.mat-active,
@@ -1203,11 +1301,58 @@ body.light-mode .cdk-overlay-pane .mat-autocomplete-panel .mat-option.mat-select
   color: var(--color-primary-dark) !important;
 }
 
+body.light-mode .dark-autocomplete .mat-mdc-option:hover .mdc-list-item__primary-text,
+body.light-mode .dark-autocomplete .mat-mdc-option:focus .mdc-list-item__primary-text,
+body.light-mode .dark-autocomplete .mat-mdc-option.mat-mdc-option-active .mdc-list-item__primary-text,
+body.light-mode .dark-autocomplete .mat-mdc-option.mdc-list-item--selected .mdc-list-item__primary-text,
+body.light-mode .dark-autocomplete .mat-mdc-option.mat-selected .mdc-list-item__primary-text {
+  color: var(--color-primary-dark) !important;
+}
+
 body.light-mode .mat-mdc-option:hover .mdc-list-item__primary-text, 
 body.light-mode .mat-mdc-option:focus .mdc-list-item__primary-text, 
 body.light-mode .mat-mdc-option.mat-mdc-option-active .mdc-list-item__primary-text,
 body.light-mode .mat-mdc-option.mdc-list-item--selected .mdc-list-item__primary-text {
   color: white !important;
+}
+
+/* GLOBAL MAT-OPTION OVERRIDES (Material 14 Legacy) - Light Mode */
+body.light-mode .mat-option {
+  color: var(--text-main) !important;
+}
+
+body.light-mode .mat-option .mat-option-text,
+body.light-mode .mat-option .service-name,
+body.light-mode .mat-option span {
+  color: var(--text-main) !important;
+}
+
+body.light-mode .mat-option:hover:not(.mat-option-disabled),
+body.light-mode .mat-option:focus:not(.mat-option-disabled),
+body.light-mode .mat-option.mat-active {
+  background-color: rgba(15, 118, 110, 0.08) !important;
+}
+
+body.light-mode .mat-option:hover .mat-option-text,
+body.light-mode .mat-option:hover .service-name,
+body.light-mode .mat-option:hover span,
+body.light-mode .mat-option:focus .mat-option-text,
+body.light-mode .mat-option:focus .service-name,
+body.light-mode .mat-option:focus span,
+body.light-mode .mat-option.mat-active .mat-option-text,
+body.light-mode .mat-option.mat-active .service-name,
+body.light-mode .mat-option.mat-active span {
+  color: var(--color-primary-dark) !important;
+}
+
+body.light-mode .mat-option.mat-selected:not(.mat-option-multiple):not(.mat-option-disabled) {
+  background-color: rgba(15, 118, 110, 0.15) !important;
+}
+
+body.light-mode .mat-option.mat-selected:not(.mat-option-multiple) .mat-option-text,
+body.light-mode .mat-option.mat-selected:not(.mat-option-multiple) .service-name,
+body.light-mode .mat-option.mat-selected:not(.mat-option-multiple) span {
+  color: var(--color-primary-dark) !important;
 }
 
 /* ==========================================================================

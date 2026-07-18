@@ -67,6 +67,7 @@ export class CitaComponent implements OnInit {
   agregarOdontologo!: Odontologo;
   fechaReserva: string = "";
   totalPagar: number = 0;
+  minDate: Date = new Date();
   currentUser: any;
   isPaciente: boolean = false;
   formGroup: FormGroup;
@@ -321,11 +322,20 @@ export class CitaComponent implements OnInit {
   }
 
   registrarCita() {
+    const selectedDate = moment(this.formGroup.value.fechaReserva);
+    const today = moment().startOf('day');
+    if (selectedDate.isBefore(today)) {
+      this._snackBar.open("La fecha de la reservación no puede ser menor a la fecha actual.", "Entendido", {
+        horizontalPosition: "end",
+        verticalPosition: "top",
+        duration: 5000
+      });
+      return;
+    }
+
     const _fechaReserva: any = moment(this.formGroup.value.fechaReserva).format('DD/MM/YYYY');
-    const _cantidad: number = this.formGroup.value.cantidad;
     const _precio: number = parseFloat(this.agregarServicio.precio);
     const _total: number = _precio;
-    this.totalPagar = this.totalPagar + _total;
 
     const nuevaCita: DetalleCita = {
       id: this.agregarCita == null ? 0 : this.agregarCita.id,
@@ -338,56 +348,79 @@ export class CitaComponent implements OnInit {
       fechaReserva: _fechaReserva,
       precioTexto: this.agregarServicio.precio
     };
-    this.ELEMENT_DATA = [nuevaCita]; // Agregar la nueva cita al inicio del arreglo
-    this.dataSource = new MatTableDataSource(this.ELEMENT_DATA);
-    this.formGroup.patchValue({
-      paciente: '',
-      servicio: '',
-      odontologo: '',
-      fechaReserva: ''
-    });
-    if (this.ELEMENT_DATA.length > 0) {
-      this.deshabilitado = true;
-      const citaDTO: Cita = {
-        id: this.agregarCita1 == null ? 0 : this.agregarCita1.id,
-        totalTexto: String(this.totalPagar.toFixed(0)),
-        DetalleCita: this.ELEMENT_DATA,
-      };
-      this._citaServicio.registrarCita(citaDTO).subscribe({
-        next: (data) => {
-          if (data.estado) {
-            this.dialog.open(ModalCitaComponent, {
-              data: {
-                numero: data.valor.numeroDocumento,
-                isPaciente: this.isPaciente
-              },
+
+    const tempTotalPagar = this.totalPagar + _total;
+    const tempElementData = [nuevaCita];
+
+    this.deshabilitado = true;
+
+    const citaDTO: Cita = {
+      id: this.agregarCita1 == null ? 0 : this.agregarCita1.id,
+      totalTexto: String(tempTotalPagar.toFixed(0)),
+      DetalleCita: tempElementData,
+    };
+
+    this._citaServicio.registrarCita(citaDTO).subscribe({
+      next: (data) => {
+        if (data.estado) {
+          // Si el registro fue exitoso, actualizamos los datos locales y limpiamos el formulario
+          this.totalPagar = tempTotalPagar;
+          this.ELEMENT_DATA = tempElementData;
+          this.dataSource = new MatTableDataSource(this.ELEMENT_DATA);
+
+          if (this.isPaciente) {
+            this.formGroup.patchValue({
+              paciente: this.agregarPaciente,
+              servicio: '',
+              odontologo: 'Auto-asignado',
+              fechaReserva: ''
             });
           } else {
-            this._snackBar.open("No se pudo registrar la cita", "Oops", {
-              horizontalPosition: "end",
-              verticalPosition: "top",
-              duration: 3000
+            this.formGroup.patchValue({
+              paciente: '',
+              servicio: '',
+              odontologo: '',
+              fechaReserva: ''
             });
           }
-        },
-        error: (e) => { },
-        complete: () => {
-          this.deshabilitado = false;
-          this._CitaServicios.obtenerCita().subscribe({
-            next: (data) => {
-              if (data.estado) {
-                this.setTableData(data.valor);
-              } else {
-                this._snackBar.open("No se encontraron datos", 'Oops!', { duration: 2000 });
-              }
+
+          this.dialog.open(ModalCitaComponent, {
+            data: {
+              numero: data.valor.numeroDocumento,
+              isPaciente: this.isPaciente
             },
-            error: (e) => { },
-            complete: () => { }
+          });
+        } else {
+          // Si falló, mostramos el mensaje de error específico enviado por el servidor
+          this._snackBar.open(data.mensaje || "No se pudo registrar la cita", "Oops", {
+            horizontalPosition: "end",
+            verticalPosition: "top",
+            duration: 5000
           });
         }
-      });
-    }
-
+      },
+      error: (e) => {
+        this._snackBar.open("Error al conectar con el servidor", "Oops", {
+          horizontalPosition: "end",
+          verticalPosition: "top",
+          duration: 5000
+        });
+      },
+      complete: () => {
+        this.deshabilitado = false;
+        this._CitaServicios.obtenerCita().subscribe({
+          next: (data) => {
+            if (data.estado) {
+              this.setTableData(data.valor);
+            } else {
+              this._snackBar.open("No se encontraron datos", 'Oops!', { duration: 2000 });
+            }
+          },
+          error: (e) => { },
+          complete: () => { }
+        });
+      }
+    });
   }
 
   mostrarAlerta(mensaje: string, tipo: string) {
@@ -437,14 +470,14 @@ export class CitaComponent implements OnInit {
           next: (data) => {
             if (data.estado) {
               this.mostrarAlerta("La cita fue eliminada", "Listo!")
-              this._CitaServicios.obtenerCita().subscribe({
-                next: (data) => {
-                  if (data.estado) {
-                    this.dataSource.data = data.valor;
-                  } else {
-                    this._snackBar.open("No se encontraron datos", 'Oops!', { duration: 2000 });
-                  }
-                },
+               this._CitaServicios.obtenerCita().subscribe({
+                 next: (data) => {
+                   if (data.estado) {
+                     this.setTableData(data.valor);
+                   } else {
+                     this._snackBar.open("No se encontraron datos", 'Oops!', { duration: 2000 });
+                   }
+                 },
                 error: (e) => { },
                 complete: () => { }
               });

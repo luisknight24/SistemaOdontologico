@@ -87,7 +87,7 @@
           <mat-label>Fecha de reserva</mat-label>
           <mat-icon matPrefix aria-hidden="true">calendar_today</mat-icon>
           <input matInput [matDatepicker]="picker1" formControlName="fechaReserva" showTime="false"
-                 placeholder="Seleccione fecha…">
+                 placeholder="Seleccione fecha…" [min]="minDate">
           <mat-hint *ngIf="citaEditar.fechaReserva">Actual: {{ citaEditar.fechaReserva }}</mat-hint>
           <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
           <mat-datepicker #picker1></mat-datepicker>

@@ -53,6 +53,7 @@ export class ModalEditarCitaComponent implements OnInit {
   agregarOdontologo!: Odontologo;
   fechaReserva: string = "";
   totalPagar: number = 0;
+  minDate: Date = new Date();
   ELEMENT_DATA: DetalleCita[] = [
   ];
   cita: DetalleCita | null = null;
@@ -204,6 +205,13 @@ export class ModalEditarCitaComponent implements OnInit {
   }
 
   editarCita() {
+    const selectedDate = moment(this.formCita.value.fechaReserva);
+    const today = moment().startOf('day');
+    if (selectedDate.isBefore(today)) {
+      this.mostrarAlertaError("La fecha de la reservación no puede ser anterior al día de hoy.", "Error", "Fecha inválida");
+      return;
+    }
+
     const _fechaReserva: any = moment(this.formCita.value.fechaReserva).format('DD/MM/YYYY');
     const _cantidad: number = this.formCita.value.cantidad;
     const _precio: number = this.agregarServicio ? parseFloat(this.agregarServicio.precio) : 0;
@@ -233,10 +241,10 @@ export class ModalEditarCitaComponent implements OnInit {
       this._CitaService.editarCita(citaDTO).subscribe({
         next: (data) => {
           if (data.estado) {
-            this.mostrarAlerta("El producto fue editado", "Exito");
+            this.mostrarAlerta("La cita fue editada exitosamente", "Éxito");
             this.dialogoReferencia.close('editado')
           } else {
-            this.mostrarAlertaError("No se pudo editar el producto", "Error", "Error específico: el producto no se pudo editar debido a ...");
+            this.mostrarAlertaError(data.mensaje || "No se pudo editar la cita", "Error", "Ocurrió un inconveniente al actualizar los datos.");
           }
         },
         error: (e) => { },
