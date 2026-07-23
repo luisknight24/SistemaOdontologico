@@ -1,93 +1,134 @@
-# DentAgend: Sistema de administración de reservaciones odontológicas
+# 🦷 DentAgend: Sistema de Administración de Reservaciones Odontológicas
 
-![.NET 6](https://img.shields.io/badge/.NET-6.0-512BD4?style=flat-square) ![Angular 15](https://img.shields.io/badge/Angular-15-DD0031?style=flat-square) ![SQL Server](https://img.shields.io/badge/SQL_Server-2019-CC2927?style=flat-square) ![JWT](https://img.shields.io/badge/JWT-JSON_Web_Token-000000?style=flat-square)
-
-🚀 **Demostración en vivo:** [https://sistema-odontologico-seven.vercel.app/](https://sistema-odontologico-seven.vercel.app/)
-
-DentAgend es un sistema integrado para la administración de reservaciones y fichas clínicas en consultorios odontológicos. En este sentido, la plataforma proporciona un espacio de trabajo unificado donde pacientes, odontólogos y administradores interactúan en tiempo real para optimizar la asignación de citas.
-
-El sistema se divide en un backend estructurado como una API RESTful con C# y un frontend dinámico desarrollado en Angular. De esta manera, se garantiza una separación limpia de responsabilidades y se facilita el mantenimiento independiente de ambos entornos.
-
----
-
-## Arquitectura y estructura del repositorio
-
-* `SistemaOdontologicoBakend/`: Contiene el código de ASP.NET Core estructurado por controladores, interfaces de repositorio, modelos de Entity Framework Core, DTOs y utilidades de configuración.
-* `SistemaOdontologicoFrontend/`: Contiene la aplicación Angular organizada por componentes de páginas (citas, usuarios, dashboard, reportes), servicios HTTP para la comunicación con la API, interceptores de seguridad y modales de interacción.
+![.NET 6](https://img.shields.io/badge/.NET-6.0-512BD4?style=flat-square&logo=dotnet)
+![Angular 14](https://img.shields.io/badge/Angular-14.2-DD0031?style=flat-square&logo=angular)
+![SQL Server](https://img.shields.io/badge/SQL_Server-2019-CC2927?style=flat-square&logo=microsoft-sql-server)
+![JWT](https://img.shields.io/badge/JWT-JSON_Web_Token-000000?style=flat-square&logo=json-web-tokens)
+![Vercel](https://img.shields.io/badge/Vercel-Deployment-000000?style=flat-square&logo=vercel)
+Plataforma empresarial diseñada para la gestión automatizada de citas clínicas, historias odontológicas y flujos administrativos en consultorios de salud dental.
 
 ---
 
-## Características principales
+## 🚀 Disponibilidad y Demostración
 
-* **Gestión de citas clínicas:** Programación, seguimiento y cancelación de citas médicas adaptadas según el rol del usuario.
-* **Autenticación y roles:** Sistema de control de accesos basado en perfiles que restringe la navegación para administradores, odontólogos y pacientes.
-* **Seguridad y tokens:** Protección de endpoints del backend mediante tokens JWT firmados digitalmente.
-* **Reportes dinámicos:** Generación de reportes detallados en formato PDF para análisis de datos clínicos y métricas de negocio.
-* **Confirmación OTP:** Validación de identidad a través de contraseñas de un solo uso enviadas por correo electrónico.
-* **Panel interactivo:** Visualización gráfica de estadísticas de reservaciones en el panel principal.
+El **sistema en línea** se encuentra disponible en [Vercel](https://sistema-odontologico-seven.vercel.app/), canalizando las peticiones del cliente al backend remoto mediante protocolo HTTPS seguro.
+
+El acceso de evaluación al sistema se realiza mediante la cuenta de paciente preconfigurada (correo: `paciente@gmail.com` / contraseña: `123456`), o registrando una nueva cuenta con validación de código OTP por correo electrónico.
 
 ---
 
-## Seguridad y control de accesos
+## 🏗️ Arquitectura del Sistema
 
-La plataforma implementa seguridad mediante tokens JWT con el fin de proteger las rutas de la API, asegurar las sesiones de los usuarios y garantizar que cada rol acceda únicamente a la información autorizada por el sistema.
+El sistema implementa una arquitectura desacoplada cliente-servidor distribuida en dos entornos independientes.
 
----
+El backend utiliza el patrón de diseño Repository en conjunto con Entity Framework Core sobre ASP.NET Core 6.0 para abstraer la persistencia en base de datos SQL Server.
 
-## Distribución de módulos por rol
+El frontend se estructura como una Single Page Application (SPA) basada en Angular 14.2, utilizando interceptores HTTP para inyectar credenciales JWT y guardias de ruta para la protección de módulos por rol.
 
-El sistema restringe la navegación y las vistas de acuerdo al rol asignado al usuario:
+```mermaid
+graph TD
+    subgraph Cliente [Frontend SPA - Angular 14.2]
+        UI[Interfaz de Usuario]
+        Services[Servicios HTTP / Interceptores]
+        AuthGuard[Guardias de Seguridad / Roles]
+    end
 
-* **Módulos del paciente:**
-  * **Dashboard:** Vista del resumen de sus citas agendadas.
-  * **Citas:** Reservación de nuevas citas seleccionando el servicio, odontólogo, fecha y hora correspondiente.
+    subgraph Servidor [Backend API - .NET 6.0]
+        Controllers[Controladores REST]
+        Repos[Patrón Repository]
+        DBInit[DbInitializer / Semillado]
+    end
 
-* **Módulos del administrador:**
-  * **Dashboard:** Panel general con indicadores de reservaciones totales, ingresos financieros y gráficos de barras.
-  * **Usuarios / Pacientes / Odontólogos / Servicios:** Catálogos completos para crear, editar, eliminar o listar los datos generales del consultorio.
-  * **Citas:** Calendario general con el estado de todas las citas del sistema.
-  * **Reportes:** Generador de reportes de citas en formato PDF y reportes dinámicos de historial clínico.
+    subgraph Datos [Base de Datos]
+        SQL[SQL Server 2019]
+    end
 
-### Cómo registrar una solicitud de cita
-
-1. Inicia sesión como paciente utilizando las credenciales de prueba o registrando una nueva cuenta.
-2. Navega al módulo **Citas** desde la barra lateral izquierda.
-3. Haz clic en el botón **Registrar nueva cita**.
-4. Selecciona el servicio dental, el odontólogo disponible, y define la fecha y hora de la reservación.
-5. Presiona **Guardar** para registrar la solicitud, la cual se listará inmediatamente en el historial de citas del paciente.
-
----
-
-## Acceso de prueba
-
-Si deseas evaluar el funcionamiento del sistema, puedes ingresar como rol de paciente con las siguientes credenciales:
-
-* **Correo:** `paciente@gmail.com`
-* **Contraseña:** `123456`
-
-De igual manera, el sistema permite registrar una nueva cuenta de paciente desde el formulario de registro. Al ingresar tu correo electrónico, recibirás un código OTP de 6 dígitos para validar tu identidad y activar la cuenta.
+    UI --> Services
+    Services -->|Peticiones HTTP + JWT| Controllers
+    Controllers --> Repos
+    Repos -->|Entity Framework Core| SQL
+    DBInit -->|Autosemillado al arranque| SQL
+    AuthGuard -.->|Protección de Rutas| UI
+```
 
 ---
 
-## Requisitos de entorno
+## ⚙️ Componentes Principales
 
-> [!NOTE]
-> Asegúrate de contar con el software básico instalado en tu servidor o máquina local antes de iniciar la configuración.
-
-* [Node.js](https://nodejs.org/) (versión compatible con Angular 15, preferentemente 16.x o 18.x).
-* [.NET 6.0 SDK](https://dotnet.microsoft.com/download/dotnet/6.0).
-* [SQL Server](https://www.microsoft.com/es-es/sql-server/sql-server-downloads) (o SQL Express).
-* Angular CLI instalado de forma global (`npm install -g @angular/cli@15`).
+* **Módulo de Autenticación y Autorización (JWT & OTP):** Controla el registro de pacientes, la validación de identidad a través de códigos OTP de un solo uso enviados por correo electrónico, y la generación de tokens JWT para la posterior autorización de endpoints.
+* **Controlador General de Reservaciones:** Gestiona la lógica de creación, modificación, asignación de odontólogos y cancelación de citas odontológicas respetando las restricciones de horarios disponibles.
+* **Generador de Reportes Clínicos (PDF):** Compila el historial de consultas médicas y estadísticas de facturación directamente a documentos PDF exportables empleando la librería pdfmake.
+* **Visualizador Dinámico de Datos (Dashboard):** Renderiza resúmenes numéricos y gráficos estadísticos interactivos sobre la facturación acumulada e ingresos del consultorio dental.
 
 ---
 
-## Instalación y arranque local
+## 📋 Lógica de Negocio y Roles
 
-### 1. Configuración de la base de datos
+| Rol de Usuario | Módulos Autorizados | Operaciones Permitidas | Reglas de Negocio Clave |
+| :--- | :--- | :--- | :--- |
+| **Paciente** | Dashboard, Citas | Crear y listar citas personales | Requiere validación de cuenta por correo (código OTP) para registrar solicitudes. |
+| **Administrador** | Dashboard completo, Citas globales, Reportes, Usuarios, Servicios | Control total (CRUD) de pacientes, médicos, servicios y asignaciones | El semillado inicial crea la cuenta maestra del administrador de forma automática. |
+| **Odontólogo** | Citas asignadas | Consultar y actualizar estado de citas programadas | Limitado a visualizar únicamente las citas donde figura como médico tratante. |
 
-1. Verifica que el motor de base de datos SQL Server esté en ejecución en tu entorno.
-2. Navega al archivo `appsettings.json` en `SistemaOdontologicoBakend/SistemaOdontologico/` y ajusta la cadena de conexión local.
+---
 
+## 📋 Distribución de Módulos y Roles
+
+El sistema restringe las vistas y la navegación de acuerdo al rol asignado a la cuenta autenticada.
+
+* **Módulos del Paciente:**
+  * **Dashboard:** Resumen visual de citas agendadas y estados de reservación.
+  * **Citas:** Solicitud de consultas seleccionando servicio, odontólogo, fecha y hora.
+
+* **Módulos del Administrador:**
+  * **Dashboard:** Indicadores financieros de facturación y gráficos comparativos de barras.
+  * **Catálogos Clínicos:** Operaciones de control (CRUD) sobre usuarios, pacientes, odontólogos y servicios.
+  * **Calendario de Citas:** Consola de supervisión de citas agendadas a nivel global.
+  * **Reportes:** Módulo de exportación de historial clínico e informes en formato PDF.
+
+### Flujo de Registro de Citas
+
+1. Autenticar la sesión empleando las credenciales de prueba o mediante la creación de un nuevo perfil.
+2. Acceder al módulo **Citas** situado en la barra lateral de navegación.
+3. Accionar el botón de registro de nueva cita clínica.
+4. Definir el tratamiento odontológico requerido, el médico disponible, la fecha y la hora.
+5. Confirmar el almacenamiento para listar de forma inmediata la reservación en el historial personal.
+
+---
+
+## 📁 Estructura del Repositorio
+
+```
+.
+├── SistemaOdontologicoBakend/              # Carpeta raíz del servidor de base de datos y lógica de negocio
+│   └── SistemaOdontologico/                # Proyecto principal de ASP.NET Core 6.0
+│       ├── Controllers/                    # Endpoints expuestos de la API REST
+│       ├── DTO/                            # Objetos de Transferencia de Datos
+│       ├── Models/                         # Modelos de Entity Framework Core y Base de Datos
+│       ├── Repository/                     # Interfaces y clases del patrón Repository
+│       ├── Utilidades/                     # Componentes de soporte (OTP, envío de correos, JWT)
+│       └── Program.cs                      # Punto de entrada de la aplicación y configuración de inyección
+└── SistemaOdontologicoFrontend/             # Carpeta raíz del cliente SPA
+    └── src/
+        └── app/
+            ├── components/                 # Componentes visuales (Login y vistas del panel)
+            │   └── pages/                  # Vistas por rol (Citas, Usuarios, Reportes, Dashboard)
+            ├── interceptors/               # Interceptores para autenticación de peticiones
+            ├── interfaces/                 # Tipados y modelos de datos
+            └── servicios/                  # Servicios de comunicación HTTP con el Backend
+```
+
+---
+
+## 🛠️ Instalación y Ejecución Local
+
+### Prerrequisitos
+- .NET 6.0 SDK instalado localmente.
+- Node.js (versión 16.x o 18.x compatible con Angular 14.2).
+- Servidor SQL Server en ejecución.
+
+### Paso 1: Configuración de Base de Datos
+Ajustar la cadena de conexión local dentro del archivo `appsettings.json` en `SistemaOdontologicoBakend/SistemaOdontologico/`:
 ```json
 "ConnectionStrings": {
   "cadenaSQL": "Server=TU_SERVIDOR;Database=SistemaOdontologicoDB;Trusted_Connection=True;"
@@ -95,30 +136,23 @@ De igual manera, el sistema permite registrar una nueva cuenta de paciente desde
 ```
 
 > [!TIP]
-> > El sistema incluye un inicializador de base de datos (`DbInitializer`) que creará las tablas, los roles, los servicios y el usuario administrador automáticamente durante el primer arranque.
+> El sistema incluye un inicializador de base de datos (`DbInitializer`) que creará las tablas, los roles, los servicios y el usuario administrador de prueba automáticamente durante el primer arranque.
 
-### 2. Ejecución del backend
-
-Abre una terminal, navega al directorio del backend y ejecuta el proyecto:
-
+### Paso 2: Ejecución del Backend
+Restaurar dependencias, compilar y arrancar la API mediante consola:
 ```powershell
 cd SistemaOdontologicoBakend\SistemaOdontologico
 dotnet restore
 dotnet build
 dotnet run
 ```
+La documentación interactiva de Swagger estará disponible en `https://localhost:7196/swagger`.
 
-> [!IMPORTANT]
-> Swagger estará disponible para pruebas en `/swagger` (usualmente bajo el puerto configurado en `https://localhost:7196/swagger`).
-
-### 3. Ejecución del frontend
-
-Abre otra terminal, navega a la carpeta del frontend, instala los paquetes e inicializa el servidor de desarrollo:
-
+### Paso 3: Ejecución del Frontend
+Instalar dependencias locales de Node e inicializar el servidor de desarrollo de Angular:
 ```bash
 cd SistemaOdontologicoFrontend
 npm install
-ng serve --open
+npm run start
 ```
-
-La aplicación web se abrirá automáticamente en tu navegador web en `http://localhost:4200/`.
+El cliente web interactivo se iniciará en `http://localhost:4200/`.
