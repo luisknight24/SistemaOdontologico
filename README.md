@@ -12,9 +12,12 @@ Plataforma diseñada para la gestión automatizada de citas clínicas, historias
 
 El **sistema en línea** se encuentra disponible en [Vercel](https://sistema-odontologico-seven.vercel.app/), gestionando las peticiones del cliente al backend remoto mediante protocolo HTTPS seguro.
 
-El acceso de evaluación al sistema se realiza mediante la cuenta de paciente preconfigurada: 
-correo: `paciente@gmail.com` 
+El acceso de evaluación al sistema se realiza mediante la cuenta de paciente preconfigurada:
+
+correo: `paciente@gmail.com`
+
 contraseña: `123456`
+
 También se puede registrar una nueva cuenta con validación de código OTP por correo electrónico.
 
 ---
