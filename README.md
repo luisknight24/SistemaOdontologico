@@ -14,9 +14,9 @@ El **sistema en línea** se encuentra disponible en [Vercel](https://sistema-odo
 
 El acceso de evaluación al sistema se realiza mediante la cuenta de paciente preconfigurada:
 
-correo: `paciente@gmail.com`
+Correo: `paciente@gmail.com`
 
-contraseña: `123456`
+Contraseña: `123456`
 
 También se puede registrar una nueva cuenta con validación de código OTP por correo electrónico.
 
