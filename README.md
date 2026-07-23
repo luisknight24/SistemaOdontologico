@@ -10,7 +10,7 @@ Plataforma diseñada para la gestión automatizada de citas clínicas, historias
 
 ## Disponibilidad y demostración
 
-El **sistema en línea** se encuentra disponible en [Vercel](https://sistema-odontologico-seven.vercel.app/), gestionando las peticiones del cliente al backend remoto mediante protocolo HTTPS seguro.
+**Sistema en línea:** https://sistema-odontologico-seven.vercel.app/.
 
 El acceso de evaluación al sistema se realiza mediante la cuenta de paciente preconfigurada:
 
